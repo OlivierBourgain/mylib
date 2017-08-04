@@ -81,7 +81,7 @@ public class ReadingListController {
 		tag.setColor(color);
 		tag.setBorderColor(borderColor);
 		tagRepository.save(tag);
-		return "tagList";
+		return "empty";
 	}
 	
 	/**
@@ -92,12 +92,16 @@ public class ReadingListController {
 		User user = getUserDetail();
 		log.info("Controller deleteTag  " + tagId );
 		Tag tag = tagRepository.getOne(tagId);
+		if (tag == null) {
+			log.warn("Tag not found for deletion " + tagId);
+			return "empty";
+		}
 		if (!tag.getUserId().equals(user.getId())) {
 			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
 			throw new IllegalArgumentException("Not your stuff");
 		}
 		tagRepository.delete(tag);
-		return "tagList";
+		return "empty";
 	}
 	
 	/**
