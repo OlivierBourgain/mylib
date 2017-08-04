@@ -53,7 +53,7 @@ public class ReadingListController {
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String readersBooks(Model model) {
+	public String bookList(Model model) {
 		log.info("Controller readersBooks");
 		User user = getUserDetail();
 

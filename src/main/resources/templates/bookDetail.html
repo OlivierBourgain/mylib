@@ -13,6 +13,9 @@
     <!-- Bootstrap core CSS -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    
+    <style th:each="tag : ${alltags}"
+    th:utext="'#tagdiv li[title=\'' + ${tag.text} + '\'], #tagdiv li[title=\'' + ${tag.text} + '\'] span {background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor} + '}'"></style>
   </head>
   <body>
 
