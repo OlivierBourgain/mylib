@@ -49,12 +49,63 @@ public class ReadingListController {
 		return "home";
 	}
 
+	
+	/**
+	 * List of tags.
+	 */
+	@RequestMapping(value = "/tags", method = RequestMethod.GET)
+	public String tagList(Model model) {
+		log.info("Controller tagList");
+		User user = getUserDetail();
+
+		List<Tag> tags = tagRepository.findByUserId(user.getId());
+		model.addAttribute("tags", tags);
+		model.addAttribute("user", user);
+		return "tagList";
+	}
+	
+	/**
+	 * Update of tag colors.
+	 */
+	@RequestMapping(value = "/updateTag", method = RequestMethod.GET)
+	public String updateTag(Long tagId, String backgroundColor, String color, String borderColor) {
+		User user = getUserDetail();
+
+		log.info("Controller updateTag " + tagId + " with " + backgroundColor + "/" + color + "/" + borderColor);
+		Tag tag = tagRepository.getOne(tagId);
+		if (!tag.getUserId().equals(user.getId())) {
+			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
+			throw new IllegalArgumentException("Not your stuff");
+		}
+		tag.setBackgroundColor(backgroundColor);
+		tag.setColor(color);
+		tag.setBorderColor(borderColor);
+		tagRepository.save(tag);
+		return "tagList";
+	}
+	
+	/**
+	 * Delete a tag.
+	 */
+	@RequestMapping(value = "/deleteTag", method = RequestMethod.GET)
+	public String deleteTag(Long tagId) {
+		User user = getUserDetail();
+		log.info("Controller deleteTag  " + tagId );
+		Tag tag = tagRepository.getOne(tagId);
+		if (!tag.getUserId().equals(user.getId())) {
+			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
+			throw new IllegalArgumentException("Not your stuff");
+		}
+		tagRepository.delete(tag);
+		return "tagList";
+	}
+	
 	/**
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
 	public String bookList(Model model) {
-		log.info("Controller readersBooks");
+		log.info("Controller bookList");
 		User user = getUserDetail();
 
 		List<Book> books = bookRepository.findByUserId(user.getId());

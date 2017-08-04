@@ -64,19 +64,22 @@
                 <td th:text="${book.pages}">Pages</td>
                 <td th:text="${book.isbn}">ISBN</td>
                 <td>
-                  <span class="tag" 
-                  th:each="tag: ${bookTagMap.get(book.id)}" 
-                  th:text="${tagMap.get(tag).text}"
-                  th:style="'background-color:' + ${tagMap.get(tag).backgroundColor} + ';color:' + ${tagMap.get(tag).color} + ';border-color:'+ ${tagMap.get(tag).borderColor}"
-                  >tag</span> 
+                    <span class="tag"
+                     th:each="tag: ${bookTagMap.get(book.id)}" 
+                    th:if="${#maps.containsKey(tagMap, tag)}"
+                    th:text="${tagMap.get(tag).text}"
+                    th:style="'background-color:' + ${tagMap.get(tag).backgroundColor} + ';color:' + ${tagMap.get(tag).color} + ';border-color:'+ ${tagMap.get(tag).borderColor}"
+                    >tag</span> 
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+      <div class="row">
+        <a href="/tags">Manage tags</a>
+      </div>
     </div>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
   </body>
