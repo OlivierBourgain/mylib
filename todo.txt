@@ -1,0 +1,16 @@
+Sort
+Search by tag
+Add date de lecture
+Formatage des dates dans le détail book.
+Choose page length on list
+Better pagination avec : http://esimakin.github.io/twbs-pagination/
+Add a message "display X results from Y"
+List= Move tag link to top
+Tag list : sort tag (per name, or per color ?)
+Add stat page (nb books, nb page, par tag, par editeur, par auteur...)
+REname a tag (SF -> SciFi)
+Creer un BookService
+Splitter le controlleur (book vs tags vs other)
+Supprimer ISBN de la liste (éventuellement ajouter l'image ?)
+Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
+Virer googleURL
