@@ -1,15 +1,12 @@
 package com.obourgain.mylib.web;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.db.TagRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.service.TagService;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
@@ -37,11 +35,13 @@ public class ReadingListController {
 
 	private BookRepository bookRepository;
 	private TagRepository tagRepository;
+	private TagService tagService;
 
 	@Autowired
-	public ReadingListController(BookRepository bookRepository, TagRepository tagRepository) {
+	public ReadingListController(BookRepository bookRepository, TagRepository tagRepository, TagService tagService) {
 		this.bookRepository = bookRepository;
 		this.tagRepository = tagRepository;
+		this.tagService = tagService;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -62,15 +62,13 @@ public class ReadingListController {
 
 		// Tag management
 		// To simplify the template code, we need:
-		// - a list of tags
 		// - a map Tag.Id -> Tag
 		// - a map Book.Id -> List of Tags.Id
 		List<Tag> allTags = tagRepository.findByUserId(user.getId());
 		Map<Long, Tag> tagMap = allTags.stream().collect(Collectors.toMap(Tag::getId, Function.identity()));
 		Map<Long, List<Long>> bookTagMap = books.stream()
-				.collect(Collectors.toMap(Book::getId, book -> getTagIdList(book)));
+				.collect(Collectors.toMap(Book::getId, book -> tagService.getTagIdList(book)));
 
-		model.addAttribute("alltags", allTags);
 		model.addAttribute("tagMap", tagMap);
 		model.addAttribute("bookTagMap", bookTagMap);
 
@@ -92,12 +90,13 @@ public class ReadingListController {
 		}
 		log.info("Book detail " + b);
 
+		// Tag list, sorted by Text.
 		List<Tag> tagList = tagRepository.findByUserId(user.getId()).stream()
 				.sorted(Comparator.comparing(Tag::getText))
 				.collect(Collectors.toList());
 
 		model.addAttribute("alltags", tagList);
-		model.addAttribute("tags", getTagIdList(b));
+		model.addAttribute("tags", tagService.getTagIdList(b));
 		model.addAttribute("book", b);
 		model.addAttribute("user", user);
 		return "bookDetail";
@@ -113,21 +112,38 @@ public class ReadingListController {
 
 		// Managing tags
 		log.info("And the tags are : " + book.getTags());
-		List<String> tagIds = getTagIds(book.getTags(), user.getId());
 
-		// Creating book
-		Book b = bookRepository.findOne(book.getId());
-		b.setTitle(book.getTitle());
-		b.setAuthor(book.getAuthor());
-		b.setIsbn(book.getIsbn());
-		b.setPages(book.getPages());
-		b.setPublisher(book.getPublisher());
-		b.setTags(String.join(",", tagIds));
-		b.setComment(book.getComment());
-		b.setUpdated(LocalDateTime.now());
-
-		bookRepository.save(b);
+		createOrUpdateBook(book, user);
 		return "redirect:/books/";
+	}
+
+	/**
+	 * If the book has an Id, and exists in database, update it.
+	 * If not, create it.
+	 */
+	private void createOrUpdateBook(Book book, User user) {
+		Book existing = bookRepository.findOne(book.getId());
+		List<String> tagIds = tagService.getTagIds(book.getTags(), user.getId());
+
+		if (existing != null) {
+			existing.setTitle(book.getTitle());
+			existing.setAuthor(book.getAuthor());
+			existing.setIsbn(book.getIsbn());
+			existing.setPages(book.getPages());
+			existing.setPublisher(book.getPublisher());
+			existing.setTags(String.join(",", tagIds));
+			existing.setComment(book.getComment());
+			existing.setUpdated(LocalDateTime.now());
+			log.info("Updating book " + existing.deepToString());
+			bookRepository.save(existing);
+		} else {
+			book.setUserId(user.getId());
+			book.setCreated(LocalDateTime.now());
+			book.setUpdated(LocalDateTime.now());
+			book.setTags(String.join(",", tagIds));
+			log.info("Creating book " + book.deepToString());
+			bookRepository.save(existing);
+		}
 	}
 
 	/**
@@ -183,60 +199,6 @@ public class ReadingListController {
 		user.setLocale(userdetail.get("locale"));
 		user.setGender(userdetail.get("gender"));
 		return user;
-	}
-
-	/**
-	 * Transform a list of tag names, to a list a tag Ids. If a tag doesn't
-	 * exists, create it in the Tag table.
-	 * 
-	 * @param tags
-	 *            The tag list, e.g. "SF,Cycle Fondation"
-	 * @return the list of Ids of the tags.
-	 */
-	private List<String> getTagIds(String in, String userId) {
-		if (in == null || in.trim().length() == 0)
-			return new ArrayList<>();
-		List<String> texts = Arrays.asList(in.split(","));
-		List<String> res = new ArrayList<>();
-
-		List<Tag> alltags = tagRepository.findByUserId(userId);
-
-		alltags.stream().forEach(System.out::println);
-		for (String text : texts) {
-			Tag t = alltags.stream()
-					.filter(x -> x.getText().equals(text.trim()))
-					.findFirst()
-					.orElseGet(() -> createNewTag(text, userId));
-			res.add(t.getId().toString());
-		}
-		return res;
-	}
-
-	/**
-	 * Create a new tag in database, and return it.
-	 */
-	private Tag createNewTag(String text, String userId) {
-		Tag t = new Tag();
-		t.setText(text.trim());
-		t.setUserId(userId);
-		t.setBackgroundColor("#E7E7E7");
-		t.setColor("#464646");
-		t.setBorderColor("#464646");
-		log.info("Creating tag " + t);
-		tagRepository.save(t);
-		log.info("Created tag " + t);
-		return t;
-	}
-
-	/**
-	 * Return the list of tags of a book, as a List<Long>.
-	 */
-	private List<Long> getTagIdList(Book book) {
-		if (StringUtils.isBlank(book.getTags()))
-			return new ArrayList<>();
-		return Stream.of(book.getTags().split(","))
-				.map(Long::parseLong)
-				.collect(Collectors.toList());
 	}
 
 }
