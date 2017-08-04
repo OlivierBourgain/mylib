@@ -27,7 +27,6 @@
   </head>
   <body>
     <div class="container">
-
       <p class="lead">
         Welcome <span th:text="${user.firstName}">user first name</span> !
       </p>
@@ -74,6 +73,25 @@
               </tr>
             </tbody>
           </table>
+          
+          <nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
+            <ul class="pagination pagination-sm">
+              <li th:classappend="${books.first}? disabled : enabled">
+                <a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li th:each="page:${#numbers.sequence(1, books.totalPages)}"
+                  th:classappend="${books.number == page - 1}? disabled : enabled">
+                  <a th:href="@{/books?(page=${page - 1}, size=${books.size})}" th:text="${page}">1</a>
+              </li>
+              <li th:classappend="${books.last} ? disabled : enabled">
+                <a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}" aria-label="Last">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <div class="row">

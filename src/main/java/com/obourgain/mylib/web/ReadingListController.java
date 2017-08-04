@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Controller;
@@ -108,11 +110,13 @@ public class ReadingListController {
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String bookList(Model model) {
+	public String bookList(Model model, Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
-
-		List<Book> books = bookRepository.findByUserId(user.getId());
+		
+		log.info("Pageable is "  + page);
+		
+		Page<Book> books = bookRepository.findByUserId(user.getId(), page);
 		model.addAttribute("books", books);
 
 		// Tag management
@@ -121,7 +125,7 @@ public class ReadingListController {
 		// - a map Book.Id -> List of Tags.Id
 		List<Tag> allTags = tagRepository.findByUserId(user.getId());
 		Map<Long, Tag> tagMap = allTags.stream().collect(Collectors.toMap(Tag::getId, Function.identity()));
-		Map<Long, List<Long>> bookTagMap = books.stream()
+		Map<Long, List<Long>> bookTagMap = books.getContent().stream()
 				.collect(Collectors.toMap(Book::getId, book -> tagService.getTagIdList(book)));
 
 		model.addAttribute("tagMap", tagMap);
