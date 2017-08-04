@@ -1,0 +1,35 @@
+
+spring:
+
+# H2 Database
+  datasource:
+    url: jdbc:h2:file:~/mylib/db/database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+# Thymeleaf
+  thymeleaf:
+    cache: false
+
+
+# Web
+server:
+  port: 2017
+  
+# Authentication
+security:
+  oauth2:
+    client:
+      clientId: ${GOOGLE_CLIENT_ID}
+      clientSecret: ${GOOGLE_CLIENT_SECRET}
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      clientAuthenticationScheme: form
+      scope:  
+        - openid
+        - email
+        - profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true

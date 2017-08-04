@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<title>Your library</title>
+
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+.tag {
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 4px;
+	padding: 2px 5px;
+	margin: 5px 0;
+	line-height: 20px;
+}
+
+.tag[Title='Asimov'] {background-color: #B99AFF;color: #FFFFFF;border-color: #3D188E;}
+
+</style>
+  </head>
+  <body>
+    <div class="container">
+
+      <p class="lead">
+        Welcome <span th:text="${user.firstName}">user first name</span> !
+      </p>
+      <div class="row">
+        <h3>Add a book</h3>
+        <form th:action="@{/isbnlookup}" method="POST" class="form-horizontal">
+          <label for="isbn" class="col-sm-1 control-label">ISBN</label>
+          <div class="col-sm-3">
+            <input id="isbn" name="isbn" type="text" class="form-control" value="" size="20"></input>
+          </div>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+      </div>
+      <div class="row">
+        <h2>Your library</h2>
+        <div th:if="${#lists.isEmpty(books)}">
+          <p>You have no book in your book list</p>
+        </div>
+        <div th:unless="${#lists.isEmpty(books)}">
+          <table class="table table-bordered table-striped table-hover table-condensed">
+            <thead>
+              <tr>
+                <th class="col-xs-4">Title</th>
+                <th class="col-xs-2">Author</th>
+                <th class="col-xs-1">Pages</th>
+                <th class="col-xs-2">ISBN</th>
+                <th class="col-xs-3">Tags</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="book : ${books}">
+                <td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
+                <td th:text="${book.author}">Author</td>
+                <td th:text="${book.pages}">Pages</td>
+                <td th:text="${book.isbn}">ISBN</td>
+                <td>
+                  <span class="tag" 
+                  th:each="tag: ${bookTagMap.get(book.id)}" 
+                  th:text="${tagMap.get(tag).text}"
+                  th:style="'background-color:' + ${tagMap.get(tag).backgroundColor} + ';color:' + ${tagMap.get(tag).color} + ';border-color:'+ ${tagMap.get(tag).borderColor}"
+                  >tag</span> 
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</th:block>
+</html>

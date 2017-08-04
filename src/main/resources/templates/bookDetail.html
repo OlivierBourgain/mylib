@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title th:text="${book.title}">Book detail title</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="starter-template">
+        <h1 th:text="${book.title}">book title</h1>
+        <a href="/books">&lt; back to list</a>
+        <p class="lead"></p>
+
+        <div class="row">
+          <div class="col-md-4">
+            <img th:src="@{/store/{path}(path=${book.largeImage})}" />
+          </div>
+          <div class="col-md-8">
+            <form class="form-horizontal" method="POST" th:action="@{/book/{id}(id=${book.id})}" th:object="${book}">
+              <input type="hidden" th:name="id" th:value="${book.id}" />
+
+              <div class="form-group">
+                <label for="title" class="col-sm-3 control-label">Title</label>
+                <div class="col-sm-9">
+                  <input id="title" name="title" type="text" class="form-control" th:value="${book.title}" placeholder="Title"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="author" class="col-sm-3 control-label">Author</label>
+                <div class="col-sm-9">
+                  <input name="author" type="text" class="form-control" th:value="${book.author}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="isbn" class="col-sm-3 control-label">ISBN</label>
+                <div class="col-sm-9">
+                  <input name="isbn" type="text" class="form-control" th:value="${book.isbn}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="publisher" class="col-sm-3 control-label">Editor</label>
+                <div class="col-sm-9">
+                  <input name="publisher" type="text" class="form-control" th:value="${book.publisher}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="publicationDate" class="col-sm-3 control-label">Publication date</label>
+                <div class="col-sm-9">
+                  <input name="publicationDate" type="text" class="form-control" value="Novembre 2011"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pages" class="col-sm-3 control-label">Pages</label>
+                <div class="col-sm-9">
+                  <input name="pages" type="text" class="form-control" th:value="${book.pages}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="tags" class="col-sm-3 control-label">Tags</label>
+                <div id="tagdiv" class="col-sm-9">
+                  <!-- <input name="tags" type="text" class="form-control" th:value="${book.tags}"></input>-->
+                  <select id="tags" name="tags" class="form-control" multiple="multiple">
+                  <option></option>
+                  <option th:each="tag : ${alltags}"  th:value="${tag.text}" th:text="${tag.text}" th:selected="${#lists.contains(tags, tag.id)}">A tag</option>
+                </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="comment" class="col-sm-3 control-label">Comment</label>
+                <div class="col-sm-9">
+                  <input name="comment" type="text" class="form-control" th:value="${book.comment}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                  <button type="submit" name="action" value="save" class="btn btn-success">Submit</button>
+                  <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <h4>Other informations</h4>
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <td class="col-md-3">Created On</td>
+                <td class="col-md-9" th:text="${book.created}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Updated On</td>
+                <td class="col-md-9" th:text="${book.updated}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Google url</td>
+                <td class="col-md-9" th:text="${book.googleURL}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Large image</td>
+                <td class="col-md-9" th:text="${book.largeImage}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Medium image</td>
+                <td class="col-md-9" th:text="${book.mediumImage}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Small image</td>
+                <td class="col-md-9" th:text="${book.smallImage}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Description</td>
+                <td class="col-md-9" th:text="${book.description}"></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Lang</td>
+                <td class="col-md-9" th:text="${book.lang}"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Select2 Plugin for tag support -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
+
+    <script>
+  	$(function() {
+  		$("#title").focus()
+  	});
+  
+  	$("#tags").select2({
+  		tags : true,
+  		tokenSeparators : [ ',' ]
+  	})
+  </script>
+  </body>
+</th:block>
+</html>
