@@ -17,3 +17,4 @@ Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
 Done
 ----
 Relation Many2Many entre book et tag
+Bug refresh sur tag list
