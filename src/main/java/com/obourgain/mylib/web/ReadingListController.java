@@ -153,7 +153,6 @@ public class ReadingListController {
 		List<Tag> tagList = tagRepository.findByUserId(user.getId()).stream()
 				.sorted(Comparator.comparing(Tag::getText))
 				.collect(Collectors.toList());
-
 		model.addAttribute("alltags", tagList);
 		model.addAttribute("tags", tagService.getTagIdList(b));
 		model.addAttribute("book", b);

@@ -11,6 +11,4 @@ Add stat page (nb books, nb page, par tag, par editeur, par auteur...)
 REname a tag (SF -> SciFi)
 Creer un BookService
 Splitter le controlleur (book vs tags vs other)
-Supprimer ISBN de la liste (éventuellement ajouter l'image ?)
 Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
-Virer googleURL
