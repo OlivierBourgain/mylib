@@ -26,7 +26,10 @@
 
         <div class="row">
           <div class="col-md-4">
-            <img th:src="@{/store/{path}(path=${book.largeImage})}" />
+            <img 
+            th:src="@{/store/{path}(path=${book.largeImage})}" 
+            th:if="${not #strings.isEmpty(path)}"
+            />
           </div>
           <div class="col-md-8">
             <form class="form-horizontal" method="POST" th:action="@{/book/{id}(id=${book.id})}" th:object="${book}">

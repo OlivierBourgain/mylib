@@ -102,11 +102,7 @@ public class ReadingListController {
 			throw new IllegalArgumentException("Not your stuff");
 		}
 
-		for(Book book : tag.getBooks()) {
-			log.info("Deleting tag " + tag.getText() + " from book " + book.getTitle());
-			book.getTags().remove(tag);
-		}
-		tagRepository.delete(tag);
+		tagService.deleteTag(tag);
 		return "empty";
 	}
 

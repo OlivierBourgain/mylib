@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.obourgain.mylib.db.TagRepository;
+import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 
 /**
@@ -28,8 +29,7 @@ public class TagService {
 	}
 
 	/**
-	 * Transform a list of tag names, to a list a tags. If a tag doesn't
-	 * exists, create it in the Tag table.
+	 * Transform a list of tag names, to a list a tags. If a tag doesn't exists, create it in the Tag table.
 	 * 
 	 * @param tags
 	 *            The tag list, e.g. "SF,Cycle Fondation"
@@ -45,7 +45,8 @@ public class TagService {
 
 		alltags.stream().forEach(System.out::println);
 		for (String text : texts) {
-			Tag t = alltags.stream()
+			Tag t = alltags
+					.stream()
 					.filter(x -> x.getText().equals(text.trim()))
 					.findFirst()
 					.orElseGet(() -> createNewTag(text, userId));
@@ -67,6 +68,19 @@ public class TagService {
 		tagRepository.save(t);
 		log.info("Created tag " + t);
 		return t;
+	}
+
+	/**
+	 * Delete a tag.
+	 */
+	public void deleteTag(Tag tag) {
+		for (Book book : tag.getBooks()) {
+			log.info("Deleting tag " + tag.getText() + " from book " + book.getTitle());
+			book.getTags().remove(tag);
+		}
+		log.info("Deleting " + tag);
+		tagRepository.delete(tag);
+		return;
 	}
 
 }
