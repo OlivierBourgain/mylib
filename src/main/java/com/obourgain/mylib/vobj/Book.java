@@ -3,7 +3,6 @@ package com.obourgain.mylib.vobj;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,7 +43,7 @@ public class Book {
 
 	private String comment;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	@JoinTable(name = "book_tag")
 	private Set<Tag> tags;
 
