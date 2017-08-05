@@ -51,6 +51,7 @@ public class ReadingListController {
 		return "home";
 	}
 
+	
 	/**
 	 * List of tags.
 	 */
@@ -251,4 +252,15 @@ public class ReadingListController {
 		return user;
 	}
 
+	
+	/**
+	 * Stats.
+	 */
+	@RequestMapping(value = "/stats", method = RequestMethod.GET)
+	public String stats(Model model) {
+		log.info("Controller stats");
+		User user = getUserDetail();
+
+		return "stats";
+	}
 }
