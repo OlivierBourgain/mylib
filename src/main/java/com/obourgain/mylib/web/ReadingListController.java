@@ -2,10 +2,10 @@ package com.obourgain.mylib.web;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +51,6 @@ public class ReadingListController {
 		return "home";
 	}
 
-	
 	/**
 	 * List of tags.
 	 */
@@ -65,7 +64,7 @@ public class ReadingListController {
 		model.addAttribute("user", user);
 		return "tagList";
 	}
-	
+
 	/**
 	 * Update of tag colors.
 	 */
@@ -85,14 +84,14 @@ public class ReadingListController {
 		tagRepository.save(tag);
 		return "empty";
 	}
-	
+
 	/**
 	 * Delete a tag.
 	 */
 	@RequestMapping(value = "/deleteTag", method = RequestMethod.GET)
 	public String deleteTag(Long tagId) {
 		User user = getUserDetail();
-		log.info("Controller deleteTag  " + tagId );
+		log.info("Controller deleteTag  " + tagId);
 		Tag tag = tagRepository.getOne(tagId);
 		if (tag == null) {
 			log.warn("Tag not found for deletion " + tagId);
@@ -102,10 +101,15 @@ public class ReadingListController {
 			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
 			throw new IllegalArgumentException("Not your stuff");
 		}
+
+		for(Book book : tag.getBooks()) {
+			log.info("Deleting tag " + tag.getText() + " from book " + book.getTitle());
+			book.getTags().remove(tag);
+		}
 		tagRepository.delete(tag);
 		return "empty";
 	}
-	
+
 	/**
 	 * List of books for a reader.
 	 */
@@ -113,24 +117,11 @@ public class ReadingListController {
 	public String bookList(Model model, Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
-		
-		log.info("Pageable is "  + page);
-		
+
+		log.info("Pageable is " + page);
+
 		Page<Book> books = bookRepository.findByUserId(user.getId(), page);
 		model.addAttribute("books", books);
-
-		// Tag management
-		// To simplify the template code, we need:
-		// - a map Tag.Id -> Tag
-		// - a map Book.Id -> List of Tags.Id
-		List<Tag> allTags = tagRepository.findByUserId(user.getId());
-		Map<Long, Tag> tagMap = allTags.stream().collect(Collectors.toMap(Tag::getId, Function.identity()));
-		Map<Long, List<Long>> bookTagMap = books.getContent().stream()
-				.collect(Collectors.toMap(Book::getId, book -> tagService.getTagIdList(book)));
-
-		model.addAttribute("tagMap", tagMap);
-		model.addAttribute("bookTagMap", bookTagMap);
-
 		model.addAttribute("user", user);
 		return "bookList";
 	}
@@ -150,13 +141,18 @@ public class ReadingListController {
 		log.info("Book detail " + b);
 
 		// Tag list, sorted by Text.
-		List<Tag> tagList = tagRepository.findByUserId(user.getId()).stream()
+		List<Tag> alltags = tagRepository
+				.findByUserId(user.getId()).stream()
 				.sorted(Comparator.comparing(Tag::getText))
 				.collect(Collectors.toList());
-		model.addAttribute("alltags", tagList);
-		model.addAttribute("tags", tagService.getTagIdList(b));
-		model.addAttribute("book", b);
+
+		// List of tag Ids for this book
+		Set<Long> tagids = b.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+
 		model.addAttribute("user", user);
+		model.addAttribute("book", b);
+		model.addAttribute("alltags", alltags);
+		model.addAttribute("tagids", tagids);
 		return "bookDetail";
 	}
 
@@ -176,12 +172,11 @@ public class ReadingListController {
 	}
 
 	/**
-	 * If the book has an Id, and exists in database, update it.
-	 * If not, create it.
+	 * If the book has an Id, and exists in database, update it. If not, create it.
 	 */
 	private void createOrUpdateBook(Book book, User user) {
 		Book existing = bookRepository.findOne(book.getId());
-		List<String> tagIds = tagService.getTagIds(book.getTags(), user.getId());
+		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
 		if (existing != null) {
 			existing.setTitle(book.getTitle());
@@ -189,7 +184,7 @@ public class ReadingListController {
 			existing.setIsbn(book.getIsbn());
 			existing.setPages(book.getPages());
 			existing.setPublisher(book.getPublisher());
-			existing.setTags(String.join(",", tagIds));
+			existing.setTags(tags);
 			existing.setComment(book.getComment());
 			existing.setUpdated(LocalDateTime.now());
 			log.info("Updating book " + existing.deepToString());
@@ -198,7 +193,7 @@ public class ReadingListController {
 			book.setUserId(user.getId());
 			book.setCreated(LocalDateTime.now());
 			book.setUpdated(LocalDateTime.now());
-			book.setTags(String.join(",", tagIds));
+			book.setTags(new HashSet<Tag>());
 			log.info("Creating book " + book.deepToString());
 			bookRepository.save(existing);
 		}
@@ -244,7 +239,8 @@ public class ReadingListController {
 	private User getUserDetail() {
 		OAuth2Authentication aut = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
 		@SuppressWarnings("unchecked")
-		LinkedHashMap<String, String> userdetail = (LinkedHashMap<String, String>) aut.getUserAuthentication()
+		LinkedHashMap<String, String> userdetail = (LinkedHashMap<String, String>) aut
+				.getUserAuthentication()
 				.getDetails();
 		User user = new User();
 		user.setId(userdetail.get("sub"));

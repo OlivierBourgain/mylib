@@ -21,8 +21,6 @@
 	line-height: 20px;
 }
 
-.tag[Title='Asimov'] {background-color: #B99AFF;color: #FFFFFF;border-color: #3D188E;}
-
 </style>
   </head>
   <body>
@@ -62,10 +60,9 @@
                 <td th:text="${book.pages}">Pages</td>
                 <td>
                     <span class="tag"
-                     th:each="tag: ${bookTagMap.get(book.id)}" 
-                    th:if="${#maps.containsKey(tagMap, tag)}"
-                    th:text="${tagMap.get(tag).text}"
-                    th:style="'background-color:' + ${tagMap.get(tag).backgroundColor} + ';color:' + ${tagMap.get(tag).color} + ';border-color:'+ ${tagMap.get(tag).borderColor}"
+                     th:each="tag: ${book.tags}" 
+                    th:text="${tag.text}"
+                    th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}"
                     >tag</span> 
                 </td>
               </tr>

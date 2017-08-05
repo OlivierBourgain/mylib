@@ -1,19 +1,16 @@
 package com.obourgain.mylib.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.obourgain.mylib.db.TagRepository;
-import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 
 /**
@@ -31,18 +28,18 @@ public class TagService {
 	}
 
 	/**
-	 * Transform a list of tag names, to a list a tag Ids. If a tag doesn't
+	 * Transform a list of tag names, to a list a tags. If a tag doesn't
 	 * exists, create it in the Tag table.
 	 * 
 	 * @param tags
 	 *            The tag list, e.g. "SF,Cycle Fondation"
-	 * @return the list of Ids of the tags.
+	 * @return the list of Tag
 	 */
-	public List<String> getTagIds(String in, String userId) {
+	public Set<Tag> getTags(String in, String userId) {
 		if (in == null || in.trim().length() == 0)
-			return new ArrayList<>();
+			return new HashSet<>();
 		List<String> texts = Arrays.asList(in.split(","));
-		List<String> res = new ArrayList<>();
+		Set<Tag> res = new HashSet<>();
 
 		List<Tag> alltags = tagRepository.findByUserId(userId);
 
@@ -52,7 +49,7 @@ public class TagService {
 					.filter(x -> x.getText().equals(text.trim()))
 					.findFirst()
 					.orElseGet(() -> createNewTag(text, userId));
-			res.add(t.getId().toString());
+			res.add(t);
 		}
 		return res;
 	}
@@ -72,13 +69,4 @@ public class TagService {
 		return t;
 	}
 
-	/**
-	 * Return the list of tags of a book, as a List<Long>.
-	 */
-	public List<Long> getTagIdList(Book book) {
-		if (StringUtils.isBlank(book.getTags())) return new ArrayList<>();
-		return Stream.of(book.getTags().split(","))
-				.map(Long::parseLong)
-				.collect(Collectors.toList());
-	}
 }

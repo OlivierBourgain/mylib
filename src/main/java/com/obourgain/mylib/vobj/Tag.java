@@ -1,9 +1,12 @@
 package com.obourgain.mylib.vobj;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -22,6 +25,9 @@ public class Tag {
 	private String color;
 	private String backgroundColor;
 	private String borderColor;
+	
+    @ManyToMany(mappedBy = "tags")
+	private Set<Book> books;
 
 	@Override
 	public String toString() {
@@ -75,6 +81,10 @@ public class Tag {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public Set<Book> getBooks() {
+		return books;
 	}
 
 }

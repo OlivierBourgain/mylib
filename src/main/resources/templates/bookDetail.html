@@ -72,9 +72,9 @@
                 <label for="tags" class="col-sm-3 control-label">Tags</label>
                 <div id="tagdiv" class="col-sm-9">
                   <!-- <input name="tags" type="text" class="form-control" th:value="${book.tags}"></input>-->
-                  <select id="tags" name="tags" class="form-control" multiple="multiple">
+                  <select id="tagString" name="tagString" class="form-control" multiple="multiple">
                   <option></option>
-                  <option th:each="tag : ${alltags}"  th:value="${tag.text}" th:text="${tag.text}" th:selected="${#lists.contains(tags, tag.id)}">A tag</option>
+                  <option th:each="tag : ${alltags}"  th:value="${tag.text}" th:text="${tag.text}" th:selected="${#lists.contains(tagids, tag.id)}">A tag</option>
                 </select>
                 </div>
               </div>
@@ -146,7 +146,7 @@
   		$("#title").focus()
   	});
   
-  	$("#tags").select2({
+  	$("#tagString").select2({
   		tags : true,
   		tokenSeparators : [ ',' ]
   	})

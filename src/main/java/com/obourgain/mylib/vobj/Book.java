@@ -1,22 +1,29 @@
 package com.obourgain.mylib.vobj;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * A book !
  */
 @Entity
+@Table(name="Book")
 public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	private String isbn;
 	private String title;
 	private String author;
@@ -30,23 +37,37 @@ public class Book {
 	private String largeImage;
 	private String mediumImage;
 	private String smallImage;
-	
+
 	private String googleURL;
-	
+
 	private String userId;
 
 	private String comment;
-	// Tags will contain a list of Tag.id, separated with ','.
-	private String tags;
-	
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "book_tag")
+	private Set<Tag> tags;
+
+	@Transient
+	private String tagString; // Used in the HTML form
+
 	private LocalDateTime created;
 	private LocalDateTime updated;
-	
+
+
+	public Set<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<Tag> tags) {
+		this.tags = tags;
+	}
+
 	@Override
 	public String toString() {
 		return "Book " + id + " - " + title + " - " + isbn;
 	}
-	
+
 	public String deepToString() {
 		StringBuilder res = new StringBuilder();
 		res.append("------\n");
@@ -66,7 +87,7 @@ public class Book {
 		res.append("------\n");
 		return res.toString();
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -107,14 +128,6 @@ public class Book {
 		this.author = author;
 	}
 
-	public String getTags() {
-		return tags;
-	}
-
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
-
 	public int getPages() {
 		return pages;
 	}
@@ -130,7 +143,7 @@ public class Book {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+
 	public LocalDateTime getCreated() {
 		return created;
 	}
@@ -150,51 +163,73 @@ public class Book {
 	public String getLargeImage() {
 		return largeImage;
 	}
+
 	public void setLargeImage(String largeImage) {
 		this.largeImage = largeImage;
 	}
+
 	public String getMediumImage() {
 		return mediumImage;
 	}
+
 	public void setMediumImage(String mediumImage) {
 		this.mediumImage = mediumImage;
 	}
+
 	public String getSmallImage() {
 		return smallImage;
 	}
+
 	public void setSmallImage(String smallImage) {
 		this.smallImage = smallImage;
 	}
+
 	public String getPublisher() {
 		return publisher;
 	}
+
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
 	}
+
 	public String getPublicationDate() {
 		return publicationDate;
 	}
+
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
 	}
+
 	public String getLang() {
 		return lang;
 	}
+
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public String getGoogleURL() {
 		return googleURL;
 	}
-	
+
 	public void setGoogleURL(String googleURL) {
 		this.googleURL = googleURL;
+	}
+
+	public String getTagString() {
+		return tagString;
+	}
+
+	public void setTagString(String tagString) {
+		this.tagString = tagString;
 	}
 
 }
