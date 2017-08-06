@@ -266,9 +266,12 @@ public class ReadingListController {
 	public String stats(Model model) {
 		log.info("Controller stats");
 		User user = getUserDetail();
-
+		
+		List<Book> allBooks =bookRepository.findByUserId(user.getId());
+		model.addAttribute("nbBooks", allBooks.size());
+		model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
+		
 		Map<String, List<StatData>> stats = statService.getAllStat(user.getId());
-
 		model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
 		model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
 		model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));

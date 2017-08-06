@@ -94,7 +94,7 @@ public class StatService {
 				.stream()
 				.map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
 				.sorted(Comparator.comparing(StatData::getValue).reversed())
-				.limit(6)
+				.limit(10)
 				.collect(Collectors.toList());
 	}
 
