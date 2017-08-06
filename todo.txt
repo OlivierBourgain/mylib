@@ -7,8 +7,7 @@ Better pagination avec : http://esimakin.github.io/twbs-pagination/
 Add a message "display X results from Y"
 List= Move tag link to top
 Tag list : sort tag (per name, or per color ?)
-Add stat page (nb books, nb page, par tag, par editeur, par auteur...)
-REname a tag (SF -> SciFi)
+Rename a tag (SF -> SciFi)
 Creer un BookService
 Splitter le controlleur (book vs tags vs other)
 Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
@@ -18,3 +17,4 @@ Done
 Relation Many2Many entre book et tag
 Bug refresh sur tag lis
 Détail : gérer cas où image est manquante.
+Add stat page (nb books, nb page, par tag, par editeur, par auteur...)

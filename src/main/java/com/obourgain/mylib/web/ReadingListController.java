@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.db.TagRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.service.StatService;
+import com.obourgain.mylib.service.StatService.StatData;
 import com.obourgain.mylib.service.TagService;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
@@ -38,12 +41,14 @@ public class ReadingListController {
 	private BookRepository bookRepository;
 	private TagRepository tagRepository;
 	private TagService tagService;
+	private StatService statService;
 
 	@Autowired
-	public ReadingListController(BookRepository bookRepository, TagRepository tagRepository, TagService tagService) {
+	public ReadingListController(BookRepository bookRepository, TagRepository tagRepository, TagService tagService, StatService statService) {
 		this.bookRepository = bookRepository;
 		this.tagRepository = tagRepository;
 		this.tagService = tagService;
+		this.statService = statService;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -51,7 +56,6 @@ public class ReadingListController {
 		return "home";
 	}
 
-	
 	/**
 	 * List of tags.
 	 */
@@ -252,7 +256,6 @@ public class ReadingListController {
 		return user;
 	}
 
-	
 	/**
 	 * Stats.
 	 */
@@ -261,6 +264,42 @@ public class ReadingListController {
 		log.info("Controller stats");
 		User user = getUserDetail();
 
+		Map<String, List<StatData>> stats = statService.getAllStat(user.getId());
+
+		model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
+		model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
+		model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));
+		model.addAttribute("booksByAuthor", toHighChartJs(stats.get("booksByAuthor")));
 		return "stats";
+	}
+
+	/**
+	 * Getting the data into the thymeleaf format is a bit painful (especially because I'm a newbie in thymeleaf).
+	 * Lets do it in Javascript.
+	 * 
+	 * So we want to generate:
+	 * <pre>
+	 *      labels: ["SF", "Policier", "Agatha Christie", "Work", "Roman", "Essai"],
+     *       datasets: [{
+     *           data: [3, 2, 1, 1, 1, 1],
+     *           backgroundColor: 'rgb(255, 255, 255)',
+     *           borderWidth: 0
+     *       }]
+     * </pre>
+	 */
+	private String toHighChartJs(List<StatData> datas) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("labels: [");
+		for(StatData data:datas) sb.append("'").append(data.key).append("',");
+		sb.append("],");
+		sb.append("datasets: [{");
+		sb.append("data: [");
+		for(StatData data:datas) sb.append(data.value).append(",");
+		sb.append("],");
+		sb.append("backgroundColor: 'rgb(255, 255, 255)',");
+		sb.append("borderWidth: 0");
+		sb.append("}]");
+		log.info(sb.toString());
+		return sb.toString();
 	}
 }

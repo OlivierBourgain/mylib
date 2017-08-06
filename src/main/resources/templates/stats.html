@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<title>The stats</title>
+<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+.stat-box{padding:0}
+.inner-stat-box{color:white;text-align:center;padding:10px;margin:0 5px}
+#booksbytag  {background: linear-gradient(to left bottom, #9bc500,#69a700)}
+#pagesbytag{background: linear-gradient(to left bottom, #f8c600,#f5ab00)}
+#booksbyauthor{background: linear-gradient(to left bottom, #dc504c,#cd3632)}
+#pagesbyauthor{background: linear-gradient(to left bottom, #a14ea0,#713470)}
+</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Stats</h1>
+			<a href="/books">&lt; back to list</a>
+			<p class="lead"></p>
+			<div class="row">
+				<div class="stat-box col-md-3">
+					<div id="booksbytag" class="inner-stat-box">
+						<h4>Top tags (#books)</h4>
+						<canvas id="booksByTagChart" width="80" height="80"></canvas>
+					</div>
+				</div>
+				<div class="stat-box col-md-3">
+					<div id="pagesbytag" class="inner-stat-box">
+						<h4>Top tags (#pages)</h4>
+						<canvas id="pagesByTagChart" width="80" height="80"></canvas>
+					</div>
+				</div>
+				<div id="" class="stat-box col-md-3">
+					<div id="booksbyauthor" class="inner-stat-box">
+
+						<h4>Top authors (#books)</h4>
+						<canvas id="booksByAuthorChart" width="80" height="80"></canvas>
+					</div>
+				</div>
+				<div id="" class="stat-box col-md-3">
+					<div id="pagesbyauthor" class="inner-stat-box">
+
+						<h4>Top authors (#pages)</h4>
+						<canvas id="pagesByAuthorChart" width="80" height="80"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bootstrap core JavaScript
+    ================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="/bootstrap/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+
+
+		<script th:inline="javascript">
+    /*<![CDATA[*/
+    Chart.defaults.global.defaultFontColor = 'white'
+    Chart.defaults.global.legend.display = false
+
+    new Chart($("#booksByTagChart"), {
+    	type: 'horizontalBar',
+        data: {
+        	[(${booksByTag})]
+        },
+        options: {
+            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+        }
+ 
+    });
+    new Chart($("#pagesByTagChart"), {
+    	type: 'horizontalBar',
+        data: {
+        	[(${pagesByTag})]
+        },
+        options: {
+            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+        }
+    });
+    new Chart($("#booksByAuthorChart"), {
+    	type: 'horizontalBar',
+        data: {
+        	[(${booksByAuthor})]
+        },
+        options: {
+            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+        }
+ 
+    });
+    new Chart($("#pagesByAuthorChart"), {
+    	type: 'horizontalBar',
+        data: {
+        	[(${pagesByAuthor})]
+        },
+        options: {
+            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+        }
+    });
+    /*]]
+    /*]]>*/
+    </script>
+	</body>
+</th:block>
+</html>
