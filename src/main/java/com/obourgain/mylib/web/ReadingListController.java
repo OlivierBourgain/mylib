@@ -1,5 +1,6 @@
 package com.obourgain.mylib.web;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -274,27 +277,29 @@ public class ReadingListController {
 	}
 
 	/**
-	 * Getting the data into the thymeleaf format is a bit painful (especially because I'm a newbie in thymeleaf).
-	 * Lets do it in Javascript.
+	 * Getting the data into the thymeleaf format is a bit painful (especially because I'm a newbie in thymeleaf). Lets do it in Javascript.
 	 * 
 	 * So we want to generate:
+	 * 
 	 * <pre>
 	 *      labels: ["SF", "Policier", "Agatha Christie", "Work", "Roman", "Essai"],
-     *       datasets: [{
-     *           data: [3, 2, 1, 1, 1, 1],
-     *           backgroundColor: 'rgb(255, 255, 255)',
-     *           borderWidth: 0
-     *       }]
-     * </pre>
+	 *       datasets: [{
+	 *           data: [3, 2, 1, 1, 1, 1],
+	 *           backgroundColor: 'rgb(255, 255, 255)',
+	 *           borderWidth: 0
+	 *       }]
+	 * </pre>
 	 */
 	private String toHighChartJs(List<StatData> datas) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("labels: [");
-		for(StatData data:datas) sb.append("'").append(data.key).append("',");
+		for (StatData data : datas)
+			sb.append("'").append(data.key).append("',");
 		sb.append("],");
 		sb.append("datasets: [{");
 		sb.append("data: [");
-		for(StatData data:datas) sb.append(data.value).append(",");
+		for (StatData data : datas)
+			sb.append(data.value).append(",");
 		sb.append("],");
 		sb.append("backgroundColor: 'rgb(255, 255, 255)',");
 		sb.append("borderWidth: 0");
@@ -302,4 +307,55 @@ public class ReadingListController {
 		log.info(sb.toString());
 		return sb.toString();
 	}
+
+	/**
+	 * Export de la liste des livres au format CSV.
+	 */
+	@RequestMapping(value = "/exportcsv", method = RequestMethod.GET)
+	public void exportcsv(HttpServletResponse response) throws IOException {
+		log.info("Controller export");
+		User user = getUserDetail();
+
+		response.setContentType("text/csv");
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=\"Library.csv\"";
+		response.setHeader(headerKey, headerValue);
+
+		List<Book> books = bookRepository.findByUserId(user.getId());
+		StringBuilder sb = booksToCsv(books);
+		response.getWriter().print(sb.toString());
+		return;
+	}
+
+	private StringBuilder booksToCsv(List<Book> books) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Id;Title;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description\n");
+		for (Book book : books) {
+			sb.append(book.getId()).append(";");
+			sb.append(book.getTitle()).append(";");
+			sb.append(book.getAuthor()).append(";");
+			sb.append(book.getIsbn()).append(";");
+			sb.append(book.getPublisher()).append(";");
+			sb.append(book.getPublicationDate()).append(";");
+			sb.append(book.getPages()).append(";");
+			for (Tag tag : book.getTags())
+				sb.append(tag.getText()).append(",");
+			sb.append(";");
+			sb.append(book.getLang()).append(";");
+			sb.append(book.getCreated()).append(";");
+			sb.append(book.getUpdated()).append(";");
+			sb.append(book.getSmallImage()).append(";");
+			sb.append(book.getMediumImage()).append(";");
+			sb.append(book.getLargeImage()).append(";");
+			sb.append(string(book.getDescription())).append(";");
+
+			sb.append("\n");
+		}
+		return sb;
+	}
+
+	private String string(String text) {
+		return text == null? "" : text;
+	}
+
 }

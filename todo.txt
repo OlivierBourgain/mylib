@@ -1,16 +1,18 @@
 Sort
 Search by tag
+Search by author, title
 Add date de lecture
 Formatage des dates dans le détail book.
 Choose page length on list
 Better pagination avec : http://esimakin.github.io/twbs-pagination/
 Add a message "display X results from Y"
-List= Move tag link to top
 Tag list : sort tag (per name, or per color ?)
 Rename a tag (SF -> SciFi)
 Creer un BookService
 Splitter le controlleur (book vs tags vs other)
 Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
+Import from CSV
+Export PDF (liste/détail)
 
 Done
 ----
@@ -18,3 +20,5 @@ Relation Many2Many entre book et tag
 Bug refresh sur tag lis
 Détail : gérer cas où image est manquante.
 Add stat page (nb books, nb page, par tag, par editeur, par auteur...)
+List= Move tag link to top
+Export CSV

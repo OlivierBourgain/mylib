@@ -2,7 +2,7 @@
 <html lang="en">
 <th:block xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+	<head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,87 +17,82 @@
 	border-style: solid;
 	border-radius: 4px;
 	padding: 2px 5px;
-	margin: 5px 0;
+	margin: 5px 2px;
 	line-height: 20px;
-}
+}</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<h3>Add a book</h3>
+					<form th:action="@{/isbnlookup}" method="POST" class="form-horizontal">
+						<label for="isbn" class="col-sm-2 control-label">ISBN</label>
+						<div class="col-sm-8">
+							<input id="isbn" name="isbn" type="text" class="form-control" value="" size="20"></input>
+						</div>
+						<button type="submit" class="btn btn-success">Submit</button>
+					</form>
+				</div>
+				<div class="col-md-6">
+					<h3>&nbsp;</h3>
 
-</style>
-  </head>
-  <body>
-    <div class="container">
-      <p class="lead">
-        Welcome <span th:text="${user.firstName}">user first name</span> !
-      </p>
-      <div class="row">
-        <h3>Add a book</h3>
-        <form th:action="@{/isbnlookup}" method="POST" class="form-horizontal">
-          <label for="isbn" class="col-sm-1 control-label">ISBN</label>
-          <div class="col-sm-3">
-            <input id="isbn" name="isbn" type="text" class="form-control" value="" size="20"></input>
-          </div>
-          <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-      </div>
-      <div class="row">
-        <h2>Your library</h2>
-        <div th:if="${#lists.isEmpty(books)}">
-          <p>You have no book in your book list</p>
-        </div>
-        <div th:unless="${#lists.isEmpty(books)}">
-          <table class="table table-bordered table-striped table-hover table-condensed">
-            <thead>
-              <tr>
-                <th class="col-xs-5">Title</th>
-                <th class="col-xs-2">Author</th>
-                <th class="col-xs-1">Pages</th>
-                <th class="col-xs-4">Tags</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr th:each="book : ${books}">
-                <td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
-                <td th:text="${book.author}">Author</td>
-                <td th:text="${book.pages}">Pages</td>
-                <td>
-                    <span class="tag"
-                     th:each="tag: ${book.tags}" 
-                    th:text="${tag.text}"
-                    th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}"
-                    >tag</span> 
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
-            <ul class="pagination pagination-sm">
-              <li th:classappend="${books.first}? disabled : enabled">
-                <a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li th:each="page:${#numbers.sequence(1, books.totalPages)}"
-                  th:classappend="${books.number == page - 1}? disabled : enabled">
-                  <a th:href="@{/books?(page=${page - 1}, size=${books.size})}" th:text="${page}">1</a>
-              </li>
-              <li th:classappend="${books.last} ? disabled : enabled">
-                <a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}" aria-label="Last">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-      <div class="row">
-        <a href="/tags">Manage tags</a>
-      </div>
-      <div class="row">
-        <a href="/stats">Stats</a>
-      </div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
-  </body>
+					<div class="row">
+						<a href="/tags">Manage tags</a>
+					</div>
+					<div class="row">
+						<a href="/stats">Stats</a>
+					</div>
+					<div class="row">
+						<a href="/exportcsv">Export CSV</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h3>Your library</h3>
+					<div th:if="${#lists.isEmpty(books)}">
+						<p>You have no book in your book list</p>
+					</div>
+					<div th:unless="${#lists.isEmpty(books)}">
+						<table class="table table-bordered table-striped table-hover table-condensed">
+							<thead>
+								<tr>
+									<th class="col-xs-5">Title</th>
+									<th class="col-xs-2">Author</th>
+									<th class="col-xs-1">Pages</th>
+									<th class="col-xs-4">Tags</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="book : ${books}">
+									<td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
+									<td th:text="${book.author}">Author</td>
+									<td th:text="${book.pages}">Pages</td>
+									<td><span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}"
+										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">tag</span></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
+							<ul class="pagination pagination-sm">
+								<li th:classappend="${books.first}? disabled : enabled"><a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First"> <span
+										aria-hidden="true">&laquo;</span>
+								</a></li>
+								<li th:each="page:${#numbers.sequence(1, books.totalPages)}" th:classappend="${books.number == page - 1}? disabled : enabled"><a
+									th:href="@{/books?(page=${page - 1}, size=${books.size})}" th:text="${page}">1</a></li>
+								<li th:classappend="${books.last} ? disabled : enabled"><a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}"
+									aria-label="Last"> <span aria-hidden="true">&raquo;</span>
+								</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="/bootstrap/js/bootstrap.min.js"></script>
+	</body>
 </th:block>
 </html>
