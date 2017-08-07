@@ -56,6 +56,13 @@ public class TagService {
 	}
 
 	/**
+	 * Return the list of tags for a user.
+	 */
+	public List<Tag> findByUserId(String userId) {
+		return tagRepository.findByUserId(userId);
+	}
+	
+	/**
 	 * Create a new tag in database, and return it.
 	 */
 	public Tag createNewTag(String text, String userId) {
@@ -69,11 +76,37 @@ public class TagService {
 		log.info("Created tag " + t);
 		return t;
 	}
+	
+	/**
+	 * Update a tag.
+	 */
+	public Tag updateTag(Long tagId, String backgroundColor, String color, String borderColor, String userId) {
+		Tag tag = tagRepository.getOne(tagId);
+		if (!tag.getUserId().equals(userId)) {
+			log.error("Bad user id " + tag.getUserId() + " vs " + userId);
+			throw new IllegalArgumentException("Not your stuff");
+		}
+		tag.setBackgroundColor(backgroundColor);
+		tag.setColor(color);
+		tag.setBorderColor(borderColor);
+		tagRepository.save(tag);
+		return tag;
+	}
 
 	/**
 	 * Delete a tag.
 	 */
-	public void deleteTag(Tag tag) {
+	public void deleteTag(Long tagId, String userId) {
+		Tag tag = tagRepository.getOne(tagId);
+		if (tag == null) {
+			log.warn("Tag not found for deletion " + tagId);
+			return;
+		}
+		if (!tag.getUserId().equals(userId)) {
+			log.error("Bad user id " + tag.getUserId() + " vs " + userId);
+			throw new IllegalArgumentException("Not your stuff");
+		}
+
 		for (Book book : tag.getBooks()) {
 			log.info("Deleting tag " + tag.getText() + " from book " + book.getTitle());
 			book.getTags().remove(tag);

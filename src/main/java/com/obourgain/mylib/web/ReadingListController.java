@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.obourgain.mylib.db.BookRepository;
-import com.obourgain.mylib.db.TagRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
 import com.obourgain.mylib.service.StatService;
 import com.obourgain.mylib.service.StatService.StatData;
@@ -42,14 +41,12 @@ public class ReadingListController {
 	private static Logger log = LogManager.getLogger(ReadingListController.class);
 
 	private BookRepository bookRepository;
-	private TagRepository tagRepository;
 	private TagService tagService;
 	private StatService statService;
 
 	@Autowired
-	public ReadingListController(BookRepository bookRepository, TagRepository tagRepository, TagService tagService, StatService statService) {
+	public ReadingListController(BookRepository bookRepository, TagService tagService, StatService statService) {
 		this.bookRepository = bookRepository;
-		this.tagRepository = tagRepository;
 		this.tagService = tagService;
 		this.statService = statService;
 	}
@@ -67,7 +64,7 @@ public class ReadingListController {
 		log.info("Controller tagList");
 		User user = getUserDetail();
 
-		List<Tag> tags = tagRepository.findByUserId(user.getId());
+		List<Tag> tags = tagService.findByUserId(user.getId());
 		model.addAttribute("tags", tags);
 		model.addAttribute("user", user);
 		return "tagList";
@@ -79,17 +76,9 @@ public class ReadingListController {
 	@RequestMapping(value = "/updateTag", method = RequestMethod.GET)
 	public String updateTag(Long tagId, String backgroundColor, String color, String borderColor) {
 		User user = getUserDetail();
-
 		log.info("Controller updateTag " + tagId + " with " + backgroundColor + "/" + color + "/" + borderColor);
-		Tag tag = tagRepository.getOne(tagId);
-		if (!tag.getUserId().equals(user.getId())) {
-			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
-			throw new IllegalArgumentException("Not your stuff");
-		}
-		tag.setBackgroundColor(backgroundColor);
-		tag.setColor(color);
-		tag.setBorderColor(borderColor);
-		tagRepository.save(tag);
+
+		tagService.updateTag(tagId, backgroundColor, color, borderColor, user.getId());
 		return "empty";
 	}
 
@@ -100,17 +89,7 @@ public class ReadingListController {
 	public String deleteTag(Long tagId) {
 		User user = getUserDetail();
 		log.info("Controller deleteTag  " + tagId);
-		Tag tag = tagRepository.getOne(tagId);
-		if (tag == null) {
-			log.warn("Tag not found for deletion " + tagId);
-			return "empty";
-		}
-		if (!tag.getUserId().equals(user.getId())) {
-			log.error("Bad user id " + tag.getUserId() + " vs " + user.getId());
-			throw new IllegalArgumentException("Not your stuff");
-		}
-
-		tagService.deleteTag(tag);
+		tagService.deleteTag(tagId, user.getId());
 		return "empty";
 	}
 
@@ -145,7 +124,7 @@ public class ReadingListController {
 		log.info("Book detail " + b);
 
 		// Tag list, sorted by Text.
-		List<Tag> alltags = tagRepository
+		List<Tag> alltags = tagService
 				.findByUserId(user.getId()).stream()
 				.sorted(Comparator.comparing(Tag::getText))
 				.collect(Collectors.toList());
