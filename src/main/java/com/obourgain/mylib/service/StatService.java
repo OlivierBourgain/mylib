@@ -69,13 +69,13 @@ public class StatService {
 
 		Map<String, List<StatData>> res = new HashMap<>();
 
-		String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("sql/TopByTag.sql"));
+		String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("TopByTag.sql"));
 		List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId);
 		log.info(byTag);
 		res.put("booksByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("NB").toString())));
 		res.put("pagesByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("sql/TopByAuthor.sql"));
+		String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("TopByAuthor.sql"));
 		List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId);
 		log.info(byAuthor);
 		res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));

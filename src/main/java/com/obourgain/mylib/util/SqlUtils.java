@@ -15,13 +15,13 @@ public class SqlUtils {
 	 * Read a SQL request from an input stream. TODO Trim white lines & comments
 	 */
 	public static String readSql(InputStream is) {
-		String sql;
 		try {
-			sql = IOUtils.toString(is, StandardCharsets.UTF_8);
+			log.info("Trying to read " + is);
+			String sql = IOUtils.toString(is, StandardCharsets.UTF_8);
+			return sql;
 		} catch (IOException e) {
 			log.error("SQL file not found");
 			throw new RuntimeException("Should not happen");
 		}
-		return sql;
 	}
 }
