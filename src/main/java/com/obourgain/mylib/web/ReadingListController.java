@@ -1,9 +1,7 @@
 package com.obourgain.mylib.web;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.obourgain.mylib.db.BookRepository;
-import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.StatService;
 import com.obourgain.mylib.service.StatService.StatData;
 import com.obourgain.mylib.service.TagService;
@@ -40,13 +37,13 @@ import com.obourgain.mylib.vobj.User;
 public class ReadingListController {
 	private static Logger log = LogManager.getLogger(ReadingListController.class);
 
-	private BookRepository bookRepository;
+	private BookService bookService;
 	private TagService tagService;
 	private StatService statService;
 
 	@Autowired
-	public ReadingListController(BookRepository bookRepository, TagService tagService, StatService statService) {
-		this.bookRepository = bookRepository;
+	public ReadingListController(BookService bookService, TagService tagService, StatService statService) {
+		this.bookService = bookService;
 		this.tagService = tagService;
 		this.statService = statService;
 	}
@@ -103,7 +100,7 @@ public class ReadingListController {
 
 		log.info("Pageable is " + page);
 
-		Page<Book> books = bookRepository.findByUserId(user.getId(), page);
+		Page<Book> books = bookService.findByUserId(user.getId(), page);
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		return "bookList";
@@ -117,7 +114,7 @@ public class ReadingListController {
 		log.info("Controller bookDetail");
 		User user = getUserDetail();
 
-		Book b = bookRepository.findOne(bookId);
+		Book b = bookService.findBook(user.getId(), bookId);
 		if (b == null) {
 			b = new Book();
 		}
@@ -147,40 +144,14 @@ public class ReadingListController {
 		log.info("Controller updateBook");
 		User user = getUserDetail();
 
-		// Managing tags
 		log.info("And the tags are : " + book.getTags());
+		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
-		createOrUpdateBook(book, user);
+		bookService.createOrUpdateBook(book, user, tags);
 		return "redirect:/books/";
 	}
 
-	/**
-	 * If the book has an Id, and exists in database, update it. If not, create it.
-	 */
-	private void createOrUpdateBook(Book book, User user) {
-		Book existing = bookRepository.findOne(book.getId());
-		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
-		if (existing != null) {
-			existing.setTitle(book.getTitle());
-			existing.setAuthor(book.getAuthor());
-			existing.setIsbn(book.getIsbn());
-			existing.setPages(book.getPages());
-			existing.setPublisher(book.getPublisher());
-			existing.setTags(tags);
-			existing.setComment(book.getComment());
-			existing.setUpdated(LocalDateTime.now());
-			log.info("Updating book " + existing.deepToString());
-			bookRepository.save(existing);
-		} else {
-			book.setUserId(user.getId());
-			book.setCreated(LocalDateTime.now());
-			book.setUpdated(LocalDateTime.now());
-			book.setTags(new HashSet<Tag>());
-			log.info("Creating book " + book.deepToString());
-			bookRepository.save(existing);
-		}
-	}
 
 	/**
 	 * Delete book.
@@ -188,7 +159,8 @@ public class ReadingListController {
 	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=delete")
 	public String deleteBook(@PathVariable("bookId") Long bookId) {
 		log.info("Controller deleteBook " + bookId);
-		bookRepository.delete(bookId);
+		User user = getUserDetail();
+		bookService.deleteBook(user.getId(), bookId);
 		return "redirect:/books/";
 	}
 
@@ -205,18 +177,12 @@ public class ReadingListController {
 			return "redirect:/books/";
 		}
 
-		Book book = ItemLookupAmazon.lookup(isbn);
-		if (book == null) {
-			log.info("No book found");
-			return "redirect:/books/";
-		}
-		book.setUserId(user.getId());
-		book.setCreated(LocalDateTime.now());
-		book.setUpdated(LocalDateTime.now());
-
-		bookRepository.save(book);
+		Book book = bookService.isbnLookup(user, isbn);
+		if (book == null) return "redirect:/books/";
 		return "redirect:/book/" + book.getId();
 	}
+
+
 
 	// Business logic.
 	private User getUserDetail() {
@@ -245,11 +211,11 @@ public class ReadingListController {
 	public String stats(Model model) {
 		log.info("Controller stats");
 		User user = getUserDetail();
-		
-		List<Book> allBooks =bookRepository.findByUserId(user.getId());
+
+		List<Book> allBooks = bookService.findByUserId(user.getId());
 		model.addAttribute("nbBooks", allBooks.size());
 		model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
-		
+
 		Map<String, List<StatData>> stats = statService.getAllStat(user.getId());
 		model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
 		model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
@@ -259,7 +225,8 @@ public class ReadingListController {
 	}
 
 	/**
-	 * Getting the data into the thymeleaf format is a bit painful (especially because I'm a newbie in thymeleaf). Lets do it in Javascript.
+	 * Getting the data into the thymeleaf format is a bit painful (especially
+	 * because I'm a newbie in thymeleaf). Lets do it in Javascript.
 	 * 
 	 * So we want to generate:
 	 * 
@@ -303,7 +270,7 @@ public class ReadingListController {
 		String headerValue = "attachment; filename=\"Library.csv\"";
 		response.setHeader(headerKey, headerValue);
 
-		List<Book> books = bookRepository.findByUserId(user.getId());
+		List<Book> books = bookService.findByUserId(user.getId());
 		StringBuilder sb = booksToCsv(books);
 		response.getWriter().print(sb.toString());
 		return;
@@ -311,7 +278,8 @@ public class ReadingListController {
 
 	private StringBuilder booksToCsv(List<Book> books) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Id;Title;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description\n");
+		sb.append(
+				"Id;Title;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description\n");
 		for (Book book : books) {
 			sb.append(book.getId()).append(";");
 			sb.append(book.getTitle()).append(";");
@@ -337,7 +305,7 @@ public class ReadingListController {
 	}
 
 	private String string(String text) {
-		return text == null? "" : text;
+		return text == null ? "" : text;
 	}
 
 }
