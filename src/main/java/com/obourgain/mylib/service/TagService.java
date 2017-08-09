@@ -1,5 +1,6 @@
 package com.obourgain.mylib.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -72,6 +73,8 @@ public class TagService {
 		t.setBackgroundColor("#E7E7E7");
 		t.setColor("#464646");
 		t.setBorderColor("#464646");
+		t.setCreated(LocalDateTime.now());
+		t.setUpdated(LocalDateTime.now());
 		tagRepository.save(t);
 		log.info("Created tag " + t);
 		return t;
@@ -89,6 +92,7 @@ public class TagService {
 		tag.setBackgroundColor(backgroundColor);
 		tag.setColor(color);
 		tag.setBorderColor(borderColor);
+		tag.setUpdated(LocalDateTime.now());
 		tagRepository.save(tag);
 		return tag;
 	}

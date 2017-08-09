@@ -1,5 +1,6 @@
 package com.obourgain.mylib.vobj;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -25,6 +26,8 @@ public class Tag {
 	private String color;
 	private String backgroundColor;
 	private String borderColor;
+	private LocalDateTime created;
+	private LocalDateTime updated;
 	
     @ManyToMany(mappedBy = "tags")
 	private Set<Book> books;
@@ -85,6 +88,22 @@ public class Tag {
 
 	public Set<Book> getBooks() {
 		return books;
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
 	}
 
 }
