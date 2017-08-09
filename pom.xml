@@ -97,9 +97,8 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- The 3 following dependencies are added to make the unescaped javascript inlining work in Thymeleaf
-			@see https://stackoverflow.com/questions/41817612/thymeleaf-unescaped-javascript-inlining
-		 -->
+		<!-- The 3 following dependencies are added to make the unescaped javascript 
+			inlining work in Thymeleaf @see https://stackoverflow.com/questions/41817612/thymeleaf-unescaped-javascript-inlining -->
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf</artifactId>
@@ -115,9 +114,7 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>2.1.2</version>
 		</dependency>
-		
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -126,6 +123,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
 import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
 
@@ -117,5 +118,19 @@ public class BookService {
 
 		bookRepository.save(book);
 		return book;
+	}
+
+	/**
+	 * Update the reading list of a book.
+	 */
+	public Book updateBookReading(User user, Long bookId, int year) {
+		Book b = findBook(user.getId(), bookId);
+		if (b == null) return b;
+		
+		Reading reading = new Reading();
+		reading.setYear(year);
+		b.getReadings().add(reading);
+		bookRepository.save(b);
+		return b;
 	}
 }

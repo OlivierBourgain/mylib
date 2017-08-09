@@ -1,6 +1,7 @@
 package com.obourgain.mylib.web;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -151,7 +152,21 @@ public class ReadingListController {
 		return "redirect:/books/";
 	}
 
+	/**
+	 * Update book.
+	 */
+	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=readnow")
+	public String updateBookReading(@PathVariable("bookId") Long bookId) {
+		log.info("Controller updateBookReading");
+		User user = getUserDetail();
 
+		int year = LocalDate.now().getYear();
+		log.info("Book " + bookId + " was read in " + year);
+
+		Book book = bookService.updateBookReading(user, bookId, year);
+		if (book == null) { return "redirect:/books/"; }
+		return "redirect:/book/" + book.getId();
+	}
 
 	/**
 	 * Delete book.
@@ -181,8 +196,6 @@ public class ReadingListController {
 		if (book == null) return "redirect:/books/";
 		return "redirect:/book/" + book.getId();
 	}
-
-
 
 	// Business logic.
 	private User getUserDetail() {
