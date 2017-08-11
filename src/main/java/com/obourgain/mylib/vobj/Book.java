@@ -7,6 +7,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +25,14 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "Book")
 public class Book {
+	
+
+	public enum BookStatus {
+		TO_READ, // à lire 
+		DISCARDED, // jeté
+		STORED, // dans un carton, en stockage
+		ON_SHELF // dans la bibliothèque
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -33,6 +43,9 @@ public class Book {
 	private String author;
 	private String publisher;
 	private String publicationDate;
+    @Enumerated(EnumType.STRING)
+	private BookStatus status;
+
 	private int pages;
 	private String lang;
 	@Column(length = 4096)
@@ -77,6 +90,7 @@ public class Book {
 		StringBuilder res = new StringBuilder();
 		res.append("------\n");
 		res.append("Id       : ").append(id).append("\n");
+		res.append("Status   : ").append(status).append("\n");
 		res.append("ISBN     : ").append(isbn).append("\n");
 		res.append("TITLE    : ").append(title).append("\n");
 		res.append("LANG     : ").append(lang).append("\n");
@@ -254,5 +268,13 @@ public class Book {
 
 	public void setReadings(List<Reading> readings) {
 		this.readings = readings;
+	}
+
+	public BookStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BookStatus status) {
+		this.status = status;
 	}
 }

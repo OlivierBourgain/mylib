@@ -81,11 +81,22 @@
                 </select>
                 </div>
               </div>
-
               <div class="form-group">
                 <label for="comment" class="col-sm-3 control-label">Comment</label>
                 <div class="col-sm-9">
                   <input name="comment" type="text" class="form-control" th:value="${book.comment}"></input>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="status" class="col-sm-3 control-label">Status</label>
+                <div class="col-sm-9">
+                  <select name="status" class="form-control" th:value="${book.status}">
+                  	<option></option>
+                  	<option value="DISCARDED" th:selected="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</option>
+                  	<option value="ON_SHELF"  th:selected="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).ON_SHELF}">On the shelves</option>
+                  	<option value="STORED"    th:selected="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).STORED}">Stored</option>
+                  	<option value="TO_READ"   th:selected="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).TO_READ}">To read</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
@@ -133,6 +144,10 @@
               <tr>
                 <td class="col-md-3">Readings</td>
                 <td class="col-md-9"><span th:each="reading: ${book.readings}" th:text="${reading.year}"></span></td>
+              </tr>
+              <tr>
+                <td class="col-md-3">Status</td>
+                <td class="col-md-9" th:text="${book.status}"></td>
               </tr>
             </tbody>
           </table>

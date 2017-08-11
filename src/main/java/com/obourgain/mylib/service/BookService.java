@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
 import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Book.BookStatus;
 import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
@@ -88,15 +89,17 @@ public class BookService {
 			existing.setTags(tags);
 			existing.setComment(book.getComment());
 			existing.setUpdated(LocalDateTime.now());
+			existing.setStatus(book.getStatus());
 			log.info("Updating book " + existing.deepToString());
 			bookRepository.save(existing);
 		} else {
 			book.setUserId(user.getId());
 			book.setCreated(LocalDateTime.now());
 			book.setUpdated(LocalDateTime.now());
+			book.setStatus(BookStatus.ON_SHELF);
 			book.setTags(new HashSet<Tag>());
 			log.info("Creating book " + book.deepToString());
-			bookRepository.save(existing);
+			bookRepository.save(book);
 		}
 	}
 	

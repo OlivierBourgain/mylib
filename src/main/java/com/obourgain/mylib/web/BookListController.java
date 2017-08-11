@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,17 +30,16 @@ public class BookListController extends AbstractController {
 		this.bookService = bookService;
 	}
 
+	
 	/**
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String bookList(Model model, Pageable page) {
+	public String bookList(Model model) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 
-		log.info("Pageable is " + page);
-
-		Page<Book> books = bookService.findByUserId(user.getId(), page);
+		List<Book> books = bookService.findByUserId(user.getId());
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		return "bookList";

@@ -10,7 +10,8 @@
 
 <title>Your library</title>
 
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"  />
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" />
 <style>
 .tag {
 	border-width: 1px;
@@ -55,13 +56,14 @@
 						<p>You have no book in your book list</p>
 					</div>
 					<div th:unless="${#lists.isEmpty(books)}">
-						<table class="table table-bordered table-striped table-hover table-condensed">
+						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
 								<tr>
 									<th class="col-xs-5">Title</th>
 									<th class="col-xs-2">Author</th>
 									<th class="col-xs-1">Pages</th>
-									<th class="col-xs-4">Tags</th>
+									<th class="col-xs-3">Tags</th>
+									<th class="col-xs-1"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -69,30 +71,30 @@
 									<td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
 									<td th:text="${book.author}">Author</td>
 									<td th:text="${book.pages}">Pages</td>
-									<td><span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}"
-										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">tag</span></td>
+									<td>
+										<span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}"
+										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">tag</span>
+									</td>
+									<td>
+										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</span>
+										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).TO_READ}">To read</span>
+									</td>								
 								</tr>
 							</tbody>
 						</table>
-
-						<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
-							<ul class="pagination pagination-sm">
-								<li th:classappend="${books.first}? disabled : enabled"><a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First"> <span
-										aria-hidden="true">&laquo;</span>
-								</a></li>
-								<li th:each="page:${#numbers.sequence(1, books.totalPages)}" th:classappend="${books.number == page - 1}? disabled : enabled"><a
-									th:href="@{/books?(page=${page - 1}, size=${books.size})}" th:text="${page}">1</a></li>
-								<li th:classappend="${books.last} ? disabled : enabled"><a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}"
-									aria-label="Last"> <span aria-hidden="true">&raquo;</span>
-								</a></li>
-							</ul>
-						</nav>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
+		<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+		<script>
+		$(function() {
+			$('#booktable').DataTable();
+		});
+		
+		</script>
 	</body>
 </th:block>
 </html>

@@ -72,7 +72,7 @@ public class StatController extends AbstractController {
 		StringBuilder sb = new StringBuilder();
 		sb.append("labels: [");
 		for (StatData data : datas)
-			sb.append("'").append(data.key).append("',");
+			sb.append("'").append(data.key.replace('\'', ' ')).append("',");
 		sb.append("],");
 		sb.append("datasets: [{");
 		sb.append("data: [");
