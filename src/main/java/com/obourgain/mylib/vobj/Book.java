@@ -40,6 +40,7 @@ public class Book {
 
 	private String isbn;
 	private String title;
+	private String subtitle;
 	private String author;
 	private String publisher;
 	private String publicationDate;
@@ -276,5 +277,13 @@ public class Book {
 
 	public void setStatus(BookStatus status) {
 		this.status = status;
+	}
+
+	public String getSubtitle() {
+		return subtitle;
+	}
+
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
 	}
 }

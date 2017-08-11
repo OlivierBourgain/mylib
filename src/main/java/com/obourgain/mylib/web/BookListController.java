@@ -1,6 +1,7 @@
 package com.obourgain.mylib.web;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -81,6 +82,7 @@ public class BookListController extends AbstractController {
 
 		List<Book> books = bookService.findByUserId(user.getId());
 		StringBuilder sb = booksToCsv(books);
+		response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
 		response.getWriter().print(sb.toString());
 		return;
 	}
@@ -88,10 +90,12 @@ public class BookListController extends AbstractController {
 	private StringBuilder booksToCsv(List<Book> books) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
-				"Id;Title;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description\n");
+				"Id;Status;Title;Subtitle;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description;Comment\n");
 		for (Book book : books) {
 			sb.append(book.getId()).append(";");
+			sb.append(book.getStatus()).append(";");
 			sb.append(book.getTitle()).append(";");
+			sb.append(book.getSubtitle()).append(";");
 			sb.append(book.getAuthor()).append(";");
 			sb.append(book.getIsbn()).append(";");
 			sb.append(book.getPublisher()).append(";");
@@ -107,6 +111,7 @@ public class BookListController extends AbstractController {
 			sb.append(book.getMediumImage()).append(";");
 			sb.append(book.getLargeImage()).append(";");
 			sb.append(string(book.getDescription())).append(";");
+			sb.append(string(book.getComment())).append(";");
 
 			sb.append("\n");
 		}

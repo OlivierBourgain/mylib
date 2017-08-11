@@ -81,7 +81,9 @@ public class BookService {
 	public void createOrUpdateBook(Book book, User user, Set<Tag> tags) {
 		Book existing = findBook(user.getId(), book.getId());
 		if (existing != null) {
+			existing.setStatus(book.getStatus());
 			existing.setTitle(book.getTitle());
+			existing.setSubtitle(book.getSubtitle());
 			existing.setAuthor(book.getAuthor());
 			existing.setIsbn(book.getIsbn());
 			existing.setPages(book.getPages());
@@ -89,7 +91,6 @@ public class BookService {
 			existing.setTags(tags);
 			existing.setComment(book.getComment());
 			existing.setUpdated(LocalDateTime.now());
-			existing.setStatus(book.getStatus());
 			log.info("Updating book " + existing.deepToString());
 			bookRepository.save(existing);
 		} else {
