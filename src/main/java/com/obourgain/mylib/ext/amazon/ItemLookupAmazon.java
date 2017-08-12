@@ -59,7 +59,8 @@ public class ItemLookupAmazon {
 			log.info(() -> book.deepToString());
 			return book;
 		} catch (Exception e) {
-			throw new RuntimeException("Erreur fetching this book", e);
+			log.error("Book not found", e);
+			return null;
 		}
 	}
 

@@ -51,7 +51,7 @@ public class BookListController extends AbstractController {
 	 * Lookup a book with ISBN
 	 */
 	@RequestMapping(value = "/isbnlookup", method = RequestMethod.POST)
-	public String isbnlookup(String isbn) {
+	public String isbnlookup(String isbn, Model model) {
 		log.info("Controller isbnlookup with " + isbn);
 		User user = getUserDetail();
 
@@ -61,7 +61,10 @@ public class BookListController extends AbstractController {
 		}
 
 		Book book = bookService.isbnLookup(user, isbn);
-		if (book == null) return "redirect:/books/";
+		if (book == null) {
+			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>" );
+			return bookList(model);
+		}
 		return "redirect:/book/" + book.getId();
 	}
 
