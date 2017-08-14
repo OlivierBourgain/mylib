@@ -11,7 +11,6 @@
 <title>Your library</title>
 
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"  />
-<link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" />
 <style>
 .tag {
 	border-width: 1px;
@@ -20,7 +19,10 @@
 	padding: 2px 5px;
 	margin: 5px 2px;
 	line-height: 20px;
-}</style>
+}
+#booklist-header-size{margin:26px 0}
+#booklist-header-summary{margin:26px 0}
+</style>
 	</head>
 	<body>
 		<div class="container">
@@ -61,13 +63,69 @@
 				th:text="${alertError}">
 				Alert message
 			</div>
+
 			<div class="row">
+				
 				<div class="col-md-12">
 					<h3>Your library</h3>
 					<div th:if="${#lists.isEmpty(books)}">
 						<p>You have no book in your book list</p>
 					</div>
 					<div th:unless="${#lists.isEmpty(books)}">
+					<!-- Pagination -->
+					<div class="row">
+						<div id="booklist-header-summary" class="col-md-4">
+							<span th:text="${books.totalElements}"></span> results, showing page <span th:text="${books.number + 1}"></span> of <span th:text="${books.totalPages}"></span>
+						</div>
+						<div id="booklist-header-pages" class="col-md-6">
+						<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
+			            <ul class="pagination pagination-sm">
+			              <li th:classappend="${books.first}? disabled : enabled">
+			                <a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First">
+			                  <span aria-hidden="true">&laquo;</span>
+			                </a>
+			              </li>
+			              <!--  Pages n-3 to current -->
+			              <li th:each="page:${#numbers.sequence(0, books.number)}"
+			              	  th:if="${books.number <= 3}"
+			                  th:classappend="${books.number == page}? disabled : enabled">
+			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
+			              </li>
+			              <li th:each="page:${#numbers.sequence(books.number - 3, books.number)}"
+			              	  th:if="${books.number > 3}"
+			                  th:classappend="${books.number == page}? disabled : enabled">
+			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
+			              </li>
+			              <li th:each="page:${#numbers.sequence(books.number + 1, books.number + 3)}"
+			              	  th:if="${books.totalPages - books.number > 3}"
+			                  th:classappend="${books.number == page}? disabled : enabled">
+			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
+			              </li>
+			              <li th:each="page:${#numbers.sequence(books.number + 1, books.totalPages - 1)}"
+			              	  th:if="${books.totalPages - books.number <= 3 && books.number < books.totalPages - 1}"
+			                  th:classappend="${books.number == page}? disabled : enabled">
+			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
+			              </li>
+			              <li th:classappend="${books.last} ? disabled : enabled">
+			                <a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}" aria-label="Last">
+			                  <span aria-hidden="true">&raquo;</span>
+			                </a>
+			              </li>
+			            </ul>
+			            </nav>
+          				</div>
+          			<div id="booklist-header-size" class="col-md-2">
+	          			<span>Show </span><select id="size">
+	          				<option></option>
+	          				<option value="20" th:selected="${books.size == 20}">20</option>
+	          				<option value="50" th:selected="${books.size == 50}">50</option>
+	          				<option value="100" th:selected="${books.size == 100}">100</option>
+	          				<option value="1000" th:selected="${books.size == 1000}">1000</option>
+	          			</select>
+	          			<span> books</span>
+          			</div>
+          			</div>
+          				<!-- Table principale -->
 						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
 								<tr>
@@ -99,13 +157,24 @@
 			</div>
 		</div>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
-		<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-		<script>
-		$(function() {
-			$('#booktable').DataTable();
-		});
 		
+		<script>
+			$(function() {
+			
+					$("#size").change(function() {
+						var newSize = $("#size").val()
+						// When size is changed, reset to
+						var newUrl = URI(window.location.href)
+							.setSearch("size", newSize)
+							.setSearch("page", 0)
+							.toString()
+							
+						console.log("New url is " + newUrl)
+						window.location.href = newUrl
+					});
+			});
 		</script>
 	</body>
 </th:block>

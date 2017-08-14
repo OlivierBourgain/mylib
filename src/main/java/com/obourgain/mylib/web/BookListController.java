@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,11 +39,13 @@ public class BookListController extends AbstractController {
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String bookList(Model model) {
+	public String bookList(Model model, Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 
-		List<Book> books = bookService.findByUserId(user.getId());
+		log.info("Pageable is " + page);
+
+		Page<Book> books = bookService.findByUserId(user.getId(), page);
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		return "bookList";
@@ -72,7 +76,7 @@ public class BookListController extends AbstractController {
 		Book book = bookService.isbnLookup(user, isbn);
 		if (book == null) {
 			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
-			return bookList(model);
+			return bookList(model, null);
 		}
 		return "redirect:/book/" + book.getId();
 	}
