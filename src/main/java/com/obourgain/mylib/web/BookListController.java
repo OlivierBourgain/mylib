@@ -2,6 +2,8 @@ package com.obourgain.mylib.web;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +33,6 @@ public class BookListController extends AbstractController {
 		this.bookService = bookService;
 	}
 
-	
 	/**
 	 * List of books for a reader.
 	 */
@@ -45,7 +46,15 @@ public class BookListController extends AbstractController {
 		model.addAttribute("user", user);
 		return "bookList";
 	}
-
+	
+	/**
+	 * Go to create a book page.
+	 */
+	@RequestMapping(value = "/books/create", method = RequestMethod.GET)
+	public String bookCreate(Model model) {
+		log.info("Controller bookNew");
+		return "bookCreate";
+	}
 
 	/**
 	 * Lookup a book with ISBN
@@ -62,18 +71,16 @@ public class BookListController extends AbstractController {
 
 		Book book = bookService.isbnLookup(user, isbn);
 		if (book == null) {
-			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>" );
+			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
 			return bookList(model);
 		}
 		return "redirect:/book/" + book.getId();
 	}
 
-
-
 	/**
 	 * Export de la liste des livres au format CSV.
 	 */
-	@RequestMapping(value = "/exportcsv", method = RequestMethod.GET)
+	@RequestMapping(value = "/books/exportcsv", method = RequestMethod.GET)
 	public void exportcsv(HttpServletResponse response) throws IOException {
 		log.info("Controller export");
 		User user = getUserDetail();
@@ -96,9 +103,9 @@ public class BookListController extends AbstractController {
 				"Id;Status;Title;Subtitle;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description;Comment\n");
 		for (Book book : books) {
 			sb.append(book.getId()).append(";");
-			sb.append(book.getStatus()).append(";");
+			sb.append(book.getStatus() == null ? "" : book.getStatus()).append(";");
 			sb.append(book.getTitle()).append(";");
-			sb.append(book.getSubtitle()).append(";");
+			sb.append(string(book.getSubtitle())).append(";");
 			sb.append(book.getAuthor()).append(";");
 			sb.append(book.getIsbn()).append(";");
 			sb.append(book.getPublisher()).append(";");
@@ -107,18 +114,24 @@ public class BookListController extends AbstractController {
 			for (Tag tag : book.getTags())
 				sb.append(tag.getText()).append(",");
 			sb.append(";");
-			sb.append(book.getLang()).append(";");
-			sb.append(book.getCreated()).append(";");
-			sb.append(book.getUpdated()).append(";");
-			sb.append(book.getSmallImage()).append(";");
-			sb.append(book.getMediumImage()).append(";");
-			sb.append(book.getLargeImage()).append(";");
+			sb.append(string(book.getLang())).append(";");
+			sb.append(date(book.getCreated())).append(";");
+			sb.append(date(book.getUpdated())).append(";");
+			sb.append(string(book.getSmallImage())).append(";");
+			sb.append(string(book.getMediumImage())).append(";");
+			sb.append(string(book.getLargeImage())).append(";");
 			sb.append(string(book.getDescription())).append(";");
 			sb.append(string(book.getComment())).append(";");
 
 			sb.append("\n");
 		}
 		return sb;
+	}
+
+	private String date(LocalDateTime date) {
+		if (date == null) return "";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		return date.format(formatter);
 	}
 
 	private String string(String text) {

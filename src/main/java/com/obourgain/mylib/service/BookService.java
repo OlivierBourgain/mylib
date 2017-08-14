@@ -1,7 +1,6 @@
 package com.obourgain.mylib.service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
 import com.obourgain.mylib.vobj.Book;
-import com.obourgain.mylib.vobj.Book.BookStatus;
 import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
@@ -51,8 +49,7 @@ public class BookService {
 	/**
 	 * Return a book.
 	 * 
-	 * Returns null if the book is not found, or if the book is not linked to
-	 * the user.
+	 * Returns null if the book is not found, or if the book is not linked to the user.
 	 */
 	public Book findBook(String userId, long bookId) {
 		Book b = bookRepository.findOne(bookId);
@@ -72,14 +69,12 @@ public class BookService {
 		if (b == null) return;
 		bookRepository.delete(b);
 	}
-	
-	
+
 	/**
-	 * If the book has an Id, and exists in database, update it. If not, create
-	 * it.
+	 * If the book has an Id, and exists in database, update it. If not, create it.
 	 */
 	public void createOrUpdateBook(Book book, User user, Set<Tag> tags) {
-		Book existing = findBook(user.getId(), book.getId());
+		Book existing = book.getId() == null ? null : findBook(user.getId(), book.getId());
 		if (existing != null) {
 			existing.setStatus(book.getStatus());
 			existing.setTitle(book.getTitle());
@@ -97,16 +92,14 @@ public class BookService {
 			book.setUserId(user.getId());
 			book.setCreated(LocalDateTime.now());
 			book.setUpdated(LocalDateTime.now());
-			book.setStatus(BookStatus.ON_SHELF);
-			book.setTags(new HashSet<Tag>());
+			book.setTags(tags);
 			log.info("Creating book " + book.deepToString());
 			bookRepository.save(book);
 		}
 	}
-	
+
 	/**
-	 * Create a book from its ISBN Number.
-	 * The ISBN can be an ISBN10 or ISBN13.
+	 * Create a book from its ISBN Number. The ISBN can be an ISBN10 or ISBN13.
 	 * 
 	 * Return null if the amazon's page for this book can't be found.
 	 */
@@ -130,7 +123,7 @@ public class BookService {
 	public Book updateBookReading(User user, Long bookId, int year) {
 		Book b = findBook(user.getId(), bookId);
 		if (b == null) return b;
-		
+
 		Reading reading = new Reading();
 		reading.setYear(year);
 		b.getReadings().add(reading);

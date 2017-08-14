@@ -108,5 +108,21 @@ public class BookDetailController extends AbstractController {
 		bookService.deleteBook(user.getId(), bookId);
 		return "redirect:/books/";
 	}
+	
+
+	/**
+	 * Create book.
+	 */
+	@RequestMapping(value = "/book", method = RequestMethod.POST, params = "action=create")
+	public String createBook(Book book) {
+		log.info("Controller createBook");
+		User user = getUserDetail();
+
+		log.info("And the tags are : " + book.getTagString());
+		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
+
+		bookService.createOrUpdateBook(book, user, tags);
+		return "redirect:/books/";
+	}
 
 }
