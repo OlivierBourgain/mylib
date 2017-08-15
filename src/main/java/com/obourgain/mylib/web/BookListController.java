@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +38,9 @@ public class BookListController extends AbstractController {
 	private BookService bookService;
 
 	@Autowired
+	private HttpSession httpSession;
+
+	@Autowired
 	public BookListController(BookService bookService) {
 		this.bookService = bookService;
 	}
@@ -43,16 +49,32 @@ public class BookListController extends AbstractController {
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String bookList(Model model, Pageable page) {
+	public String bookList(HttpServletRequest request, Model model, Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 
-		log.info("Pageable is " + page);
+		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
+		
+		log.info("Request Pageable is " + page);
+		log.info("Cached  Pageable is " + cachedPage);
 
+		if (request.getParameter("page") == null 
+				&& request.getParameter("sort") == null 
+				&& request.getParameter("size") == null 
+				&& cachedPage != null) {
+			String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
+			if (cachedPage.getSort() != null) {
+				Order order = cachedPage.getSort().iterator().next();
+				params += "&sort=" + order.getProperty();
+				if (order.isDescending()) params+=",DESC";
+			}
+			return "redirect:/books?" + params;
+		}
+		
+		httpSession.setAttribute("bookListPageable", page);
 		Page<Book> books = bookService.findByUserId(user.getId(), page);
 
 		List<Integer> pagination = computePagination(books);
-		log.info(pagination);
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		model.addAttribute("pagination", pagination);
@@ -106,7 +128,7 @@ public class BookListController extends AbstractController {
 	 * Lookup a book with ISBN
 	 */
 	@RequestMapping(value = "/isbnlookup", method = RequestMethod.POST)
-	public String isbnlookup(String isbn, Model model) {
+	public String isbnlookup(HttpServletRequest request, String isbn, Model model) {
 		log.info("Controller isbnlookup with " + isbn);
 		User user = getUserDetail();
 
@@ -118,7 +140,7 @@ public class BookListController extends AbstractController {
 		Book book = bookService.isbnLookup(user, isbn);
 		if (book == null) {
 			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
-			return bookList(model, null);
+			return bookList(request, model, null);
 		}
 		return "redirect:/book/" + book.getId();
 	}

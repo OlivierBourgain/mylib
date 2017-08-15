@@ -153,16 +153,16 @@
 		
 		<script>
 			$(function() {
-			
+				
+					// Select page size
 					$("#size").change(function() {
 						var newSize = $("#size").val()
-						// When size is changed, reset to
+						// When size is changed, reset page number to 0
 						var newUrl = URI(window.location.href)
 									.setSearch("size", newSize)
 									.setSearch("page", 0)
 									.toString()
 							
-						console.log("New url is " + newUrl)
 						window.location.href = newUrl
 					});
 					
@@ -173,13 +173,12 @@
 						var cursort = URI(window.location.href).query(true).sort
 						
 						var newsort = col
-						if (cursort == col || cursort == col + ",ASC") newsort = col + ",DESC"
+						if (cursort == col) newsort = col + ",DESC"
 						
 						var newUrl = URI(window.location.href)
 									.setSearch("sort", newsort)
 									.toString()
 						
-						console.log("New url is " + newUrl)
 						window.location.href = newUrl
 					});
 					
@@ -190,7 +189,6 @@
 									.setSearch("page", page)
 									.toString()
 						
-						console.log("New url is " + newUrl)
 						window.location.href = newUrl
 					});					
 			});
