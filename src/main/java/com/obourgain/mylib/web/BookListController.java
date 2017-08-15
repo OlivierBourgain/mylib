@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,6 +29,7 @@ import com.obourgain.mylib.vobj.User;
 
 @Controller
 public class BookListController extends AbstractController {
+
 	private static Logger log = LogManager.getLogger(BookListController.class);
 
 	private BookService bookService;
@@ -46,11 +50,49 @@ public class BookListController extends AbstractController {
 		log.info("Pageable is " + page);
 
 		Page<Book> books = bookService.findByUserId(user.getId(), page);
+
+		List<Integer> pagination = computePagination(books);
+		log.info(pagination);
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
+		model.addAttribute("pagination", pagination);
 		return "bookList";
 	}
-	
+
+	private static final int PAGINATION_GAP = -1;
+
+	/**
+	 * Return a list of pages to be display in the pagination bar.
+	 * 
+	 * This method is in the controller to avoid to many code in the template. It could be moved to an utility class if more lists are added in the application.
+	 */
+	private List<Integer> computePagination(Page<? extends Object> list) {
+		if (list.getTotalPages() <= 7)
+			// Will print all page number between 0 and totalPage - 1
+			return IntStream.rangeClosed(0, list.getTotalPages() - 1).boxed().collect(Collectors.toList());
+
+		// More than 7 pages, will return:
+		// (- is a place holder indicating a gap in the sequence)
+		// 012345- if page <= 3
+		// -23456- if page > 3 and < total - 4
+		// -456789 if page >= total - 4
+		int page = list.getNumber();
+		int last = list.getTotalPages() - 1;
+		List<Integer> res = new ArrayList<>();
+		if (page <= 3) {
+			res.addAll(IntStream.rangeClosed(0, 5).boxed().collect(Collectors.toList()));
+			res.add(PAGINATION_GAP);
+		} else if (page < list.getTotalPages() - 4) {
+			res.add(PAGINATION_GAP);
+			res.addAll(IntStream.rangeClosed(page - 2, page + 2).boxed().collect(Collectors.toList()));
+			res.add(PAGINATION_GAP);
+		} else {
+			res.add(PAGINATION_GAP);
+			res.addAll(IntStream.rangeClosed(last - 5, last).boxed().collect(Collectors.toList()));
+		}
+		return res;
+	}
+
 	/**
 	 * Go to create a book page.
 	 */

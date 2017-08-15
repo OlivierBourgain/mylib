@@ -85,26 +85,15 @@
 			                  <span aria-hidden="true">&laquo;</span>
 			                </a>
 			              </li>
-			              <!--  Pages n-3 to current -->
-			              <li th:each="page:${#numbers.sequence(0, books.number)}"
-			              	  th:if="${books.number <= 3}"
-			                  th:classappend="${books.number == page}? disabled : enabled">
-			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
-			              </li>
-			              <li th:each="page:${#numbers.sequence(books.number - 3, books.number)}"
-			              	  th:if="${books.number > 3}"
-			                  th:classappend="${books.number == page}? disabled : enabled">
-			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
-			              </li>
-			              <li th:each="page:${#numbers.sequence(books.number + 1, books.number + 3)}"
-			              	  th:if="${books.totalPages - books.number > 3}"
-			                  th:classappend="${books.number == page}? disabled : enabled">
-			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
-			              </li>
-			              <li th:each="page:${#numbers.sequence(books.number + 1, books.totalPages - 1)}"
-			              	  th:if="${books.totalPages - books.number <= 3 && books.number < books.totalPages - 1}"
-			                  th:classappend="${books.number == page}? disabled : enabled">
-			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" th:text="${page + 1}">1</a>
+			              <!-- /* Pagination is precomputed on server */ -->
+			              <li th:each="page:${pagination}"
+			                  th:classappend="${books.number == page or page < 0}? disabled : enabled">
+			                  <span
+			                     th:if="${page == -1}"
+			                  	 th:text="...">...</span>
+			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" 
+			                     th:if="${page > -1}"
+			                     th:text="${page + 1}">1</a>
 			              </li>
 			              <li th:classappend="${books.last} ? disabled : enabled">
 			                <a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}" aria-label="Last">
@@ -117,6 +106,7 @@
           			<div id="booklist-header-size" class="col-md-2">
 	          			<span>Show </span><select id="size">
 	          				<option></option>
+	          				<option value="10" th:selected="${books.size == 10}">10</option>
 	          				<option value="20" th:selected="${books.size == 20}">20</option>
 	          				<option value="50" th:selected="${books.size == 50}">50</option>
 	          				<option value="100" th:selected="${books.size == 100}">100</option>
