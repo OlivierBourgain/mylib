@@ -81,7 +81,7 @@
 						<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
 			            <ul class="pagination pagination-sm">
 			              <li th:classappend="${books.first}? disabled : enabled">
-			                <a th:href="@{/books?(page=0, size=${books.size})}" aria-label="First">
+			                <a aria-label="First" href="#"  data-th-attr="data-page=0">
 			                  <span aria-hidden="true">&laquo;</span>
 			                </a>
 			              </li>
@@ -91,12 +91,13 @@
 			                  <span
 			                     th:if="${page == -1}"
 			                  	 th:text="...">...</span>
-			                  <a th:href="@{/books?(page=${page}, size=${books.size})}" 
+			                  <a href="#" 
 			                     th:if="${page > -1}"
+			                     data-th-attr="data-page=${page}"
 			                     th:text="${page + 1}">1</a>
 			              </li>
 			              <li th:classappend="${books.last} ? disabled : enabled">
-			                <a th:href="@{/books?(page=${books.totalPages - 1}, size=${books.size})}" aria-label="Last">
+			                <a href="#"  data-th-attr="data-page=${books.totalPages - 1}" aria-label="Last">
 			                  <span aria-hidden="true">&raquo;</span>
 			                </a>
 			              </li>
@@ -119,10 +120,10 @@
 						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
 								<tr>
-									<th class="col-xs-5">Title</th>
-									<th class="col-xs-2">Author</th>
-									<th class="col-xs-1">Pages</th>
-									<th class="col-xs-3">Tags</th>
+									<th class="col-xs-5"><a href="#" data-col="Title">Title</a></th>
+									<th class="col-xs-2"><a href="#" data-col="Author">Author</a></th>
+									<th class="col-xs-1"><a href="#" data-col="Pages">Pages</a></th>
+									<th class="col-xs-3"><a href="#" data-col="Tags">Tags</a></th>
 									<th class="col-xs-1"></th>
 								</tr>
 							</thead>
@@ -157,13 +158,35 @@
 						var newSize = $("#size").val()
 						// When size is changed, reset to
 						var newUrl = URI(window.location.href)
-							.setSearch("size", newSize)
-							.setSearch("page", 0)
-							.toString()
+									.setSearch("size", newSize)
+									.setSearch("page", 0)
+									.toString()
 							
 						console.log("New url is " + newUrl)
 						window.location.href = newUrl
 					});
+					
+					// Table headers
+					$("th a").click(function() {
+						var col = $(this).attr("data-col")
+						var newUrl = URI(window.location.href)
+									.setSearch("sort", col)
+									.toString()
+						
+						console.log("New url is " + newUrl)
+						window.location.href = newUrl
+					});
+					
+					// Pagination
+					$("li a").click(function() {
+						var page = $(this).attr("data-page")
+						var newUrl = URI(window.location.href)
+									.setSearch("page", page)
+									.toString()
+						
+						console.log("New url is " + newUrl)
+						window.location.href = newUrl
+					});					
 			});
 		</script>
 	</body>

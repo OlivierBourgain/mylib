@@ -67,28 +67,28 @@ public class BookListController extends AbstractController {
 	 * This method is in the controller to avoid to many code in the template. It could be moved to an utility class if more lists are added in the application.
 	 */
 	private List<Integer> computePagination(Page<? extends Object> list) {
-		if (list.getTotalPages() <= 7)
+		if (list.getTotalPages() <= 9)
 			// Will print all page number between 0 and totalPage - 1
 			return IntStream.rangeClosed(0, list.getTotalPages() - 1).boxed().collect(Collectors.toList());
 
-		// More than 7 pages, will return:
+		// More than 9 pages, will return:
 		// (- is a place holder indicating a gap in the sequence)
-		// 012345- if page <= 3
-		// -23456- if page > 3 and < total - 4
-		// -456789 if page >= total - 4
+		// 01234567- if page <= 4
+		// -3456789- if page > 4 and < total - 5
+		// -23456789 if page >= total - 5
 		int page = list.getNumber();
 		int last = list.getTotalPages() - 1;
 		List<Integer> res = new ArrayList<>();
-		if (page <= 3) {
-			res.addAll(IntStream.rangeClosed(0, 5).boxed().collect(Collectors.toList()));
+		if (page <= 4) {
+			res.addAll(IntStream.rangeClosed(0, 7).boxed().collect(Collectors.toList()));
 			res.add(PAGINATION_GAP);
-		} else if (page < list.getTotalPages() - 4) {
+		} else if (page < list.getTotalPages() - 5) {
 			res.add(PAGINATION_GAP);
-			res.addAll(IntStream.rangeClosed(page - 2, page + 2).boxed().collect(Collectors.toList()));
+			res.addAll(IntStream.rangeClosed(page - 3, page + 3).boxed().collect(Collectors.toList()));
 			res.add(PAGINATION_GAP);
 		} else {
 			res.add(PAGINATION_GAP);
-			res.addAll(IntStream.rangeClosed(last - 5, last).boxed().collect(Collectors.toList()));
+			res.addAll(IntStream.rangeClosed(last - 7, last).boxed().collect(Collectors.toList()));
 		}
 		return res;
 	}
