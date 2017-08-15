@@ -169,8 +169,14 @@
 					// Table headers
 					$("th a").click(function() {
 						var col = $(this).attr("data-col")
+						
+						var cursort = URI(window.location.href).query(true).sort
+						
+						var newsort = col
+						if (cursort == col || cursort == col + ",ASC") newsort = col + ",DESC"
+						
 						var newUrl = URI(window.location.href)
-									.setSearch("sort", col)
+									.setSearch("sort", newsort)
 									.toString()
 						
 						console.log("New url is " + newUrl)
