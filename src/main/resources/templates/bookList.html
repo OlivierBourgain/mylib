@@ -68,10 +68,10 @@
 				
 				<div class="col-md-12">
 					<h3>Your library</h3>
-					<div th:if="${#lists.isEmpty(books)}">
+					<div th:if="${books.totalElements == 0}">
 						<p>You have no book in your book list</p>
 					</div>
-					<div th:unless="${#lists.isEmpty(books)}">
+					<div th:if="${books.totalElements gt 0}">
 					<!-- Pagination -->
 					<div class="row">
 						<div id="booklist-header-summary" class="col-md-4">
