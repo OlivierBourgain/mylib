@@ -51,6 +51,13 @@
 					<div class="row">
 						<a href="/books/create">New book</a>
 					</div>
+                    <div class="row">
+                        <input id="search-criteria" type="text" name="query" th:value="${searchCriteria}"/>
+                        <button type="submit" onclick="search();">Submit</button>
+                    </div>
+                    <div class="row">
+                      <a href="/books/rebuildindex">Rebuild search index</a>
+                    </div>
 				</div>
 			</div>
 			<div class="alert alert-warning alert-dismissible" role="alert"
@@ -73,49 +80,52 @@
 					</div>
 					<div th:if="${books.totalElements gt 0}">
 					<!-- Pagination -->
-					<div class="row">
-						<div id="booklist-header-summary" class="col-md-4">
-							<span th:text="${books.totalElements}"></span> results, showing page <span th:text="${books.number + 1}"></span> of <span th:text="${books.totalPages}"></span>
-						</div>
-						<div id="booklist-header-pages" class="col-md-6">
-						<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
-			            <ul class="pagination pagination-sm">
-			              <li th:classappend="${books.first}? disabled : enabled">
-			                <a aria-label="First" href="#"  data-th-attr="data-page=0">
-			                  <span aria-hidden="true">&laquo;</span>
-			                </a>
-			              </li>
-			              <!-- /* Pagination is precomputed on server */ -->
-			              <li th:each="page:${pagination}"
-			                  th:classappend="${books.number == page or page < 0}? disabled : enabled">
-			                  <span
-			                     th:if="${page == -1}"
-			                  	 th:text="...">...</span>
-			                  <a href="#" 
-			                     th:if="${page > -1}"
-			                     data-th-attr="data-page=${page}"
-			                     th:text="${page + 1}">1</a>
-			              </li>
-			              <li th:classappend="${books.last} ? disabled : enabled">
-			                <a href="#"  data-th-attr="data-page=${books.totalPages - 1}" aria-label="Last">
-			                  <span aria-hidden="true">&raquo;</span>
-			                </a>
-			              </li>
-			            </ul>
-			            </nav>
+					
+						<div class="row">
+							<div id="booklist-header-summary" class="col-md-5">
+								<span th:text="${books.totalElements}"></span> results, 
+								showing page <span th:text="${books.number + 1}"></span> 
+								of <span th:text="${books.totalPages}"></span><span th:if="${!#strings.isEmpty(searchCriteria)}">, filter on  <strong th:text="${searchCriteria}">Search</strong></span>
+							</div>
+							<div id="booklist-header-pages" class="col-md-5">
+								<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
+					            <ul class="pagination pagination-sm">
+					              <li th:classappend="${books.first}? disabled : enabled">
+					                <a aria-label="First" href="#"  data-th-attr="data-page=0">
+					                  <span aria-hidden="true">&laquo;</span>
+					                </a>
+					              </li>
+					              <!-- /* Pagination is precomputed on server */ -->
+					              <li th:each="page:${pagination}"
+					                  th:classappend="${books.number == page or page < 0}? disabled : enabled">
+					                  <span
+					                     th:if="${page == -1}"
+					                  	 th:text="...">...</span>
+					                  <a href="#" 
+					                     th:if="${page > -1}"
+					                     data-th-attr="data-page=${page}"
+					                     th:text="${page + 1}">1</a>
+					              </li>
+					              <li th:classappend="${books.last} ? disabled : enabled">
+					                <a href="#"  data-th-attr="data-page=${books.totalPages - 1}" aria-label="Last">
+					                  <span aria-hidden="true">&raquo;</span>
+					                </a>
+					              </li>
+					            </ul>
+					            </nav>
+		          			</div>
+		          			<div id="booklist-header-size" class="col-md-2">
+			          			<span>Show </span><select id="size">
+			          				<option></option>
+			          				<option value="10" th:selected="${books.size == 10}">10</option>
+			          				<option value="20" th:selected="${books.size == 20}">20</option>
+			          				<option value="50" th:selected="${books.size == 50}">50</option>
+			          				<option value="100" th:selected="${books.size == 100}">100</option>
+			          				<option value="1000" th:selected="${books.size == 1000}">1000</option>
+			          			</select>
+			          			<span> books</span>
+		          			</div>
           				</div>
-          			<div id="booklist-header-size" class="col-md-2">
-	          			<span>Show </span><select id="size">
-	          				<option></option>
-	          				<option value="10" th:selected="${books.size == 10}">10</option>
-	          				<option value="20" th:selected="${books.size == 20}">20</option>
-	          				<option value="50" th:selected="${books.size == 50}">50</option>
-	          				<option value="100" th:selected="${books.size == 100}">100</option>
-	          				<option value="1000" th:selected="${books.size == 1000}">1000</option>
-	          			</select>
-	          			<span> books</span>
-          			</div>
-          			</div>
           				<!-- Table principale -->
 						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
@@ -154,44 +164,54 @@
 		<script>
 			$(function() {
 				
-					// Select page size
-					$("#size").change(function() {
-						var newSize = $("#size").val()
-						// When size is changed, reset page number to 0
-						var newUrl = URI(window.location.href)
-									.setSearch("size", newSize)
-									.setSearch("page", 0)
-									.toString()
-							
-						window.location.href = newUrl
-					});
-					
-					// Table headers
-					$("th a").click(function() {
-						var col = $(this).attr("data-col")
-						
-						var cursort = URI(window.location.href).query(true).sort
-						
-						var newsort = col
-						if (cursort == col) newsort = col + ",DESC"
-						
-						var newUrl = URI(window.location.href)
-									.setSearch("sort", newsort)
-									.toString()
-						
-						window.location.href = newUrl
-					});
-					
-					// Pagination
-					$("li a").click(function() {
-						var page = $(this).attr("data-page")
-						var newUrl = URI(window.location.href)
-									.setSearch("page", page)
-									.toString()
-						
-						window.location.href = newUrl
-					});					
+        				// Select page size
+        				$("#size").change(function() {
+        					var newSize = $("#size").val()
+        					// When size is changed, reset page number to 0
+        					var newUrl = URI(window.location.href)
+        								.setSearch("size", newSize)
+        								.setSearch("page", 0)
+        								.toString()
+        						
+        					window.location.href = newUrl
+        				});
+        				
+        				// Table headers
+        				$("th a").click(function() {
+        					var col = $(this).attr("data-col")
+        					
+        					var cursort = URI(window.location.href).query(true).sort
+        					
+        					var newsort = col
+        					if (cursort == col) newsort = col + ",DESC"
+        					
+        					var newUrl = URI(window.location.href)
+        								.setSearch("sort", newsort)
+        								.toString()
+        					
+        					window.location.href = newUrl
+        				});
+        				
+        				// Pagination
+        				$("li a").click(function() {
+        					var page = $(this).attr("data-page")
+        					var newUrl = URI(window.location.href)
+        								.setSearch("page", page)
+        								.toString()
+        					
+        					window.location.href = newUrl
+        				});		
 			});
+      
+            // Search
+            function search() {
+              var criteria = $("#search-criteria").val()
+              var newUrl = URI(window.location.href)
+                .setSearch("criteria", criteria)
+                .toString()
+    
+               window.location.href = newUrl
+            } 
 		</script>
 	</body>
 </th:block>

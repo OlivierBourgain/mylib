@@ -91,6 +91,7 @@ public class Book {
 		StringBuilder res = new StringBuilder();
 		res.append("------\n");
 		res.append("Id       : ").append(id).append("\n");
+		res.append("User     : ").append(userId).append("\n");
 		res.append("Status   : ").append(status).append("\n");
 		res.append("ISBN     : ").append(isbn).append("\n");
 		res.append("TITLE    : ").append(title).append("\n");
@@ -98,7 +99,6 @@ public class Book {
 		res.append("AUTHOR   : ").append(author).append("\n");
 		res.append("PUBLISHER: ").append(publisher).append("\n");
 		res.append("DATE     : ").append(publicationDate).append("\n");
-		res.append("GOOGLE   : ").append(googleURL).append("\n");
 		res.append("PAGES    : ").append(pages).append("\n");
 		res.append("Small IMG: ").append(smallImage).append("\n");
 		res.append("Med   IMG: ").append(mediumImage).append("\n");

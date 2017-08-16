@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
@@ -25,12 +26,11 @@ import com.obourgain.mylib.vobj.User;
 public class BookService {
 	private static Logger log = LogManager.getLogger(BookService.class);
 
+	@Autowired
 	private BookRepository bookRepository;
 
 	@Autowired
-	public BookService(BookRepository bookRepository) {
-		this.bookRepository = bookRepository;
-	}
+	private LuceneSearch luceneSearch;
 
 	/**
 	 * Return the list of books for a user.
@@ -88,6 +88,7 @@ public class BookService {
 			existing.setUpdated(LocalDateTime.now());
 			log.info("Updating book " + existing.deepToString());
 			bookRepository.save(existing);
+			luceneSearch.addToIndex(existing);
 		} else {
 			book.setUserId(user.getId());
 			book.setCreated(LocalDateTime.now());
@@ -95,6 +96,7 @@ public class BookService {
 			book.setTags(tags);
 			log.info("Creating book " + book.deepToString());
 			bookRepository.save(book);
+			luceneSearch.addToIndex(book);
 		}
 	}
 

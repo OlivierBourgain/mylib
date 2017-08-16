@@ -5,7 +5,12 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -18,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
@@ -26,6 +32,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.obourgain.mylib.service.BookService;
+import com.obourgain.mylib.service.TagService;
+import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
@@ -35,15 +43,14 @@ public class BookListController extends AbstractController {
 
 	private static Logger log = LogManager.getLogger(BookListController.class);
 
+	@Autowired
 	private BookService bookService;
-
+	@Autowired
+	private TagService tagService;
 	@Autowired
 	private HttpSession httpSession;
-
 	@Autowired
-	public BookListController(BookService bookService) {
-		this.bookService = bookService;
-	}
+	private LuceneSearch luceneSearch;
 
 	/**
 	 * List of books for a reader.
@@ -54,31 +61,98 @@ public class BookListController extends AbstractController {
 		User user = getUserDetail();
 
 		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
-		
+		String searchCriteria = request.getParameter("criteria");
+
 		log.info("Request Pageable is " + page);
 		log.info("Cached  Pageable is " + cachedPage);
+		log.info("searchCriteria " + searchCriteria);
 
-		if (request.getParameter("page") == null 
-				&& request.getParameter("sort") == null 
-				&& request.getParameter("size") == null 
+		if (request.getParameter("page") == null
+				&& request.getParameter("sort") == null
+				&& request.getParameter("size") == null
+				&& searchCriteria == null
 				&& cachedPage != null) {
-			String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
-			if (cachedPage.getSort() != null) {
-				Order order = cachedPage.getSort().iterator().next();
-				params += "&sort=" + order.getProperty();
-				if (order.isDescending()) params+=",DESC";
-			}
+			String params = getParams(cachedPage);
 			return "redirect:/books?" + params;
 		}
-		
 		httpSession.setAttribute("bookListPageable", page);
-		Page<Book> books = bookService.findByUserId(user.getId(), page);
+
+		Page<Book> books;
+		if (StringUtils.isNotBlank(searchCriteria)) {
+			// Use Lucene
+			books = getBooks(searchCriteria, page, user);
+		} else {
+			// Use database
+			books = bookService.findByUserId(user.getId(), page);
+		}
 
 		List<Integer> pagination = computePagination(books);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("searchCriteria", searchCriteria);
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
-		model.addAttribute("pagination", pagination);
 		return "bookList";
+	}
+
+	// Generate the URL parameters that are equivalent to the given Pageable.
+	// Used when a Pageable is in session, and we want to reapply it.
+	private String getParams(Pageable cachedPage) {
+		String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
+		if (cachedPage.getSort() != null) {
+			Order order = cachedPage.getSort().iterator().next();
+			params += "&sort=" + order.getProperty();
+			if (order.isDescending()) params += ",DESC";
+		}
+		return params;
+	}
+
+	/**
+	 * Get the list of book from Lucene, as a Page<Book>.
+	 */
+	private Page<Book> getBooks(String criteria, Pageable page, User user) {
+		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, 100);
+
+		// Fix the tags
+		Map<Long, Tag> alltags = tagService.findByUserId(user.getId()).stream()
+				.collect(Collectors.toMap(Tag::getId, Function.identity()));
+		Pattern pattern = Pattern.compile(",");
+		luceneBooks.stream().forEach(
+				book -> book.setTags(pattern.splitAsStream(book.getTagString())
+						.map(Long::valueOf)
+						.map(x -> alltags.get(x))
+						.collect(Collectors.toSet())));
+
+		// Apply the pageable (sort)
+		if (page.getSort() != null) {
+			Order order = page.getSort().iterator().next();
+			Comparator<Book> comparator = Comparator.comparing(Book::getTitle);
+			;
+			switch (order.getProperty()) {
+			case "Title":
+				comparator = Comparator.comparing(Book::getTitle);
+				break;
+			case "Author":
+				comparator = Comparator.comparing(Book::getAuthor);
+				break;
+			case "Pages":
+				comparator = Comparator.comparing(Book::getPages);
+				break;
+			case "Tags":
+				comparator = Comparator.comparing(Book::getTagString);
+				break;
+			}
+			if (order.isDescending()) comparator = comparator.reversed();
+			Collections.sort(luceneBooks, comparator);
+		}
+
+		// Apply the pageable (size, and page)
+		int start = page.getOffset();
+		if (start > luceneBooks.size()) start = 0;
+		int end = (start + page.getPageSize()) > luceneBooks.size() ? luceneBooks.size() : (start + page.getPageSize());
+		log.info(page.getOffset() + "/" + page.getPageNumber() + "/" + page.getPageSize());
+		log.info(start + "/" + end);
+		Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), page, luceneBooks.size());
+		return books;
 	}
 
 	private static final int PAGINATION_GAP = -1;
@@ -86,7 +160,9 @@ public class BookListController extends AbstractController {
 	/**
 	 * Return a list of pages to be display in the pagination bar.
 	 * 
-	 * This method is in the controller to avoid to many code in the template. It could be moved to an utility class if more lists are added in the application.
+	 * This method is in the controller to avoid to many code in the template.
+	 * It could be moved to an utility class if more lists are added in the
+	 * application.
 	 */
 	private List<Integer> computePagination(Page<? extends Object> list) {
 		if (list.getTotalPages() <= 9)
@@ -204,6 +280,20 @@ public class BookListController extends AbstractController {
 
 	private String string(String text) {
 		return text == null ? "" : text;
+	}
+
+	/**
+	 * Recrée l'index de recherche.
+	 */
+	@RequestMapping(value = "/books/rebuildindex", method = RequestMethod.GET)
+	public String rebuildindex(HttpServletResponse response) throws IOException {
+		log.info("Controller rebuildindex");
+		User user = getUserDetail();
+
+		List<Book> books = bookService.findByUserId(user.getId());
+		luceneSearch.clearIndex();
+		luceneSearch.addAll(books);
+		return "redirect:/books/";
 	}
 
 }

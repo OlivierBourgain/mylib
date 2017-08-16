@@ -1,6 +1,4 @@
-Sort (fin)
-Search by tag
-Search by author, title
+Fin du search
 Formatage des dates dans le détail book.
 Tag list : sort tag (per name, or per color ?)
 Rename a tag (SF -> SciFi)
