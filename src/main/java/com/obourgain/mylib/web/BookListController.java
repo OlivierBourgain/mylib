@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -86,6 +88,13 @@ public class BookListController extends AbstractController {
 			books = bookService.findByUserId(user.getId(), page);
 		}
 
+		// Fix tags order
+		books.map(book -> {
+			Set<Tag> sortedTag = new TreeSet<Tag>(book.getTags());
+			book.setTags(sortedTag);
+			return book;
+		});
+
 		List<Integer> pagination = computePagination(books);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchCriteria", searchCriteria);
@@ -113,14 +122,16 @@ public class BookListController extends AbstractController {
 		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, 100);
 
 		// Fix the tags
-		Map<Long, Tag> alltags = tagService.findByUserId(user.getId()).stream()
+		Map<Long, Tag> alltags = tagService
+				.findByUserId(user.getId()).stream()
 				.collect(Collectors.toMap(Tag::getId, Function.identity()));
 		Pattern pattern = Pattern.compile(",");
 		luceneBooks.stream().forEach(
-				book -> book.setTags(pattern.splitAsStream(book.getTagString())
-						.map(Long::valueOf)
-						.map(x -> alltags.get(x))
-						.collect(Collectors.toSet())));
+				book -> book.setTags(pattern
+								.splitAsStream(book.getTagString())
+								.map(Long::valueOf)
+								.map(x -> alltags.get(x))
+								.collect(Collectors.toSet())));
 
 		// Apply the pageable (sort)
 		if (page.getSort() != null) {
@@ -160,9 +171,7 @@ public class BookListController extends AbstractController {
 	/**
 	 * Return a list of pages to be display in the pagination bar.
 	 * 
-	 * This method is in the controller to avoid to many code in the template.
-	 * It could be moved to an utility class if more lists are added in the
-	 * application.
+	 * This method is in the controller to avoid to many code in the template. It could be moved to an utility class if more lists are added in the application.
 	 */
 	private List<Integer> computePagination(Page<? extends Object> list) {
 		if (list.getTotalPages() <= 9)

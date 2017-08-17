@@ -96,6 +96,18 @@ public class TagService {
 		tagRepository.save(tag);
 		return tag;
 	}
+	
+	public Tag updateTag(Long tagId, Integer priority, String userId) {
+		Tag tag = tagRepository.getOne(tagId);
+		if (!tag.getUserId().equals(userId)) {
+			log.error("Bad user id " + tag.getUserId() + " vs " + userId);
+			throw new IllegalArgumentException("Not your stuff");
+		}
+		tag.setPriority(priority);
+		tag.setUpdated(LocalDateTime.now());
+		tagRepository.save(tag);
+		return tag;
+	}
 
 	/**
 	 * Delete a tag.
@@ -119,5 +131,7 @@ public class TagService {
 		tagRepository.delete(tag);
 		return;
 	}
+
+
 
 }

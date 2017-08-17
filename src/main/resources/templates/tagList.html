@@ -31,6 +31,9 @@
     line-height: 20px;
   }
   
+  .input-priority{width:50px;text-align:right;padding:0 4px 0 0}
+  a{cursor:pointer}	
+  
       #tag-color-A{background-color:#E7E7E7; color:#464646; border-color:#464646;} /* Mercury */
       #tag-color-B{background-color:#B6CFF5; color:#0D3472; border-color:#0D3472;} /* Perano */
       #tag-color-C{background-color:#98D7E4; color:#0D3B44; border-color:#0D3B44;} /* Regent St blue */
@@ -58,12 +61,23 @@
 </style>
   </head>
   <body>
+  
+	<input type="hidden" id="csrf" name="_csrf" th:value="${_csrf.token}"/>
+  
     <div class="container">
       <h1>Tags</h1>
       <a href="/books">&lt; back to list</a>
       <p class="lead"></p>
       <div class="row">
         <table class="table">
+          <thead>
+          	<tr>
+          		<th></th>
+          		<th></th>
+          		<th>Priority</th>
+          		<th></th>
+          	</tr>
+          </thead>
           <tbody>
             <tr th:each="tag:${tags}" th:id="${tag.id}">
               <td>
@@ -81,6 +95,10 @@
                   <span id="tag-color-P" class="tagcolor">a</span> <span id="tag-color-Q" class="tagcolor">a</span> <span id="tag-color-R" class="tagcolor">a</span>
                   <span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
                   <span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>
+              </td>
+              <td>
+              	<input type="text" th:value="${tag.priority}" class="input-priority"></input><a></a>
+                <a class="update-priority">update</a>
               </td>
               <td>
                 <a class="delete">delete</a>
@@ -103,9 +121,10 @@
         var back = rgb2hex($(this).css('background-color'));
         var color = rgb2hex($(this).css('color'));
         var border = rgb2hex($(this).css('border-color'));
+        var csrf = $("#csrf").val(); 
         console.log("New color for " + tagid);
-        $.get( "updateTag", 
-        		{ tagId: tagid, backgroundColor: back, color: color, borderColor: border },
+        $.post( "updateTagColor", 
+        		{ tagId: tagid, backgroundColor: back, color: color, borderColor: border, _csrf:csrf},
         		function() { location.reload()}
         );
        
@@ -113,8 +132,17 @@
       
       $('a.delete').click(function() {
         var tagid = $(this).closest('tr').attr('id'); // table row ID 
-        $.get( "deleteTag", { tagId: tagid}, function() {location.reload()} );
+        var csrf = $("#csrf").val(); 
+        $.post( "deleteTag", { tagId: tagid, csrf: csrf}, function() {location.reload()} );
       });
+      
+      $('a.update-priority').click(function() {
+          var tagid = $(this).closest('tr').attr('id'); // table row ID 
+          var priority = $(this).siblings('input').val(); 
+          var csrf = $("#csrf").val(); 
+          console.log("Modifying priority to " + priority + " for tag " + tagid)
+          $.post( "updateTagPriority", { tagId: tagid, priority: priority, _csrf: csrf}, function() {location.reload()} );
+        });
       
       // https://stackoverflow.com/questions/1740700/how-to-get-hex-color-value-rather-than-rgb-value
       function rgb2hex(rgb) {

@@ -15,7 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="Tag")
-public class Tag {
+public class Tag implements Comparable<Tag>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -26,6 +26,7 @@ public class Tag {
 	private String color;
 	private String backgroundColor;
 	private String borderColor;
+	private Integer priority;
 	private LocalDateTime created;
 	private LocalDateTime updated;
 	
@@ -38,6 +39,15 @@ public class Tag {
 				backgroundColor, color, borderColor);
 	}
 
+	@Override
+	public int compareTo(Tag o) {
+		if (getPriority() ==  o.getPriority()) return getText().compareTo(o.getText());
+		if (getPriority() == null) return 1;
+		if (o.getPriority() == null) return -1;
+		// Else by priority desc
+		return -getPriority().compareTo(o.getPriority());
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -105,5 +115,14 @@ public class Tag {
 	public void setUpdated(LocalDateTime updated) {
 		this.updated = updated;
 	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
 
 }

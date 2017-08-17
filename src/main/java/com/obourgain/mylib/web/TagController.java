@@ -1,5 +1,6 @@
 package com.obourgain.mylib.web;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,7 @@ public class TagController extends AbstractController {
 	private TagService tagService;
 
 	@Autowired
-	public TagController( TagService tagService) {
+	public TagController(TagService tagService) {
 		this.tagService = tagService;
 	}
 
@@ -34,6 +35,7 @@ public class TagController extends AbstractController {
 		User user = getUserDetail();
 
 		List<Tag> tags = tagService.findByUserId(user.getId());
+		Collections.sort(tags);
 		model.addAttribute("tags", tags);
 		model.addAttribute("user", user);
 		return "tagList";
@@ -42,19 +44,31 @@ public class TagController extends AbstractController {
 	/**
 	 * Update of tag colors.
 	 */
-	@RequestMapping(value = "/updateTag", method = RequestMethod.GET)
-	public String updateTag(Long tagId, String backgroundColor, String color, String borderColor) {
+	@RequestMapping(value = "/updateTagColor", method = RequestMethod.POST)
+	public String updateTagColor(Long tagId, String backgroundColor, String color, String borderColor) {
 		User user = getUserDetail();
 		log.info("Controller updateTag " + tagId + " with " + backgroundColor + "/" + color + "/" + borderColor);
 
 		tagService.updateTag(tagId, backgroundColor, color, borderColor, user.getId());
 		return "empty";
 	}
+	
+	/**
+	 * Update of tag priority.
+	 */
+	@RequestMapping(value = "/updateTagPriority", method = RequestMethod.POST)
+	public String updateTagPriority(Long tagId, Integer priority) {
+		User user = getUserDetail();
+		log.info("Controller updateTag " + tagId + " with priority " + priority);
+
+		tagService.updateTag(tagId, priority, user.getId());
+		return "empty";
+	}
 
 	/**
 	 * Delete a tag.
 	 */
-	@RequestMapping(value = "/deleteTag", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteTag", method = RequestMethod.POST)
 	public String deleteTag(Long tagId) {
 		User user = getUserDetail();
 		log.info("Controller deleteTag  " + tagId);
