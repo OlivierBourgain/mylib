@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
@@ -82,9 +83,11 @@ public class BookListController extends AbstractController {
 		Page<Book> books;
 		if (StringUtils.isNotBlank(searchCriteria)) {
 			// Use Lucene
+			log.info("Getting the list of books from Lucene");
 			books = getBooks(searchCriteria, page, user);
 		} else {
 			// Use database
+			log.info("Getting the list of books from Database");
 			books = bookService.findByUserId(user.getId(), page);
 		}
 
@@ -158,11 +161,15 @@ public class BookListController extends AbstractController {
 
 		// Apply the pageable (size, and page)
 		int start = page.getOffset();
-		if (start > luceneBooks.size()) start = 0;
+		Pageable newPage = page;
+		if (start > luceneBooks.size()) {
+			start = 0;
+			newPage = new PageRequest(0, page.getPageSize(), page.getSort());
+		}
 		int end = (start + page.getPageSize()) > luceneBooks.size() ? luceneBooks.size() : (start + page.getPageSize());
 		log.info(page.getOffset() + "/" + page.getPageNumber() + "/" + page.getPageSize());
 		log.info(start + "/" + end);
-		Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), page, luceneBooks.size());
+		Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
 		return books;
 	}
 
