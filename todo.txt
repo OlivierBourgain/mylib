@@ -1,7 +1,5 @@
 Formatage des dates dans le détail book.
-Tag list : sort tag (per name, or per color ?)
 Rename a tag (SF -> SciFi)
-Tag priority
 Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
 Import from CSV
 Export PDF (liste/détail)

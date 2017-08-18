@@ -24,15 +24,12 @@ import com.obourgain.mylib.vobj.User;
 public class StatController extends AbstractController {
 	private static Logger log = LogManager.getLogger(StatController.class);
 
+	@Autowired
 	private BookService bookService;
+	@Autowired
 	private StatService statService;
 
-	@Autowired
-	public StatController(BookService bookService, StatService statService) {
-		this.bookService = bookService;
-		this.statService = statService;
-	}
-
+	
 	/**
 	 * Stats.
 	 */

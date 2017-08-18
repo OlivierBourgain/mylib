@@ -19,12 +19,8 @@ import com.obourgain.mylib.vobj.User;
 public class TagController extends AbstractController {
 	private static Logger log = LogManager.getLogger(TagController.class);
 
-	private TagService tagService;
-
 	@Autowired
-	public TagController(TagService tagService) {
-		this.tagService = tagService;
-	}
+	private TagService tagService;
 
 	/**
 	 * List of tags.

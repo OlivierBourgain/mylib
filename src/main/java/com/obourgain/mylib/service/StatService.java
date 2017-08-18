@@ -17,8 +17,9 @@ import com.obourgain.mylib.util.SqlUtils;
 
 @Service
 public class StatService {
-	private final JdbcTemplate jdbcTemplate;
 	private static final Logger log = LogManager.getLogger(StatService.class);
+
+	private final JdbcTemplate jdbcTemplate;
 
 	@Autowired
 	public StatService(JdbcTemplate jdbcTemplate) {

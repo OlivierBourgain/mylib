@@ -28,14 +28,10 @@ import com.obourgain.mylib.vobj.User;
 public class BookDetailController extends AbstractController {
 	private static Logger log = LogManager.getLogger(BookDetailController.class);
 
-	private BookService bookService;
-	private TagService tagService;
-
 	@Autowired
-	public BookDetailController(BookService bookService, TagService tagService) {
-		this.bookService = bookService;
-		this.tagService = tagService;
-	}
+	private BookService bookService;
+	@Autowired
+	private TagService tagService;
 
 	/**
 	 * Get the detail of a book.
