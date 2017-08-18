@@ -38,7 +38,7 @@ a{cursor:pointer}
 						<button type="submit" class="btn btn-success">Submit</button>
 					</form>
 				</div>
-				<div class="col-md-6">
+				<div id="menu" class="col-md-3">
 					<h3>&nbsp;</h3>
 					<div class="row">
 						<a href="/tags">Manage tags</a>
@@ -60,6 +60,7 @@ a{cursor:pointer}
                       <a href="/books/rebuildindex">Rebuild search index</a>
                     </div>
 				</div>
+                <div class="col-md-3" id="bookpreview"></div>
 			</div>
 			<div class="alert alert-warning alert-dismissible" role="alert"
 				th:if="${!#strings.isEmpty(alertWarn)}"
@@ -71,22 +72,21 @@ a{cursor:pointer}
 				th:text="${alertError}">
 				Alert message
 			</div>
-
 			<div class="row">
-				
 				<div class="col-md-12">
 					<h3>Your library</h3>
 					<div th:if="${books.totalElements == 0}">
-						<p>You have no book in your book list</p>
+						<p>No book found</p>
 					</div>
 					<div th:if="${books.totalElements gt 0}">
 					<!-- Pagination -->
 					
 						<div class="row">
 							<div id="booklist-header-summary" class="col-md-5">
-								<span th:text="${books.totalElements}"></span> results, 
-								showing page <span th:text="${books.number + 1}"></span> 
-								of <span th:text="${books.totalPages}"></span><span th:if="${!#strings.isEmpty(searchCriteria)}">, filter on  <strong th:text="${searchCriteria}">Search</strong></span>
+								<span th:text="${books.totalElements}"></span> results<!-- Antispace device
+								--><span th:if="${books.totalPages gt 1}">, showing page <span th:text="${books.number + 1}"></span>
+                                 of <span th:text="${books.totalPages}"></span></span><!-- Antispace device  
+                                  --><span th:if="${!#strings.isEmpty(searchCriteria)}">, filter on  <strong th:text="${searchCriteria}">Search</strong></span>
 							</div>
 							<div id="booklist-header-pages" class="col-md-5">
 								<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
@@ -139,13 +139,15 @@ a{cursor:pointer}
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="book : ${books}">
+								<tr th:each="book : ${books}" class="book-line">
 									<td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
 									<td th:text="${book.author}">Author</td>
 									<td th:text="${book.pages}">Pages</td>
 									<td>
-										<span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}"
-										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">tag</span>
+										<span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}" data-th-attr="data-tagid=${tag.id}"
+										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">
+                                            tag
+                                         </span>
 									</td>
 									<td>
 										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</span>
@@ -161,7 +163,6 @@ a{cursor:pointer}
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
-		
 		<script>
 			$(function() {
 				
@@ -201,7 +202,7 @@ a{cursor:pointer}
         								.toString()
         					
         					window.location.href = newUrl
-        				});		
+        				});
 			});
       
             // Search
