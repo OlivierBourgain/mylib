@@ -133,7 +133,7 @@
       $('a.delete').click(function() {
         var tagid = $(this).closest('tr').attr('id'); // table row ID 
         var csrf = $("#csrf").val(); 
-        $.post( "deleteTag", { tagId: tagid, csrf: csrf}, function() {location.reload()} );
+        $.post( "deleteTag", { tagId: tagid, _csrf: csrf}, function() {location.reload()} );
       });
       
       $('a.update-priority').click(function() {
