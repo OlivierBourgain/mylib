@@ -89,6 +89,7 @@ public class BookListController extends AbstractController {
 		List<Integer> pagination = computePagination(books);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchCriteria", searchCriteria);
+		model.addAttribute("sort", books.getSort() == null? null: books.getSort().iterator().next());
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		return "bookList";

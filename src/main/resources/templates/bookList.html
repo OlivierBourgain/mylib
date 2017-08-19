@@ -80,7 +80,6 @@ a{cursor:pointer}
 					</div>
 					<div th:if="${books.totalElements gt 0}">
 					<!-- Pagination -->
-					
 						<div class="row">
 							<div id="booklist-header-summary" class="col-md-5">
 								<span th:text="${books.totalElements}"></span> results<!-- Antispace device
@@ -131,10 +130,30 @@ a{cursor:pointer}
 						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
 								<tr>
-									<th class="col-xs-5"><a href="#" data-col="Title">Title</a></th>
-									<th class="col-xs-2"><a href="#" data-col="Author">Author</a></th>
-									<th class="col-xs-1"><a href="#" data-col="Pages">Pages</a></th>
-									<th class="col-xs-3"><a href="#" data-col="Tags">Tags</a></th>
+									<th class="col-xs-5">
+										<a href="#" data-col="Title">Title
+										<span th:if="${sort != null && sort.property == 'Title' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+										<span th:if="${sort != null && sort.property == 'Title' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+										</a>
+									</th>
+									<th class="col-xs-2">
+										<a href="#" data-col="Author">Author
+										<span th:if="${sort != null && sort.property == 'Author' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+										<span th:if="${sort != null && sort.property == 'Author' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+									    </a>    
+									</th>
+									<th class="col-xs-1">
+										<a href="#" data-col="Pages">Pages
+										<span th:if="${sort != null && sort.property == 'Pages' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+										<span th:if="${sort != null && sort.property == 'Pages' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+									    </a>    
+									</th>
+									<th class="col-xs-3">
+										<a href="#" data-col="Tags">Tags
+										<span th:if="${sort != null && sort.property == 'Tags' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+										<span th:if="${sort != null && sort.property == 'Tags' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+									    </a>    
+									</th>
 									<th class="col-xs-1"></th>
 								</tr>
 							</thead>
