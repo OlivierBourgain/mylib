@@ -144,5 +144,20 @@ public class LuceneSearchTest {
 		List<Book> res1 = fixture.search("AnotherUser", "ABCDEFG", 10);
 		assertTrue(res1.isEmpty());
 	}
+	
+	@Test
+	public void returnAll() {
+		Book book = new Book();
+		book.setId(41L);
+		book.setUserId("UserABC");
+		book.setTitle("L'étoile et le fouet");
+		book.setTags(new HashSet<>());
+		fixture.addToIndex(book);
+
+		List<Book> res1 = fixture.search("UserABC", "", 10);
+		assertEquals(41L, res1.get(0).getId().longValue());
+	}
+	
+	
 
 }

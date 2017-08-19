@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,22 +82,9 @@ public class BookListController extends AbstractController {
 		httpSession.setAttribute("bookListPageable", page);
 
 		Page<Book> books;
-		if (StringUtils.isNotBlank(searchCriteria)) {
-			// Use Lucene
-			log.info("Getting the list of books from Lucene");
-			books = getBooks(searchCriteria, page, user);
-		} else {
-			// Use database
-			log.info("Getting the list of books from Database");
-			books = bookService.findByUserId(user.getId(), page);
-		}
-
-		// Fix tags order
-		books.map(book -> {
-			Set<Tag> sortedTag = new TreeSet<Tag>(book.getTags());
-			book.setTags(sortedTag);
-			return book;
-		});
+		// Use Lucene
+		log.info("Getting the list of books from Lucene");
+		books = getBooks(searchCriteria, page, user);
 
 		List<Integer> pagination = computePagination(books);
 		model.addAttribute("pagination", pagination);
@@ -122,25 +110,28 @@ public class BookListController extends AbstractController {
 	 * Get the list of book from Lucene, as a Page<Book>.
 	 */
 	private Page<Book> getBooks(String criteria, Pageable page, User user) {
-		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, 100);
+		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, 100000);
 
 		// Fix the tags
 		Map<Long, Tag> alltags = tagService
 				.findByUserId(user.getId()).stream()
 				.collect(Collectors.toMap(Tag::getId, Function.identity()));
+
 		Pattern pattern = Pattern.compile(",");
 		luceneBooks.stream().forEach(
-				book -> book.setTags(pattern
-								.splitAsStream(book.getTagString())
-								.map(Long::valueOf)
-								.map(x -> alltags.get(x))
-								.collect(Collectors.toSet())));
+				book -> {
+					Set<Tag> tags = pattern
+							.splitAsStream(book.getTagString())
+							.map(Long::valueOf)
+							.map(x -> alltags.get(x))
+							.collect(Collectors.toSet());
+					book.setTags(new TreeSet<>(tags));
+				});
 
 		// Apply the pageable (sort)
 		if (page.getSort() != null) {
 			Order order = page.getSort().iterator().next();
 			Comparator<Book> comparator = Comparator.comparing(Book::getTitle);
-			;
 			switch (order.getProperty()) {
 			case "Title":
 				comparator = Comparator.comparing(Book::getTitle);
@@ -152,7 +143,7 @@ public class BookListController extends AbstractController {
 				comparator = Comparator.comparing(Book::getPages);
 				break;
 			case "Tags":
-				comparator = Comparator.comparing(Book::getTagString);
+				comparator = new TagListComparator();
 				break;
 			}
 			if (order.isDescending()) comparator = comparator.reversed();
@@ -171,6 +162,24 @@ public class BookListController extends AbstractController {
 		log.info(start + "/" + end);
 		Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
 		return books;
+	}
+
+	/** Compare two books based on the their list of tags */
+	public class TagListComparator implements Comparator<Book> {
+
+		@Override
+		public int compare(Book o1, Book o2) {
+			Iterator<Tag> tags1 = o1.getTags().iterator();
+			Iterator<Tag> tags2 = o2.getTags().iterator();
+			while (tags1.hasNext() && tags2.hasNext()) {
+				int c = tags1.next().compareTo(tags2.next());
+				if (c != 0) return c;
+			}
+			if (tags1.hasNext()) return 1;
+			if (tags2.hasNext()) return -1;
+			return 0;
+		}
+
 	}
 
 	private static final int PAGINATION_GAP = -1;

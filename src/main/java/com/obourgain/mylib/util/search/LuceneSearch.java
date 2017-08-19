@@ -213,7 +213,6 @@ public class LuceneSearch {
 
 	public List<Book> search(String userId, String query, int nbHits) {
 		log.debug("Internal search for " + query);
-		if (StringUtils.isBlank(query)) return new ArrayList<Book>();
 
 		try {
 			Query q = getQuery(userId, query);
@@ -233,6 +232,8 @@ public class LuceneSearch {
 	 */
 	private Query getQuery(String userId, String criteria) throws ParseException {
 		Query q1 = new TermQuery(new Term(FIELD_USER_ID, "" + userId));
+		
+		if (StringUtils.isBlank(criteria)) return q1;
 
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(
 				new String[] { FIELD_TITLE, FIELD_SUBTITLE, FIELD_AUTHOR, FIELD_ISBN, FIELD_TAG },

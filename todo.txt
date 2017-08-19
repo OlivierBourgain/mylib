@@ -1,7 +1,5 @@
-Rename a tag (SF -> SciFi)
 Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
 Import from CSV
 Export PDF (liste/détail)
-Fix sort sur les tags dans la liste
 Filtrage par tag
 Filtrage par auteur ?
