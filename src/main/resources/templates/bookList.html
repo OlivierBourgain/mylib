@@ -20,9 +20,11 @@
 	margin: 5px 2px;
 	line-height: 20px;
 }
+
 a{cursor:pointer}
 #booklist-header-size{margin:26px 0}
 #booklist-header-summary{margin:26px 0}
+.booklist-cell{width: 0; min-width: 100%;}
 </style>
 	</head>
 	<body>
@@ -163,10 +165,12 @@ a{cursor:pointer}
 									<td th:text="${book.author}">Author</td>
 									<td th:text="${book.pages}">Pages</td>
 									<td class="text-nowrap">
-										<span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}" data-th-attr="data-tagid=${tag.id}"
-										th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">
-                                            tag
-                                         </span>
+										<div class="booklist-cell">
+											<span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}" data-th-attr="data-tagid=${tag.id}"
+											th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">
+		                                           tag
+	                                        </span>
+	                                    </div>
 									</td>
 									<td>
 										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</span>

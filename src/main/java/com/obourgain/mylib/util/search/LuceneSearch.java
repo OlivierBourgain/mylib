@@ -39,6 +39,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.springframework.stereotype.Component;
 
 import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Book.BookStatus;
 import com.obourgain.mylib.vobj.Tag;
 
 /**
@@ -57,8 +58,7 @@ public class LuceneSearch {
 	 * $HOME/mylib/search/y/
 	 * </pre>
 	 *
-	 * where y is a version number (e.g. v3), which allow to handle change in
-	 * the structure of the index, while keeping the possibility to rollback.
+	 * where y is a version number (e.g. v3), which allow to handle change in the structure of the index, while keeping the possibility to rollback.
 	 */
 	private static final String INDEX_VERSION = "/v0/";
 	public static final String ROOT = System.getProperty("user.home") + "/mylib";
@@ -96,8 +96,7 @@ public class LuceneSearch {
 	}
 
 	/**
-	 * Create an instance of this class, using a specific index. To be used for
-	 * unit test, without interference with the real index.
+	 * Create an instance of this class, using a specific index. To be used for unit test, without interference with the real index.
 	 */
 	public LuceneSearch(String dir) {
 		openIndex(dir);
@@ -191,7 +190,7 @@ public class LuceneSearch {
 		doc.add(new StringField(FIELD_ID, "" + book.getId(), Field.Store.YES));
 		doc.add(new TextField(FIELD_TITLE, book.getTitle(), Field.Store.YES));
 		if (book.getSubtitle() != null) doc.add(new TextField(FIELD_SUBTITLE, book.getSubtitle(), Field.Store.YES));
-		if (book.getAuthor()   != null) doc.add(new TextField(FIELD_AUTHOR,   book.getAuthor(),   Field.Store.YES));
+		if (book.getAuthor() != null) doc.add(new TextField(FIELD_AUTHOR, book.getAuthor(), Field.Store.YES));
 		if (book.getIsbn() != null) doc.add(new TextField(FIELD_ISBN, book.getIsbn(), Field.Store.YES));
 		if (book.getPublisher() != null) doc.add(new TextField(FIELD_PUBLISHER, book.getPublisher(), Field.Store.YES));
 		if (book.getComment() != null) doc.add(new TextField(FIELD_COMMENT, book.getComment(), Field.Store.YES));
@@ -232,7 +231,7 @@ public class LuceneSearch {
 	 */
 	private Query getQuery(String userId, String criteria) throws ParseException {
 		Query q1 = new TermQuery(new Term(FIELD_USER_ID, "" + userId));
-		
+
 		if (StringUtils.isBlank(criteria)) return q1;
 
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(
@@ -293,6 +292,8 @@ public class LuceneSearch {
 		book.setPages(Integer.parseInt(doc.get(FIELD_PAGES)));
 		book.setComment(doc.get(FIELD_COMMENT));
 		book.setTagString(doc.get(FIELD_RAW_TAG));
+		String status = doc.get(FIELD_STATUS);
+		if (status != null) book.setStatus(BookStatus.valueOf(status));
 		return book;
 	}
 
