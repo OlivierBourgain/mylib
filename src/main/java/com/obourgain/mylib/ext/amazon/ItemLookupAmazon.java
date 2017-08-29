@@ -37,7 +37,15 @@ public class ItemLookupAmazon {
 		Book res = lookup("2290120332");
 		System.out.println(res.deepToString());
 	}
+	
 
+	/**
+	 * Lookup a book on Amazon, with its ISBN.
+	 * 
+	 * ISBN can be 10 or 13 characters.
+	 * 
+	 * This function won't work for ISBN 13 starting with 979 (as there is no corresponding ISBN 10) 
+	 */
 	public static Book lookup(String isbn) {
 		try {
 			String isbn10 = isbn;
@@ -55,6 +63,30 @@ public class ItemLookupAmazon {
 			book.setSmallImage(saveImage(isbn10, 'T'));
 			book.setMediumImage(saveImage(isbn10, 'Z'));
 			book.setLargeImage(saveImage(isbn10, 'L'));
+
+			log.info(() -> book.deepToString());
+			return book;
+		} catch (Exception e) {
+			log.error("Book not found", e);
+			return null;
+		}
+	}
+
+	
+	/**
+	 * Lookup a book on Amazon, given it's ASIN.
+	 */
+	public static Book asinLookup(String asin) {
+		try {
+
+			String url = "https://www.amazon.fr/exec/obidos/ASIN/" + asin;
+			log.info("Calling amazon asin={} at {}", asin, url);
+			Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
+			Book book = new Book();
+			book.setTitle(getTitle(doc));
+			book.setAuthor(getAuthor(doc));
+
+			parseDetail(book, doc);
 
 			log.info(() -> book.deepToString());
 			return book;

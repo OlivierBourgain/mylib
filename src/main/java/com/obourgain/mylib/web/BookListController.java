@@ -89,7 +89,7 @@ public class BookListController extends AbstractController {
 		List<Integer> pagination = computePagination(books);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchCriteria", searchCriteria);
-		model.addAttribute("sort", books.getSort() == null? null: books.getSort().iterator().next());
+		model.addAttribute("sort", books.getSort() == null ? null : books.getSort().iterator().next());
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
 		return "bookList";
@@ -239,7 +239,13 @@ public class BookListController extends AbstractController {
 			return "redirect:/books/";
 		}
 
-		Book book = bookService.isbnLookup(user, isbn);
+		Book book = null;
+		if (isbn.startsWith("asin")) {
+			String asin = isbn.substring(isbn.indexOf('=') + 1);
+			book = bookService.asinLookup(user, asin);
+		} else {
+			book = bookService.isbnLookup(user, isbn);
+		}
 		if (book == null) {
 			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
 			return bookList(request, model, null);

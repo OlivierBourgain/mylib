@@ -118,6 +118,25 @@ public class BookService {
 		bookRepository.save(book);
 		return book;
 	}
+	
+	/**
+	 * Create a book from its ASIN Number. 
+	 * 
+	 * Return null if the amazon's page for this book can't be found.
+	 */
+	public Book asinLookup(User user, String asin) {
+		Book book = ItemLookupAmazon.asinLookup(asin);
+		if (book == null) {
+			log.info("No book found");
+			return null;
+		}
+		book.setUserId(user.getId());
+		book.setCreated(LocalDateTime.now());
+		book.setUpdated(LocalDateTime.now());
+
+		bookRepository.save(book);
+		return book;
+	}
 
 	/**
 	 * Update the reading list of a book.
