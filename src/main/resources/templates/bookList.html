@@ -20,7 +20,8 @@
 	margin: 5px 2px;
 	line-height: 20px;
 }
-
+ul.pagination li a{min-width:35px;text-align:center}
+ul.pagination li span{min-width:35px;text-align:center}
 a{cursor:pointer}
 #booklist-header-size{margin:26px 0}
 #booklist-header-summary{margin:26px 0}
@@ -99,7 +100,7 @@ a{cursor:pointer}
 					              </li>
 					              <!-- /* Pagination is precomputed on server */ -->
 					              <li th:each="page:${pagination}"
-					                  th:classappend="${books.number == page or page < 0}? disabled : enabled">
+					              	  th:classappend="|${page < 0 ? 'disabled' : 'enabled'} ${books.number == page ? 'active' : ''}|" >
 					                  <span
 					                     th:if="${page == -1}"
 					                  	 th:text="...">...</span>
