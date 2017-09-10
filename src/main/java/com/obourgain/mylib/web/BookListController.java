@@ -42,8 +42,13 @@ import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
 
+/**
+ * Controllers for the book list page.
+ */
 @Controller
 public class BookListController extends AbstractController {
+
+	private static final int MAX_RESULTS = 100000;
 
 	private static Logger log = LogManager.getLogger(BookListController.class);
 
@@ -64,8 +69,9 @@ public class BookListController extends AbstractController {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 
-		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
 		String searchCriteria = request.getParameter("criteria");
+		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
+		String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
 
 		log.info("Request Pageable is " + page);
 		log.info("Cached  Pageable is " + cachedPage);
@@ -76,10 +82,11 @@ public class BookListController extends AbstractController {
 				&& request.getParameter("size") == null
 				&& searchCriteria == null
 				&& cachedPage != null) {
-			String params = getParams(cachedPage);
+			String params = getParams(cachedPage, cachedSearchCriteria);
 			return "redirect:/books?" + params;
 		}
 		httpSession.setAttribute("bookListPageable", page);
+		httpSession.setAttribute("bookListSearchCriteria", searchCriteria);
 
 		Page<Book> books;
 		// Use Lucene
@@ -97,12 +104,15 @@ public class BookListController extends AbstractController {
 
 	// Generate the URL parameters that are equivalent to the given Pageable.
 	// Used when a Pageable is in session, and we want to reapply it.
-	private String getParams(Pageable cachedPage) {
+	private String getParams(Pageable cachedPage, String searchCriteria) {
 		String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
 		if (cachedPage.getSort() != null) {
 			Order order = cachedPage.getSort().iterator().next();
 			params += "&sort=" + order.getProperty();
 			if (order.isDescending()) params += ",DESC";
+		}
+		if (StringUtils.isNotBlank(searchCriteria)) {
+			params += "&criteria=" + searchCriteria;
 		}
 		return params;
 	}
@@ -111,23 +121,12 @@ public class BookListController extends AbstractController {
 	 * Get the list of book from Lucene, as a Page<Book>.
 	 */
 	private Page<Book> getBooks(String criteria, Pageable page, User user) {
-		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, 100000);
-
-		// Fix the tags
 		Map<Long, Tag> alltags = tagService
 				.findByUserId(user.getId()).stream()
 				.collect(Collectors.toMap(Tag::getId, Function.identity()));
 
-		Pattern pattern = Pattern.compile(",");
-		luceneBooks.stream().forEach(
-				book -> {
-					Set<Tag> tags = pattern
-							.splitAsStream(book.getTagString())
-							.map(Long::valueOf)
-							.map(x -> alltags.get(x))
-							.collect(Collectors.toSet());
-					book.setTags(new TreeSet<>(tags));
-				});
+		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, MAX_RESULTS);
+		fixTags(luceneBooks, alltags);
 
 		// Apply the pageable (sort)
 		if (page.getSort() != null) {
@@ -165,7 +164,29 @@ public class BookListController extends AbstractController {
 		return books;
 	}
 
-	/** Compare two books based on the their list of tags */
+	/**
+	 * Fix the tags.
+	 * 
+	 * In the lucene search, tags are stored in Book.tagString, as a list of Ids (e.g. "1,23,54"). We need to replace that and compute Book.tag, which contains
+	 * a Set of Tag objects. In order to have a nice display, we also want the Book.tag set to be ordered by Tag.priority desc.
+	 */
+	private void fixTags(List<Book> luceneBooks, Map<Long, Tag> alltags) {
+
+		Pattern pattern = Pattern.compile(",");
+		luceneBooks.stream().forEach(
+				book -> {
+					Set<Tag> tags = pattern
+							.splitAsStream(book.getTagString())
+							.map(Long::valueOf)
+							.map(x -> alltags.get(x))
+							.collect(Collectors.toSet());
+					book.setTags(new TreeSet<>(tags));
+				});
+	}
+
+	/**
+	 * Compare two books based on the their list of tags
+	 */
 	public class TagListComparator implements Comparator<Book> {
 
 		@Override
