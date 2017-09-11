@@ -42,20 +42,20 @@ public class LuceneSearchTest {
 		book.setTags(tags);
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "testtitle", 10);
+		List<Book> res1 = fixture.search("UserABC", "testtitle",  false, 10);
 		assertEquals(35L, res1.get(0).getId().longValue());
 
-		List<Book> res2 = fixture.search("UserABC", "testauthor", 10);
+		List<Book> res2 = fixture.search("UserABC", "testauthor",  false, 10);
 		assertEquals(35L, res2.get(0).getId().longValue());
 
-		List<Book> res3 = fixture.search("UserABC", "testtag", 10);
+		List<Book> res3 = fixture.search("UserABC", "testtag", false,  10);
 		assertEquals(35L, res3.get(0).getId().longValue());
 		assertEquals("12,", res3.get(0).getTagString());
 
-		List<Book> res4 = fixture.search("UserABC", "testisbn", 10);
+		List<Book> res4 = fixture.search("UserABC", "testisbn",  false, 10);
 		assertEquals(35L, res4.get(0).getId().longValue());
 
-		List<Book> res5 = fixture.search("UserABC", "testsubtitle", 10);
+		List<Book> res5 = fixture.search("UserABC", "testsubtitle",  false, 10);
 		assertEquals(35L, res5.get(0).getId().longValue());
 	}
 
@@ -68,10 +68,10 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "télécom", 10);
+		List<Book> res1 = fixture.search("UserABC", "télécom",  false, 10);
 		assertEquals(32L, res1.get(0).getId().longValue());
 
-		List<Book> res2 = fixture.search("UserABC", "TÉlÉCOM", 10);
+		List<Book> res2 = fixture.search("UserABC", "TÉlÉCOM",  false, 10);
 		assertEquals(32L, res2.get(0).getId().longValue());
 	}
 
@@ -84,10 +84,10 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "TELECOM", 10);
+		List<Book> res1 = fixture.search("UserABC", "TELECOM", false,  10);
 		assertEquals(37L, res1.get(0).getId().longValue());
 
-		List<Book> res2 = fixture.search("UserABC", "TÉlÉCOM", 10);
+		List<Book> res2 = fixture.search("UserABC", "TÉlÉCOM",  false, 10);
 		assertEquals(37L, res2.get(0).getId().longValue());
 	}
 
@@ -100,7 +100,7 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "En terre etrangère", 10);
+		List<Book> res1 = fixture.search("UserABC", "En terre etrangère", false,  10);
 		assertEquals(39L, res1.get(0).getId().longValue());
 
 	}
@@ -114,7 +114,7 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "CRYPTO*", 10);
+		List<Book> res1 = fixture.search("UserABC", "CRYPTO*",  false, 10);
 		assertEquals(40L, res1.get(0).getId().longValue());
 
 	}
@@ -128,7 +128,7 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "étoile", 10);
+		List<Book> res1 = fixture.search("UserABC", "étoile",  false, 10);
 		assertEquals(41L, res1.get(0).getId().longValue());
 	}
 	
@@ -141,7 +141,7 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("AnotherUser", "ABCDEFG", 10);
+		List<Book> res1 = fixture.search("AnotherUser", "ABCDEFG", false,  10);
 		assertTrue(res1.isEmpty());
 	}
 	
@@ -154,7 +154,7 @@ public class LuceneSearchTest {
 		book.setTags(new HashSet<>());
 		fixture.addToIndex(book);
 
-		List<Book> res1 = fixture.search("UserABC", "", 10);
+		List<Book> res1 = fixture.search("UserABC", "", false,  10);
 		assertEquals(41L, res1.get(0).getId().longValue());
 	}
 	

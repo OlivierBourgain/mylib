@@ -62,6 +62,10 @@ a{cursor:pointer}
                     <div class="row">
                       <a href="/books/rebuildindex">Rebuild search index</a>
                     </div>
+                    <div class="row">
+          				<input type="checkbox" id="showDisc" th:checked="${showDiscarded}" />   
+          				<label for="showDisc0">Show discarded</label>
+          			</div>
 				</div>
                 <div class="col-md-3" id="bookpreview"></div>
 			</div>
@@ -131,6 +135,7 @@ a{cursor:pointer}
 			          			<span> books</span>
 		          			</div>
           				</div>
+        
           				<!-- Table principale -->
 						<table id="booktable" class="table table-bordered table-striped table-hover table-condensed">
 							<thead>
@@ -231,11 +236,20 @@ a{cursor:pointer}
         				});
         				// Pagination
         				$("a#removeSearchCriteria").click(function() {
-        					var page = $(this).attr("data-page")
         					var newUrl = URI(window.location.href)
         								.setSearch("criteria", "")
         								.toString()
         					
+        					window.location.href = newUrl
+        				});
+        				// Check box show discarded
+        				$("#showDisc").click(function() {
+        					var checked = $(this)[0].checked 
+        					var newUrl = URI(window.location.href)
+        					if (checked)
+        						newUrl.setSearch("showDisc", "true").toString()
+        					else 
+        						newUrl.setSearch("showDisc","").toString()
         					window.location.href = newUrl
         				});
 			});

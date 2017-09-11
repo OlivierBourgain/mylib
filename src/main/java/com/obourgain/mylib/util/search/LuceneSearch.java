@@ -210,11 +210,11 @@ public class LuceneSearch {
 		w.addDocument(doc);
 	}
 
-	public List<Book> search(String userId, String query, int nbHits) {
+	public List<Book> search(String userId, String query, boolean showDiscarded, int nbHits) {
 		log.debug("Internal search for " + query);
 
 		try {
-			Query q = getQuery(userId, query);
+			Query q = getQuery(userId, query, showDiscarded);
 			List<Book> res = executeQuery(q, nbHits);
 			log.debug("MatchFound" + res.size());
 			return res;
@@ -229,22 +229,30 @@ public class LuceneSearch {
 	/**
 	 * Query contain a mandatory userId, and then the search criterias.
 	 */
-	private Query getQuery(String userId, String criteria) throws ParseException {
+	private Query getQuery(String userId, String criteria, boolean showDiscarded) throws ParseException {
 		Query q1 = new TermQuery(new Term(FIELD_USER_ID, "" + userId));
+		Query q2 = new TermQuery(new Term(FIELD_STATUS, "DISCARDED"));
 
-		if (StringUtils.isBlank(criteria)) return q1;
+		if (StringUtils.isBlank(criteria)) {
+			BooleanQuery.Builder qb = new BooleanQuery.Builder()
+					.add(q1, BooleanClause.Occur.MUST);
+			if (!showDiscarded)
+				qb.add(q2, BooleanClause.Occur.MUST_NOT);
+			return qb.build();
+		}
 
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(
 				new String[] { FIELD_TITLE, FIELD_SUBTITLE, FIELD_AUTHOR, FIELD_ISBN, FIELD_TAG },
 				ANALYSER);
-		Query q2 = parser.parse(criteria);
+		Query q3 = parser.parse(criteria);
 
-		BooleanQuery query = new BooleanQuery.Builder()
+		BooleanQuery.Builder qb = new BooleanQuery.Builder()
 				.add(q1, BooleanClause.Occur.MUST)
-				.add(q2, BooleanClause.Occur.MUST)
-				.build();
-
-		return query;
+				.add(q3, BooleanClause.Occur.MUST);
+		
+		if (!showDiscarded)
+			qb.add(q2, BooleanClause.Occur.MUST_NOT);
+		return qb.build();
 	}
 
 	/**

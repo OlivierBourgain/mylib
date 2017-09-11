@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.TagService;
+import com.obourgain.mylib.util.HttpRequestUtil;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
@@ -70,9 +71,11 @@ public class BookListController extends AbstractController {
 		User user = getUserDetail();
 
 		String searchCriteria = request.getParameter("criteria");
+		Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
 		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
 		String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
-
+		Boolean cachedShowDiscarded = (Boolean) httpSession.getAttribute("bookListShowDiscarded");
+		
 		log.info("Request Pageable is " + page);
 		log.info("Cached  Pageable is " + cachedPage);
 		log.info("searchCriteria " + searchCriteria);
@@ -82,20 +85,23 @@ public class BookListController extends AbstractController {
 				&& request.getParameter("size") == null
 				&& searchCriteria == null
 				&& cachedPage != null) {
-			String params = getParams(cachedPage, cachedSearchCriteria);
+			String params = getParams(cachedPage, cachedSearchCriteria, cachedShowDiscarded);
 			return "redirect:/books?" + params;
 		}
 		httpSession.setAttribute("bookListPageable", page);
 		httpSession.setAttribute("bookListSearchCriteria", searchCriteria);
+		httpSession.setAttribute("bookListShowDiscarded", showDiscarded);
+
 
 		Page<Book> books;
 		// Use Lucene
 		log.info("Getting the list of books from Lucene");
-		books = getBooks(searchCriteria, page, user);
+		books = getBooks(searchCriteria, showDiscarded, page, user);
 
 		List<Integer> pagination = computePagination(books);
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("searchCriteria", searchCriteria);
+		model.addAttribute("showDiscarded", showDiscarded);
 		model.addAttribute("sort", books.getSort() == null ? null : books.getSort().iterator().next());
 		model.addAttribute("books", books);
 		model.addAttribute("user", user);
@@ -104,7 +110,7 @@ public class BookListController extends AbstractController {
 
 	// Generate the URL parameters that are equivalent to the given Pageable.
 	// Used when a Pageable is in session, and we want to reapply it.
-	private String getParams(Pageable cachedPage, String searchCriteria) {
+	private String getParams(Pageable cachedPage, String searchCriteria, Boolean showDiscarded) {
 		String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
 		if (cachedPage.getSort() != null) {
 			Order order = cachedPage.getSort().iterator().next();
@@ -114,18 +120,21 @@ public class BookListController extends AbstractController {
 		if (StringUtils.isNotBlank(searchCriteria)) {
 			params += "&criteria=" + searchCriteria;
 		}
+		if (showDiscarded == true) {
+			params += "&showDisc=true";
+		}
 		return params;
 	}
 
 	/**
 	 * Get the list of book from Lucene, as a Page<Book>.
 	 */
-	private Page<Book> getBooks(String criteria, Pageable page, User user) {
+	private Page<Book> getBooks(String criteria, boolean showDiscarded, Pageable page, User user) {
 		Map<Long, Tag> alltags = tagService
 				.findByUserId(user.getId()).stream()
 				.collect(Collectors.toMap(Tag::getId, Function.identity()));
 
-		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, MAX_RESULTS);
+		List<Book> luceneBooks = luceneSearch.search(user.getId(), criteria, showDiscarded, MAX_RESULTS);
 		fixTags(luceneBooks, alltags);
 
 		// Apply the pageable (sort)
