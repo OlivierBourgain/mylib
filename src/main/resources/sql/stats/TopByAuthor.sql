@@ -6,4 +6,5 @@ FROM
 	book
 WHERE 
 	user_id = ?
+	and (status is null or status <> 'DISCARDED' or ? = 1)
 GROUP BY author

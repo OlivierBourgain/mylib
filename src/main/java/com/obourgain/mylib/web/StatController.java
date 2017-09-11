@@ -2,6 +2,9 @@ package com.obourgain.mylib.web;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.StatService;
 import com.obourgain.mylib.service.StatService.StatData;
+import com.obourgain.mylib.util.HttpRequestUtil;
 import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Book.BookStatus;
 import com.obourgain.mylib.vobj.User;
 
 /**
@@ -34,19 +39,26 @@ public class StatController extends AbstractController {
 	 * Stats.
 	 */
 	@RequestMapping(value = "/stats", method = RequestMethod.GET)
-	public String stats(Model model) {
+	public String stats(HttpServletRequest request, Model model) {
 		log.info("Controller stats");
 		User user = getUserDetail();
 
+		Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
+
 		List<Book> allBooks = bookService.findByUserId(user.getId());
+		
+		if (!showDiscarded) 
+			allBooks = allBooks.stream().filter(b -> b.getStatus() != BookStatus.DISCARDED).collect(Collectors.toList());
+		
 		model.addAttribute("nbBooks", allBooks.size());
 		model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
-
-		Map<String, List<StatData>> stats = statService.getAllStat(user.getId());
+		
+		Map<String, List<StatData>> stats = statService.getAllStat(user.getId(), showDiscarded);
 		model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
 		model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
 		model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));
 		model.addAttribute("booksByAuthor", toHighChartJs(stats.get("booksByAuthor")));
+		model.addAttribute("showDiscarded", showDiscarded);
 		return "stats";
 	}
 

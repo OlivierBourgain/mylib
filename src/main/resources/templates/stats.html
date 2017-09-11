@@ -29,6 +29,10 @@
 				(<strong th:text="${#numbers.formatInteger(nbPages,0,'DEFAULT')}">1234</strong> pages)
 			</p>
 			<div class="row">
+				<input type="checkbox" id="showDisc" th:checked="${showDiscarded}" />   
+				<label for="showDisc">Show discarded</label>
+			</div>			
+			<div class="row">
 				<div class="stat-box col-md-3">
 					<div id="booksbytag" class="inner-stat-box">
 						<h4>Top tags (#books)</h4>
@@ -43,14 +47,12 @@
 				</div>
 				<div id="" class="stat-box col-md-3">
 					<div id="booksbyauthor" class="inner-stat-box">
-
 						<h4>Top authors (#books)</h4>
 						<canvas id="booksByAuthorChart" width="80" height="80"></canvas>
 					</div>
 				</div>
 				<div id="" class="stat-box col-md-3">
 					<div id="pagesbyauthor" class="inner-stat-box">
-
 						<h4>Top authors (#pages)</h4>
 						<canvas id="pagesByAuthorChart" width="80" height="80"></canvas>
 					</div>
@@ -58,60 +60,71 @@
 			</div>
 		</div>
 
-		<!-- Bootstrap core JavaScript
-    ================================================== -->
+		<!-- Bootstrap core JavaScript ================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
 
 
 		<script th:inline="javascript">
-    /*<![CDATA[*/
-    Chart.defaults.global.defaultFontColor = 'white'
-    Chart.defaults.global.legend.display = false
+	/*<![CDATA[*/
+	Chart.defaults.global.defaultFontColor = 'white'
+	Chart.defaults.global.legend.display = false
 
-    new Chart($("#booksByTagChart"), {
-    	type: 'horizontalBar',
-        data: {
-        	[(${booksByTag})]
-        },
-        options: {
-            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-        }
+	new Chart($("#booksByTagChart"), {
+		type: 'horizontalBar',
+		data: {
+			[(${booksByTag})]
+		},
+		options: {
+			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+		}
  
-    });
-    new Chart($("#pagesByTagChart"), {
-    	type: 'horizontalBar',
-        data: {
-        	[(${pagesByTag})]
-        },
-        options: {
-            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-        }
-    });
-    new Chart($("#booksByAuthorChart"), {
-    	type: 'horizontalBar',
-        data: {
-        	[(${booksByAuthor})]
-        },
-        options: {
-            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-        }
+	});
+	new Chart($("#pagesByTagChart"), {
+		type: 'horizontalBar',
+		data: {
+			[(${pagesByTag})]
+		},
+		options: {
+			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+		}
+	});
+	new Chart($("#booksByAuthorChart"), {
+		type: 'horizontalBar',
+		data: {
+			[(${booksByAuthor})]
+		},
+		options: {
+			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+		}
  
-    });
-    new Chart($("#pagesByAuthorChart"), {
-    	type: 'horizontalBar',
-        data: {
-        	[(${pagesByAuthor})]
-        },
-        options: {
-            scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-        }
-    });
-    /*]]
-    /*]]>*/
-    </script>
+	});
+	new Chart($("#pagesByAuthorChart"), {
+		type: 'horizontalBar',
+		data: {
+			[(${pagesByAuthor})]
+		},
+		options: {
+			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
+		}
+	});
+	
+	// Check box show discarded
+	$("#showDisc").click(function() {
+		var checked = $(this)[0].checked 
+		var newUrl = URI(window.location.href)
+		if (checked)
+			newUrl.setSearch("showDisc", "true").toString()
+		else 
+			newUrl.setSearch("showDisc","").toString()
+		window.location.href = newUrl
+	});
+	/*]]
+	/*]]>*/
+	</script>
 	</body>
 </th:block>
 </html>

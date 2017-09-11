@@ -65,19 +65,21 @@ public class StatService {
 	 * Return a Map containing all stats for the library.
 	 * 
 	 * It contains : - booksByTag - pagesByTag - booksByAuthor - pagesByAuthor
+	 * 
+	 * @param showDiscarded
 	 */
-	public Map<String, List<StatData>> getAllStat(String userId) {
+	public Map<String, List<StatData>> getAllStat(String userId, Boolean showDiscarded) {
 
 		Map<String, List<StatData>> res = new HashMap<>();
 
 		String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByTag.sql"));
-		List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId);
+		List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId, showDiscarded ? 1 : 0);
 		log.info(byTag);
 		res.put("booksByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("NB").toString())));
 		res.put("pagesByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
 		String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByAuthor.sql"));
-		List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId);
+		List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId, showDiscarded ? 1 : 0);
 		log.info(byAuthor);
 		res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
 		res.put("pagesByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
