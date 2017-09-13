@@ -157,18 +157,20 @@ a{cursor:pointer}
 										<span th:if="${sort != null && sort.property == 'Pages' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
 										</a>	
 									</th>
-									<th class="col-xs-3">
+									<th class="col-xs-4">
 										<a href="#" data-col="Tags">Tags
 										<span th:if="${sort != null && sort.property == 'Tags' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
 										<span th:if="${sort != null && sort.property == 'Tags' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
 										</a>	
 									</th>
-									<th class="col-xs-1"></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="book : ${books}" class="book-line">
-									<td><a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a></td>
+									<td>
+										<a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}">Title</a>
+										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">(Discarded)</span>
+									</td>
 									<td th:text="${book.author}">Author</td>
 									<td th:text="${book.pages}">Pages</td>
 									<td class="text-nowrap">
@@ -179,10 +181,6 @@ a{cursor:pointer}
 											</span>
 										</div>
 									</td>
-									<td>
-										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</span>
-										<span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).TO_READ}">To read</span>
-									</td>								
 								</tr>
 							</tbody>
 						</table>
