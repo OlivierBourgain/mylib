@@ -1,6 +1,9 @@
 package com.obourgain.mylib.web;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -118,7 +121,10 @@ public class BookListController extends AbstractController {
 			if (order.isDescending()) params += ",DESC";
 		}
 		if (StringUtils.isNotBlank(searchCriteria)) {
-			params += "&criteria=" + searchCriteria;
+			try {
+				params += "&criteria=" + URLEncoder.encode(searchCriteria, StandardCharsets.UTF_8.name());
+			} catch (UnsupportedEncodingException e) {
+			}
 		}
 		if (showDiscarded == true) {
 			params += "&showDisc=true";
