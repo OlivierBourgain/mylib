@@ -109,7 +109,6 @@
                 <div class="col-md-9 col-md-offset-3">
                   <button type="submit" name="action" value="save" class="btn btn-success">Submit</button>
                   <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
-                  <button type="submit" name="action" value="readnow" class="btn btn-info">I've just read it!</button>
                 </div>
               </div>
             </form>
@@ -146,10 +145,6 @@
               <tr>
                 <td class="col-md-3">Lang</td>
                 <td class="col-md-9" th:text="${book.lang}"></td>
-              </tr>
-              <tr>
-                <td class="col-md-3">Readings</td>
-                <td class="col-md-9"><span th:each="reading: ${book.readings}" th:text="${reading.year}"></span></td>
               </tr>
               <tr>
                 <td class="col-md-3">Status</td>

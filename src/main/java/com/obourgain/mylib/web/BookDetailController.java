@@ -40,7 +40,7 @@ public class BookDetailController extends AbstractController {
 	public String bookDetail(@PathVariable("bookId") long bookId, Model model) {
 		log.info("Controller bookDetail");
 		User user = getUserDetail();
-
+		
 		Book b = bookService.findBook(user.getId(), bookId);
 		if (b == null) {
 			b = new Book();

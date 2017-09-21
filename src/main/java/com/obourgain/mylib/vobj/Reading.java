@@ -1,30 +1,39 @@
 package com.obourgain.mylib.vobj;
 
-import javax.persistence.Column;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
  * This class represents the date a book was read.
- * As reading a book is not immediate, the only mandatory field is the year (to allow for stats).
  * 
- * And as I'm a bit lazy, there is no other field (maybe later I will add month and day).
+ * In addition to the date, we store the year and month to simplify get stats.
  */
 @Entity
-@Table(name="Reading")
+@Table(name = "Reading")
 public class Reading {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private int year;
-
-	// Foreign key to book
-	  @Column(name="book_id")
-	  private Long bookId;
+	private String userId;
 	
+	// Foreign key to book
+	@ManyToOne
+	private Book book;
+	
+	// Date the book was read
+	private LocalDate date;
+	private int year;
+	private int month;
+	
+	private LocalDateTime created;
+	private LocalDateTime updated;
 
 	public Long getId() {
 		return id;
@@ -42,13 +51,53 @@ public class Reading {
 		this.year = year;
 	}
 
-	public Long getBookId() {
-		return bookId;
+
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setBookId(Long bookId) {
-		this.bookId = bookId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
+	public int getMonth() {
+		return month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public LocalDateTime getCreated() {
+		return created;
+	}
+
+	public void setCreated(LocalDateTime created) {
+		this.created = created;
+	}
+
+	public LocalDateTime getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
+	}
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
 
 }

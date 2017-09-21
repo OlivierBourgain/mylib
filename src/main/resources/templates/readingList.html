@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<title>Your reading list</title>
+
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css" />
+<style>
+a {cursor: pointer}
+</style>
+	</head>
+	<body>
+		<input type="hidden" id="csrf" name="_csrf" th:value="${_csrf.token}" />
+
+
+
+		<div class="container">
+
+			<div class="row">
+				<h1>Reading list</h1>
+				<a href="/books">&lt; back to list</a>
+				<p class="lead"></p>
+			</div>
+			<div class="row">
+				<form method="POST" th:action="@{/reading}" class="form-horizontal">
+					<div class="col-xs-6">
+					<select name="bookId" id="book-select" class="form-control input-large">
+						<option></option>
+						<option th:each="book: ${books}" th:value="${book.id}" th:text="${book.title}">
+						</option>
+					</select>
+					</div>
+					<div class="col-xs-2">
+					<input id="readdate" name="readdate" type="text" placeholder="2017-12-23" class="form-control"></input> 
+					</div>
+					<div class="col-xs-2">
+					<input type="submit" value="Add" class="btn btn-success"/>
+					</div>
+				</form>
+			</div>
+			<div class="row">
+				<h2>History</h2>
+				<table class="table table-bordered table-striped table-hover table-condensed">
+					<thead id="readingtable" class="table table-bordered table-striped table-hover table-condensed">
+						<tr>
+							<th>Title</th>
+							<th>Date read</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reading : ${readings}" th:id="${reading.id}">
+							<td th:text="${reading.book.title}"></td>
+							<td th:text="${#temporals.format(reading.date, 'yyyy-MM-dd')}"></td>
+							<td><a class="delete-lnk">Delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+		<script src="/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+			$(function() {
+				$('#readdate').datepicker({
+					format : "yyyy-mm-dd",
+					weekStart : 1,
+					todayBtn : "linked",
+					autoclose : true,
+					todayHighlight : true
+				});
+
+				$('a.delete-lnk').click(function() {
+					var readingId = $(this).closest('tr').attr('id'); // table row ID 
+					var csrf = $("#csrf").val();
+					$.post("/deleteReading", {
+						readingId : readingId,
+						_csrf : csrf
+					}, function() {
+						location.reload()
+					});
+				});
+			})
+		</script>
+	</body>
+</th:block>
+</html>
