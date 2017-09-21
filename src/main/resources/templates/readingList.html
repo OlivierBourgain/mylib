@@ -51,6 +51,7 @@ a {cursor: pointer}
 					<thead id="readingtable" class="table table-bordered table-striped table-hover table-condensed">
 						<tr>
 							<th>Title</th>
+							<th>Author</th>
 							<th>Date read</th>
 							<th></th>
 						</tr>
@@ -58,6 +59,7 @@ a {cursor: pointer}
 					<tbody>
 						<tr th:each="reading : ${readings}" th:id="${reading.id}">
 							<td th:text="${reading.book.title}"></td>
+							<td th:text="${reading.book.author}"></td>
 							<td th:text="${#temporals.format(reading.date, 'yyyy-MM-dd')}"></td>
 							<td><a class="delete-lnk">Delete</a></td>
 						</tr>
