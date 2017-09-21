@@ -84,6 +84,14 @@ public class StatService {
 		res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
 		res.put("pagesByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
+		String sqlReadYear = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerYear.sql"));
+		List<Map<String, Object>> readYear = jdbcTemplate.queryForList(sqlReadYear, userId);
+		log.info(readYear);
+
+		String sqlReadMonth = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerMonth.sql"));
+		List<Map<String, Object>> readMonth = jdbcTemplate.queryForList(sqlReadMonth, userId);
+		log.info(readMonth);
+
 		log.info(res);
 		return res;
 	}

@@ -10,13 +10,12 @@ import org.apache.logging.log4j.Logger;
 
 public class SqlUtils {
 	private static final Logger log = LogManager.getLogger(SqlUtils.class);
-	
+
 	/**
 	 * Read a SQL request from an input stream. TODO Trim white lines & comments
 	 */
 	public static String readSql(InputStream is) {
 		try {
-			log.info("Trying to read " + is);
 			String sql = IOUtils.toString(is, StandardCharsets.UTF_8);
 			return sql;
 		} catch (IOException e) {
