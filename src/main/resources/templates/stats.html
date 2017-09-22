@@ -13,14 +13,18 @@
 
 <style>
 .stat-box{padding:0}
-.inner-stat-box{color:white;text-align:center;padding:10px;margin:0 5px}
+.inner-stat-box{color:white;text-align:center;padding:10px;margin:5px 5px}
+
 #booksbytag  {background: linear-gradient(to left bottom, #9bc500,#69a700)}
 #pagesbytag{background: linear-gradient(to left bottom, #f8c600,#f5ab00)}
 #booksbyauthor{background: linear-gradient(to left bottom, #dc504c,#cd3632)}
 #pagesbyauthor{background: linear-gradient(to left bottom, #a14ea0,#713470)}
 
-#statbyyear{background: linear-gradient(to left bottom, #a7d1f2,#7fbdee)}
-#statbymonth{background: linear-gradient(to left bottom, #edc7df,#e5abcf)}
+#booksbyyear{background: linear-gradient(to left bottom, #a7d1f2,#7fbdee)}
+#pagesbyyear{background: linear-gradient(to left bottom, #a7d1f2,#7fbdee)}
+
+#booksbymonth{background: linear-gradient(to left bottom, #edc7df,#e5abcf)}
+#pagesbymonth{background: linear-gradient(to left bottom, #edc7df,#e5abcf)}
 
 </style>
 	</head>
@@ -62,6 +66,37 @@
 					</div>
 				</div>
 			</div>
+            <div class="row">
+              <div id="" class="stat-box col-md-6">
+                <div id="booksbymonth" class="inner-stat-box">
+                  <h4>Books per month</h4>
+                  <canvas id="booksPerMonthChart" width="80" height="30"></canvas>
+                </div>
+              </div>
+              <div id="" class="stat-box col-md-6">
+                <div id="pagesbymonth" class="inner-stat-box">
+                  <h4>Pages per month</h4>
+                  <canvas id="pagesPerMonthChart" width="80" height="30"></canvas>
+                </div>
+              </div>            
+            </div>
+            <div class="row">
+              <div id="" class="stat-box col-md-6">
+                <div id="booksbyyear" class="inner-stat-box">
+                  <h4>Books per year</h4>
+                  <canvas id="booksPerYearChart" width="80" height="30"></canvas>
+                </div>
+              </div>
+              <div id="" class="stat-box col-md-6">
+                <div id="pagesbyyear" class="inner-stat-box">
+                  <h4>Pages per year</h4>
+                  <canvas id="pagesPerYearChart" width="80" height="30"></canvas>
+                </div>
+              </div>            
+            </div>
+
+
+
 		</div>
 
 		<!-- Bootstrap core JavaScript ================================================== -->
@@ -115,7 +150,52 @@
 			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
 		}
 	});
+    new Chart($("#booksPerYearChart"), {
+      type: 'bar',
+      data: {
+        [(${booksByYear})]
+      },
+      options: {
+            scales: {
+              xAxes: [{maxBarThickness : 40}], 
+              yAxes: [{ticks: {beginAtZero:true}}]
+            },            
+      }
+    });
+    new Chart($("#pagesPerYearChart"), {
+      type: 'bar',
+      data: {
+        [(${pagesByYear})]
+      },
+      options: {
+            scales: {
+              xAxes: [{maxBarThickness : 40}], 
+              yAxes: [{ticks: {beginAtZero:true}}]
+            },
+      }
+    });
 	
+    new Chart($("#booksPerMonthChart"), {
+      type: 'bar',
+      data: {
+        [(${booksByMonth})]               
+      },
+      options: {
+            scales: {yAxes: [{ticks: {beginAtZero:true}}]},            
+      }
+    });  
+    new Chart($("#pagesPerMonthChart"), {
+      type: 'bar',
+      data: {
+        [(${pagesByMonth})]               
+
+      },
+      options: {
+            scales: {
+              yAxes: [{ticks: {beginAtZero:true}}]
+            },
+      }
+    });  
 	// Check box show discarded
 	$("#showDisc").click(function() {
 		var checked = $(this)[0].checked 

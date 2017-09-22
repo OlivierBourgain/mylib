@@ -58,9 +58,14 @@ public class StatController extends AbstractController {
 		model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
 		model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));
 		model.addAttribute("booksByAuthor", toHighChartJs(stats.get("booksByAuthor")));
+		model.addAttribute("pagesByYear", toHighChartJs(stats.get("pagesByYear")));
+		model.addAttribute("booksByYear", toHighChartJs(stats.get("booksByYear")));
+		model.addAttribute("pagesByMonth", toHighChartJs(stats.get("pagesByMonth")));
+		model.addAttribute("booksByMonth", toHighChartJs(stats.get("booksByMonth")));
 		model.addAttribute("showDiscarded", showDiscarded);
 		return "stats";
 	}
+
 
 	/**
 	 * Getting the data into the thymeleaf format is a bit painful (especially
@@ -94,4 +99,7 @@ public class StatController extends AbstractController {
 		log.info(sb.toString());
 		return sb.toString();
 	}
+	
+	
+
 }

@@ -1,5 +1,5 @@
 SELECT
-	reading.year,
+	reading.year as year,
 	count(*) as nb,
 	sum(book.pages) as pages
 FROM

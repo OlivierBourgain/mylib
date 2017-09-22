@@ -1,5 +1,5 @@
 SELECT
-	reading.month,
+	reading.month as month,
 	count(*) as nb,
 	sum(book.pages) as pages
 FROM
