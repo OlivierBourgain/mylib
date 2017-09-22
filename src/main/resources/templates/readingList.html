@@ -50,10 +50,15 @@ a {cursor: pointer}
 				<table class="table table-bordered table-striped table-hover table-condensed">
 					<thead id="readingtable" class="table table-bordered table-striped table-hover table-condensed">
 						<tr>
-							<th>Title</th>
-							<th>Author</th>
-							<th>Date read</th>
-							<th></th>
+							<th class="col-xs-5">Title</th>
+							<th class="col-xs-4">Author</th>
+							<th class="col-xs-2">
+									<a href="#" data-col="Date">Date read
+                                  <span th:if="${sort != null && sort.property == 'Date' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
+                                  <span th:if="${sort != null && sort.property == 'Date' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
+                                  </a>
+                            </th>
+							<th class="col-xs-1"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -90,6 +95,22 @@ a {cursor: pointer}
 					}, function() {
 						location.reload()
 					});
+				});
+				
+				// Table headers
+				$("th a").click(function() {
+					var col = $(this).attr("data-col")
+					
+					var cursort = URI(window.location.href).query(true).sort
+					
+					var newsort = col
+					if (cursort == col) newsort = col + ",DESC"
+					
+					var newUrl = URI(window.location.href)
+								.setSearch("sort", newsort)
+								.toString()
+					
+					window.location.href = newUrl
 				});
 			})
 		</script>

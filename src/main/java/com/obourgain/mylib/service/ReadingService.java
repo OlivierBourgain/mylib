@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.obourgain.mylib.db.ReadingRepository;
@@ -27,6 +29,13 @@ public class ReadingService {
 	public List<Reading> findByUserId(String userId) {
 		log.debug("Reading list for " + userId);
 		return readingRepository.findByUserId(userId);
+	}
+	
+	/**
+	 * Return the list of tags for a user.
+	 */
+	public Page<Reading> findByUserId(String userId, Pageable page) {
+		return readingRepository.findByUserId(userId, page);
 	}
 
 	/**

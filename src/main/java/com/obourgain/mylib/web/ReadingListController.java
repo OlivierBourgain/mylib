@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,15 +39,17 @@ public class ReadingListController extends AbstractController {
 	 * Get the reading list.
 	 */
 	@RequestMapping(value = "/readinglist", method = RequestMethod.GET)
-	public String readingList(HttpServletRequest request, Model model) {
+	public String readingList(HttpServletRequest request, Model model, Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
-		List<Reading> readings = readingService.findByUserId(user.getId());
+
+		Page<Reading> readings = readingService.findByUserId(user.getId(), page);
 		List<Book> books = bookService.findByUserId(user.getId());
 		books.sort(Comparator.comparing(Book::getTitle));
 
 		model.addAttribute("readings", readings);
 		model.addAttribute("books", books);
+		model.addAttribute("sort", readings.getSort() == null ? null : readings.getSort().iterator().next());
 
 		return "readingList";
 	}
