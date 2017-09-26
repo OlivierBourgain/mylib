@@ -23,9 +23,9 @@
 ul.pagination li a{min-width:35px;text-align:center}
 ul.pagination li span{min-width:35px;text-align:center}
 a{cursor:pointer}
-#booklist-header-size{margin:26px 0}
-#booklist-header-summary{margin:26px 0}
-.booklist-cell{width: 0; min-width: 100%;}
+#list-header-size{margin:26px 0}
+#list-header-summary{margin:26px 0}
+.list-cell{width: 0; min-width: 100%;}
 </style>
 	</head>
 	<body>
@@ -91,7 +91,7 @@ a{cursor:pointer}
 					<div th:if="${books.totalElements gt 0}">
 					<!-- Pagination -->
 						<div class="row">
-							<div id="booklist-header-summary" class="col-md-5">
+							<div id="list-header-summary" class="col-md-5">
 								<span th:text="${books.totalElements}"></span> results<!-- Antispace device
 								--><span th:if="${books.totalPages gt 1}">, showing page <span th:text="${books.number + 1}"></span>
 								 of <span th:text="${books.totalPages}"></span></span><!-- Antispace device  
@@ -99,7 +99,7 @@ a{cursor:pointer}
 								  filter on <strong th:text="${searchCriteria}">Search</strong> 
 								  (<a id="removeSearchCriteria" href="#">remove</a>)</span>
 							</div>
-							<div id="booklist-header-pages" class="col-md-5">
+							<div id="list-header-pages" class="col-md-5">
 								<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
 								<ul class="pagination pagination-sm">
 								  <li th:classappend="${books.first}? disabled : enabled">
@@ -126,7 +126,7 @@ a{cursor:pointer}
 								</ul>
 								</nav>
 							</div>
-							<div id="booklist-header-size" class="col-md-2">
+							<div id="list-header-size" class="col-md-2">
 								<span>Show </span><select id="size">
 									<option></option>
 									<option value="10" th:selected="${books.size == 10}">10</option>

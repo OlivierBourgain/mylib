@@ -47,6 +47,8 @@ public class ReadingListController extends AbstractController {
 		List<Book> books = bookService.findByUserId(user.getId());
 		books.sort(Comparator.comparing(Book::getTitle));
 
+		List<Integer> pagination = computePagination(readings);
+		model.addAttribute("pagination", pagination);
 		model.addAttribute("readings", readings);
 		model.addAttribute("books", books);
 		model.addAttribute("sort", readings.getSort() == null ? null : readings.getSort().iterator().next());

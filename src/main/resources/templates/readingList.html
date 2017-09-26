@@ -12,17 +12,18 @@
 
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <style>
 a {cursor: pointer}
+#list-header-size{margin:26px 0}
+#list-header-summary{margin:26px 0}
+.list-cell{width: 0; min-width: 100%;}
 </style>
 	</head>
 	<body>
 		<input type="hidden" id="csrf" name="_csrf" th:value="${_csrf.token}" />
 
-
-
 		<div class="container">
-
 			<div class="row">
 				<h1>Reading list</h1>
 				<a href="/books">&lt; back to list</a>
@@ -46,17 +47,61 @@ a {cursor: pointer}
 				</form>
 			</div>
 			<div class="row">
-				<h2>History</h2>
+				<div id="list-header-summary"  class="col-md-5">
+					<span th:text="${readings.totalElements}"></span> results<!-- Antispace device
+					--><span th:if="${readings.totalPages gt 1}">, showing page <span th:text="${readings.number + 1}"></span>
+					of <span th:text="${readings.totalPages}"></span></span>
+				</div>
+				<div id="list-header-pages" class="col-md-5">
+					<nav aria-label="Reading list navigation" th:if="${readings.totalPages gt 1}">
+					<ul class="pagination pagination-sm">
+					  <li th:classappend="${readings.first}? disabled : enabled">
+						<a aria-label="First" href="#"  data-th-attr="data-page=0">
+						  <span aria-hidden="true">&laquo;</span>
+						</a>
+					  </li>
+					  <!-- /* Pagination is precomputed on server */ -->
+					  <li th:each="page:${pagination}"
+					  	  th:classappend="|${page < 0 ? 'disabled' : 'enabled'} ${readings.number == page ? 'active' : ''}|" >
+						  <span
+							 th:if="${page == -1}"
+						  	 th:text="...">...</span>
+						  <a href="#" 
+							 th:if="${page > -1}"
+							 data-th-attr="data-page=${page}"
+							 th:text="${page + 1}">1</a>
+					  </li>
+					  <li th:classappend="${readings.last} ? disabled : enabled">
+						<a href="#"  data-th-attr="data-page=${readings.totalPages - 1}" aria-label="Last">
+						  <span aria-hidden="true">&raquo;</span>
+						</a>
+					  </li>
+					</ul>
+					</nav>
+				</div>
+				<div id="list-header-size" class="col-md-2">
+					<span>Show </span><select id="size">
+						<option></option>
+						<option value="10" th:selected="${readings.size == 10}">10</option>
+						<option value="20" th:selected="${readings.size == 20}">20</option>
+						<option value="50" th:selected="${readings.size == 50}">50</option>
+						<option value="100" th:selected="${readings.size == 100}">100</option>
+						<option value="1000" th:selected="${readings.size == 1000}">1000</option>
+					</select>
+					<span> books</span>
+				</div>
+			</div>
+			<div class="row">
 				<table class="table table-bordered table-striped table-hover table-condensed">
 					<thead id="readingtable" class="table table-bordered table-striped table-hover table-condensed">
 						<tr>
 							<th class="col-xs-5">Title</th>
 							<th class="col-xs-4">Author</th>
 							<th class="col-xs-2">
-									<a href="#" data-col="Date">Date read
+								<a href="#" data-col="Date">Date read
                                   <span th:if="${sort != null && sort.property == 'Date' && sort.ascending}" class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                                   <span th:if="${sort != null && sort.property == 'Date' && sort.descending}" class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
-                                  </a>
+                               	</a>
                             </th>
 							<th class="col-xs-1"></th>
 						</tr>
@@ -75,9 +120,13 @@ a {cursor: pointer}
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+		
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
 		<script>
 			$(function() {
+				$('#book-select').select2();
+
 				$('#readdate').datepicker({
 					format : "yyyy-mm-dd",
 					weekStart : 1,
@@ -95,6 +144,26 @@ a {cursor: pointer}
 					}, function() {
 						location.reload()
 					});
+				});
+				// Pagination
+				$("li a").click(function() {
+					var page = $(this).attr("data-page")
+					var newUrl = URI(window.location.href)
+								.setSearch("page", page)
+								.toString()
+					
+					window.location.href = newUrl
+				});
+				// Select page size
+				$("#size").change(function() {
+					var newSize = $("#size").val()
+					// When size is changed, reset page number to 0
+					var newUrl = URI(window.location.href)
+								.setSearch("size", newSize)
+								.setSearch("page", 0)
+								.toString()
+						
+					window.location.href = newUrl
 				});
 				
 				// Table headers
