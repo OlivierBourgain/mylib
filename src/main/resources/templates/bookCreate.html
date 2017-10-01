@@ -2,140 +2,145 @@
 <html lang="en">
 <th:block xmlns:th="http://www.thymeleaf.org">
 
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Create a book</title>
+<title>Create a book</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-    
-    <style th:each="tag : ${alltags}" th:utext="'#tagdiv li[title=\'' + ${tag.text} + '\'], #tagdiv li[title=\'' + ${tag.text} + '\'] span {background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor} + '}'"></style>
-  </head>
-  <body>
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 
-    <div class="container">
-      <div class="starter-template">
-        <a href="/books">&lt; back to list</a>
-        <p class="lead"></p>
+<style th:each="tag : ${alltags}"
+	th:utext="'#tagdiv li[title=\'' + ${tag.text} + '\'], #tagdiv li[title=\'' + ${tag.text} + '\'] span {background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor} + '}'"></style>
+	</head>
+	<body>
 
-        <div class="row">
-          <div class="col-md-12">
-            <form class="form-horizontal" method="POST" th:action="@{/book/}" th:object="${book}">
-              <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">Title</label>
-                <div class="col-sm-9">
-                  <input id="title" name="title" type="text" class="form-control" placeholder="Title"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="subtitle" class="col-sm-3 control-label">Subtitle</label>
-                <div class="col-sm-9">
-                  <input id="subtitle" name="subtitle" type="text" class="form-control" placeholder="Subtitle"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="author" class="col-sm-3 control-label">Author</label>
-                <div class="col-sm-9">
-                  <input name="author" type="text" class="form-control" placeholder="Author"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="isbn" class="col-sm-3 control-label">ISBN</label>
-                <div class="col-sm-9">
-                  <input name="isbn" type="text" class="form-control" placeholder="978-XXXXXXXXXX"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="publisher" class="col-sm-3 control-label">Editor</label>
-                <div class="col-sm-9">
-                  <input name="publisher" type="text" class="form-control" ></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="publicationDate" class="col-sm-3 control-label">Publication date</label>
-                <div class="col-sm-9">
-                  <input name="publicationDate" type="text" class="form-control" ></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="pages" class="col-sm-3 control-label">Pages</label>
-                <div class="col-sm-9">
-                  <input name="pages" type="text" class="form-control" value="0"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="lang" class="col-sm-3 control-label">Lang</label>
-                <div class="col-sm-9">
-                  <input name="lang" type="text" class="form-control" placeholder="fr"></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="tags" class="col-sm-3 control-label">Tags</label>
-                <div id="tagdiv" class="col-sm-9">
-                  <select id="tagString" name="tagString" class="form-control" multiple="multiple">
-                  	<option></option>
-                  	<option th:each="tag : ${alltags}"  th:value="${tag.text}" th:text="${tag.text}">A tag</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="comment" class="col-sm-3 control-label">Comment</label>
-                <div class="col-sm-9">
-                  <input name="comment" type="text" class="form-control" ></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="description" class="col-sm-3 control-label">Description</label>
-                <div class="col-sm-9">
-                  <input name="description" type="text" class="form-control" ></input>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="status" class="col-sm-3 control-label">Status</label>
-                <div class="col-sm-9">
-                  <select name="status" class="form-control" >
-                  	<option></option>
-                  	<option value="DISCARDED" >Discarded</option>
-                  	<option value="ON_SHELF"  >On the shelves</option>
-                  	<option value="STORED"    >Stored</option>
-                  	<option value="TO_READ"   >To read</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-9 col-md-offset-3">
-                  <button type="submit" name="action" value="create" class="btn btn-success">Submit</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Bootstrap core JavaScript
+		<div class="container">
+			<div class="row">
+				<h1>Add a new book</h1>
+			</div>
+			<div class="row">
+				<a href="/books">&lt; back to list</a>
+				<p class="lead"></p>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-horizontal" method="POST" th:action="@{/book/}" th:object="${book}">
+						<div class="form-group row row">
+							<label for="title" class="col-sm-3 col-form-label">Title</label>
+							<div class="col-sm-9">
+								<input id="title" name="title" type="text" class="form-control" placeholder="Title"></input>
+							</div>
+						</div>
+						<div class="form-group row row">
+							<label for="subtitle" class="col-sm-3 col-form-label">Subtitle</label>
+							<div class="col-sm-9">
+								<input id="subtitle" name="subtitle" type="text" class="form-control" placeholder="Subtitle"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="author" class="col-sm-3 col-form-label">Author</label>
+							<div class="col-sm-9">
+								<input name="author" type="text" class="form-control" placeholder="Author"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="isbn" class="col-sm-3 col-form-label">ISBN</label>
+							<div class="col-sm-9">
+								<input name="isbn" type="text" class="form-control" placeholder="978-XXXXXXXXXX"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="publisher" class="col-sm-3 col-form-label">Editor</label>
+							<div class="col-sm-9">
+								<input name="publisher" type="text" class="form-control"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="publicationDate" class="col-sm-3 col-form-label">Publication date</label>
+							<div class="col-sm-9">
+								<input name="publicationDate" type="text" class="form-control"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="pages" class="col-sm-3 col-form-label">Pages</label>
+							<div class="col-sm-9">
+								<input name="pages" type="text" class="form-control" value="0"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="lang" class="col-sm-3 col-form-label">Lang</label>
+							<div class="col-sm-9">
+								<input name="lang" type="text" class="form-control" placeholder="fr"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="tags" class="col-sm-3 col-form-label">Tags</label>
+							<div id="tagdiv" class="col-sm-9">
+								<select id="tagString" name="tagString" class="form-control" multiple="multiple">
+									<option></option>
+									<option th:each="tag : ${alltags}" th:value="${tag.text}" th:text="${tag.text}">A tag</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="comment" class="col-sm-3 col-form-label">Comment</label>
+							<div class="col-sm-9">
+								<input name="comment" type="text" class="form-control"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="description" class="col-sm-3 col-form-label">Description</label>
+							<div class="col-sm-9">
+								<input name="description" type="text" class="form-control"></input>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="status" class="col-sm-3 col-form-label">Status</label>
+							<div class="col-sm-9">
+								<select name="status" class="form-control">
+									<option></option>
+									<option value="DISCARDED">Discarded</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="ml-auto">
+								<button type="submit" name="action" value="create" class="btn btn-success">Submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+			integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+			integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
-    <!-- Select2 Plugin for tag support -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
 
-    <script>
-  	$(function() {
-  		$("#title").focus()
-  	});
-  
-  	$("#tagString").select2({
-  		tags : true,
-  		tokenSeparators : [ ',' ]
-  	})
-  </script>
-  </body>
+		<!-- Select2 Plugin for tag support -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
+
+		<script>
+			$(function() {
+				$("#title").focus()
+			});
+
+			$("#tagString").select2({
+				tags : true,
+				tokenSeparators : [ ',' ]
+			})
+		</script>
+	</body>
 </th:block>
 </html>
