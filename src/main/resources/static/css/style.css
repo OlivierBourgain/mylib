@@ -1,21 +1,2 @@
-body {
-	background-color:#cccccc;
-	font-family: arial,helvetica,sans-serif
-}
 
-table {    border-collapse: collapse;}
 
-th,td {border:1px solid blue;padding:2px}
-
-.bookHeadline {
-	font-size:12pt;
-	font-weight:bold;
-}
-
-.bookComment {
-	font-size:10pt;
-}
-
-label {
-	font-weight:bold;
-}
