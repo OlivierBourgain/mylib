@@ -2,157 +2,168 @@
 <html lang="en">
 <th:block xmlns:th="http://www.thymeleaf.org">
 
-  <head>
+	<head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <title>The tags</title>
-<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 
 <style>
-  .tagcolor {
-  	padding: 2px 3px 0px 2px;
-  	font-family: Courier;
-  	border-width: 1px;
-  	border-style: solid;
-  	line-height: 12px;
-  	height: 16px;
-  	display: inline-block
-  }
-  
-  .tag {
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
-    padding: 2px 5px;
-    margin: 5px 0;
-    line-height: 20px;
-  }
-  
-  .input-priority{width:50px;text-align:right;padding:0 4px 0 0}
-  a{cursor:pointer}	
-  
-      #tag-color-A{background-color:#E7E7E7; color:#464646; border-color:#464646;} /* Mercury */
-      #tag-color-B{background-color:#B6CFF5; color:#0D3472; border-color:#0D3472;} /* Perano */
-      #tag-color-C{background-color:#98D7E4; color:#0D3B44; border-color:#0D3B44;} /* Regent St blue */
-      #tag-color-D{background-color:#E3D7FF; color:#3D188E; border-color:#3D188E;} /* Fog */
-      #tag-color-E{background-color:#FBD3E0; color:#711A36; border-color:#711A36;} /* classic rose */
-      #tag-color-F{background-color:#F2B2A8; color:#8A1C0A; border-color:#8A1C0A;} /* Mandys pink */
-      #tag-color-G{background-color:#C2C2C2; color:#FFFFFF; border-color:#464646;} /* Silver */
-      #tag-color-H{background-color:#4986E7; color:#FFFFFF; border-color:#0D3472;} /* Royal blue */
-      #tag-color-I{background-color:#2DA2BB; color:#FFFFFF; border-color:#0D3B44;} /* Curious blue */
-      #tag-color-J{background-color:#B99AFF; color:#FFFFFF; border-color:#3D188E;} /* Mauve */
-      #tag-color-K{background-color:#F691B2; color:#994A64; border-color:#994A64;} /* Persian pink */
-      #tag-color-L{background-color:#FB4C2F; color:#FFFFFF; border-color:#8A1C0A;} /* Red orange */
-      #tag-color-M{background-color:#FFC8AF; color:#7A2E0B; border-color:#7A2E0B;} /* Wax flower */
-      #tag-color-N{background-color:#FFDEB5; color:#7A4706; border-color:#7A4706;} /* Frangipani */
-      #tag-color-O{background-color:#FBE983; color:#594C05; border-color:#594C05;} /* Sweet corn */
-      #tag-color-P{background-color:#FDEDC1; color:#684E07; border-color:#684E07;} /* Beeswax */
-      #tag-color-Q{background-color:#B3EFD3; color:#0B4F30; border-color:#0B4F30;} /* Magic mint  */
-      #tag-color-R{background-color:#A2DCC1; color:#04502E; border-color:#04502E;} /* Fringy flower*/
-      #tag-color-S{background-color:#FF7537; color:#FFFFFF; border-color:#8A1C0A;} /* Burning orange */
-      #tag-color-T{background-color:#FFAD46; color:#FFFFFF; border-color:#8A1C0A;} /* Yellow orange*/
-      #tag-color-U{background-color:#EBDBDE; color:#662E37; border-color:#662E37;} /* Soft peach */
-      #tag-color-V{background-color:#CCA6AC; color:#FFFFFF; border-color:#662E37;} /* Clam shell */
-      #tag-color-W{background-color:#42D692; color:#094228; border-color:#094228;} /* Shamrock */
-      #tag-color-X{background-color:#16A765; color:#FFFFFF; border-color:#094228;} /* Mountain meadow */
+.tagcolor {
+	padding: 2px 3px 0px 2px; font-family: Courier; border-width: 1px;
+	border-style: solid; line-height: 12px; height: 16px;
+	display: inline-block
+}
+
+.tag {
+	border-width: 1px; border-style: solid; border-radius: 4px;
+	padding: 2px 5px; margin: 5px 0; line-height: 20px;
+}
+
+.input-priority {width: 50px; text-align: right; padding: 0 4px 0 0}
+
+a {cursor: pointer}
+#tag-color-A{background-color:#E7E7E7; color:#464646; border-color:#464646;} /* Mercury */
+#tag-color-B{background-color:#B6CFF5; color:#0D3472; border-color:#0D3472;} /* Perano */
+#tag-color-C{background-color:#98D7E4; color:#0D3B44; border-color:#0D3B44;} /* Regent St blue */
+#tag-color-D{background-color:#E3D7FF; color:#3D188E; border-color:#3D188E;} /* Fog */
+#tag-color-E{background-color:#FBD3E0; color:#711A36; border-color:#711A36;} /* classic rose */
+#tag-color-F{background-color:#F2B2A8; color:#8A1C0A; border-color:#8A1C0A;} /* Mandys pink */
+#tag-color-G{background-color:#C2C2C2; color:#FFFFFF; border-color:#464646;} /* Silver */
+#tag-color-H{background-color:#4986E7; color:#FFFFFF; border-color:#0D3472;} /* Royal blue */
+#tag-color-I{background-color:#2DA2BB; color:#FFFFFF; border-color:#0D3B44;} /* Curious blue */
+#tag-color-J{background-color:#B99AFF; color:#FFFFFF; border-color:#3D188E;} /* Mauve */
+#tag-color-K{background-color:#F691B2; color:#994A64; border-color:#994A64;} /* Persian pink */
+#tag-color-L{background-color:#FB4C2F; color:#FFFFFF; border-color:#8A1C0A;} /* Red orange */
+#tag-color-M{background-color:#FFC8AF; color:#7A2E0B; border-color:#7A2E0B;} /* Wax flower */
+#tag-color-N{background-color:#FFDEB5; color:#7A4706; border-color:#7A4706;} /* Frangipani */
+#tag-color-O{background-color:#FBE983; color:#594C05; border-color:#594C05;} /* Sweet corn */
+#tag-color-P{background-color:#FDEDC1; color:#684E07; border-color:#684E07;} /* Beeswax */
+#tag-color-Q{background-color:#B3EFD3; color:#0B4F30; border-color:#0B4F30;} /* Magic mint  */
+#tag-color-R{background-color:#A2DCC1; color:#04502E; border-color:#04502E;} /* Fringy flower*/
+#tag-color-S{background-color:#FF7537; color:#FFFFFF; border-color:#8A1C0A;} /* Burning orange */
+#tag-color-T{background-color:#FFAD46; color:#FFFFFF; border-color:#8A1C0A;} /* Yellow orange*/
+#tag-color-U{background-color:#EBDBDE; color:#662E37; border-color:#662E37;} /* Soft peach */
+#tag-color-V{background-color:#CCA6AC; color:#FFFFFF; border-color:#662E37;} /* Clam shell */
+#tag-color-W{background-color:#42D692; color:#094228; border-color:#094228;} /* Shamrock */
+#tag-color-X{background-color:#16A765; color:#FFFFFF; border-color:#094228;} /* Mountain meadow */
 </style>
-  </head>
-  <body>
-  
-	<input type="hidden" id="csrf" name="_csrf" th:value="${_csrf.token}"/>
-  
-    <div class="container">
-      <h1>Tags</h1>
-      <a href="/books">&lt; back to list</a>
-      <p class="lead"></p>
-      <div class="row">
-        <table class="table">
-          <thead>
-          	<tr>
-          		<th></th>
-          		<th></th>
-          		<th>Priority</th>
-          		<th></th>
-          	</tr>
-          </thead>
-          <tbody>
-            <tr th:each="tag:${tags}" th:id="${tag.id}">
-              <td>
-                <span class="tag" 
-                  th:text="${tag.text}"
-                  th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}"
-                >Tag</span>
-              </td>
-              <td>
-                  <span id="tag-color-A" class="tagcolor">a</span> <span id="tag-color-B" class="tagcolor">a</span> <span id="tag-color-C" class="tagcolor">a</span>
-                  <span id="tag-color-D" class="tagcolor">a</span> <span id="tag-color-E" class="tagcolor">a</span> <span id="tag-color-F" class="tagcolor">a</span>
-                  <span id="tag-color-G" class="tagcolor">a</span> <span id="tag-color-H" class="tagcolor">a</span> <span id="tag-color-I" class="tagcolor">a</span>
-                  <span id="tag-color-J" class="tagcolor">a</span> <span id="tag-color-K" class="tagcolor">a</span> <span id="tag-color-L" class="tagcolor">a</span>
-                  <span id="tag-color-M" class="tagcolor">a</span> <span id="tag-color-N" class="tagcolor">a</span> <span id="tag-color-O" class="tagcolor">a</span>
-                  <span id="tag-color-P" class="tagcolor">a</span> <span id="tag-color-Q" class="tagcolor">a</span> <span id="tag-color-R" class="tagcolor">a</span>
-                  <span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
-                  <span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>
-              </td>
-              <td>
-              	<input type="text" th:value="${tag.priority}" class="input-priority"></input><a></a>
-                <a class="update-priority">update</a>
-              </td>
-              <td>
-                <a class="delete">delete</a>
-              </td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    
-    <!-- Bootstrap core JavaScript
+	</head>
+	<body>
+
+		<input type="hidden" id="csrf" name="_csrf" th:value="${_csrf.token}" />
+
+		<div class="container">
+			<h1>Tags</h1>
+			<a href="/books">&lt; back to list</a>
+			<p class="lead"></p>
+			<div class="row">
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th>Priority</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="tag:${tags}" th:id="${tag.id}">
+							<td><span class="tag" th:text="${tag.text}"
+								th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}">Tag</span>
+							</td>
+							<td>
+								<span id="tag-color-A" class="tagcolor">a</span> <span id="tag-color-B" class="tagcolor">a</span> <span id="tag-color-C" class="tagcolor">a</span>
+								<span id="tag-color-D" class="tagcolor">a</span> <span id="tag-color-E" class="tagcolor">a</span> <span id="tag-color-F" class="tagcolor">a</span>
+								<span id="tag-color-G" class="tagcolor">a</span> <span id="tag-color-H" class="tagcolor">a</span> <span id="tag-color-I" class="tagcolor">a</span>
+								<span id="tag-color-J" class="tagcolor">a</span> <span id="tag-color-K" class="tagcolor">a</span> <span id="tag-color-L" class="tagcolor">a</span>
+								<span id="tag-color-M" class="tagcolor">a</span> <span id="tag-color-N" class="tagcolor">a</span> <span id="tag-color-O" class="tagcolor">a</span>
+								<span id="tag-color-P" class="tagcolor">a</span> <span id="tag-color-Q" class="tagcolor">a</span> <span id="tag-color-R" class="tagcolor">a</span>
+								<span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
+								<span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>							
+							</td>
+							<td><input type="text" th:value="${tag.priority}" class="input-priority"></input><a></a></td>
+							<td><a class="update-priority" href="#">update</a></td>
+							<td><a class="delete" href="#">delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
-    
-    <script type="text/javascript">
-      $('.tagcolor').click(function () {
-        var tagid = $(this).closest('tr').attr('id'); // table row ID 
-        var back = rgb2hex($(this).css('background-color'));
-        var color = rgb2hex($(this).css('color'));
-        var border = rgb2hex($(this).css('border-color'));
-        var csrf = $("#csrf").val(); 
-        console.log("New color for " + tagid);
-        $.post( "updateTagColor", 
-        		{ tagId: tagid, backgroundColor: back, color: color, borderColor: border, _csrf:csrf},
-        		function() { location.reload()}
-        );
-       
-      });
-      
-      $('a.delete').click(function() {
-        var tagid = $(this).closest('tr').attr('id'); // table row ID 
-        var csrf = $("#csrf").val(); 
-        $.post( "deleteTag", { tagId: tagid, _csrf: csrf}, function() {location.reload()} );
-      });
-      
-      $('a.update-priority').click(function() {
-          var tagid = $(this).closest('tr').attr('id'); // table row ID 
-          var priority = $(this).siblings('input').val(); 
-          var csrf = $("#csrf").val(); 
-          console.log("Modifying priority to " + priority + " for tag " + tagid)
-          $.post( "updateTagPriority", { tagId: tagid, priority: priority, _csrf: csrf}, function() {location.reload()} );
-        });
-      
-      // https://stackoverflow.com/questions/1740700/how-to-get-hex-color-value-rather-than-rgb-value
-      function rgb2hex(rgb) {
-          if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
-          rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-          function hex(x) { return ("0" + parseInt(x).toString(16)).slice(-2);}
-          return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-      }
-    
-    </script>
-  </body>
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+			integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+			integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+
+		<script type="text/javascript">
+			$('.tagcolor').click(function() {
+				var tagid = $(this).closest('tr').attr('id'); // table row ID 
+				var back = rgb2hex($(this).css('background-color'));
+				var color = rgb2hex($(this).css('color'));
+				var border = rgb2hex($(this).css('border-color'));
+				var csrf = $("#csrf").val();
+				console.log("New color for " + tagid);
+				$.post("updateTagColor", {
+					tagId : tagid,
+					backgroundColor : back,
+					color : color,
+					borderColor : border,
+					_csrf : csrf
+				}, function() {
+					location.reload()
+				});
+
+			});
+
+			$('a.delete').click(function() {
+				var tagid = $(this).closest('tr').attr('id'); // table row ID 
+				var csrf = $("#csrf").val();
+				$.post("deleteTag", {
+					tagId : tagid,
+					_csrf : csrf
+				}, function() {
+					location.reload()
+				});
+			});
+
+			$('a.update-priority').click(
+					function() {
+						var tagid = $(this).closest('tr').attr('id'); // table row ID 
+						var priority = $(this).siblings('input').val();
+						var csrf = $("#csrf").val();
+						console.log("Modifying priority to " + priority
+								+ " for tag " + tagid)
+						$.post("updateTagPriority", {
+							tagId : tagid,
+							priority : priority,
+							_csrf : csrf
+						}, function() {
+							location.reload()
+						});
+					});
+
+			// https://stackoverflow.com/questions/1740700/how-to-get-hex-color-value-rather-than-rgb-value
+			function rgb2hex(rgb) {
+				if (/^#[0-9A-F]{6}$/i.test(rgb))
+					return rgb;
+				rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+				function hex(x) {
+					return ("0" + parseInt(x).toString(16)).slice(-2);
+				}
+				return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+			}
+		</script>
+	</body>
 </th:block>
 </html>
