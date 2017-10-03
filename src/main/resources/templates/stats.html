@@ -14,8 +14,6 @@
 
 <style>
 html {overflow-y: scroll;} /* Avoid centering jump */
-.container{margin-top:20px}
-
 .stat-box{padding:0}
 .container{box-sizing:content-box}
 .inner-stat-box{color:white;text-align:center;padding:10px;margin:5px 5px;}
@@ -49,9 +47,18 @@ html {overflow-y: scroll;} /* Avoid centering jump */
       <li class="nav-item active">
         <a class="nav-link" href="/stats">Stats</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/tags">Tags</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">More...</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/books/rebuildindex">Rebuild search index</a>
+        </div>
+      </li>  
     </ul>
   </div>
-</nav>
+</nav> 
 		<div class="container">
 			<p class="lead">
 				<strong th:text="${#numbers.formatInteger(nbBooks,0,'DEFAULT')}">13</strong> books (<strong

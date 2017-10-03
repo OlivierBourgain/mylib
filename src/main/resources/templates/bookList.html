@@ -50,6 +50,15 @@ a{cursor:pointer}
       <li class="nav-item">
         <a class="nav-link" href="/stats">Stats</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/tags">Tags</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">More...</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="/books/rebuildindex">Rebuild search index</a>
+        </div>
+      </li>
     </ul>
   </div>
 </nav>  
@@ -66,10 +75,6 @@ a{cursor:pointer}
 					<p>Add a book by typing its ISBN number, or <code>ASIN:Amazon ASIN number</code>.</p>
 				</div>
 				<div id="menu" class="col-md-4">
-					<h3>&nbsp;</h3>
-					<div class="row">
-						<a href="/tags">Manage tags</a>
-					</div>
 					<div class="row">
 						<a href="/books/exportcsv">Export CSV</a>
 					</div>
@@ -79,9 +84,6 @@ a{cursor:pointer}
 					<div class="row">
 						<input id="search-criteria" type="text" name="query" th:value="${searchCriteria}"/>
 						<button type="submit" onclick="search();">Submit</button>
-					</div>
-					<div class="row">
-					  <a href="/books/rebuildindex">Rebuild search index</a>
 					</div>
 					<div class="row">
 						<label for="showDisc">
@@ -234,7 +236,7 @@ a{cursor:pointer}
 						});
 						
 						// Pagination
-						$("li a").click(function() {
+						$("li.page-item a").click(function() {
 							var page = $(this).attr("data-page")
 							var newUrl = URI(window.location.href)
 										.setSearch("page", page)
