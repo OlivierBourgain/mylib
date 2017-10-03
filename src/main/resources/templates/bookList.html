@@ -29,14 +29,32 @@ ul.pagination li a{min-width:35px;text-align:center}
 ul.pagination li span{min-width:35px;text-align:center}
 a{cursor:pointer}
 .list-cell{width: 0; min-width: 100%;}
-
+.container{margin-top:20px}
 </style>
 	</head>
 	<body>
+  
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/books">Books</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/readinglist">Reading list</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/stats">Stats</a>
+      </li>
+    </ul>
+  </div>
+</nav>  
+  
 		<div class="container">
-			<div class="row">
-				<h1>Book list</h1>
-			</div>
 			<div class="row">
 				<div class="col-md-8">
 					<form th:action="@{/isbnlookup}" method="POST" class="row">
@@ -53,13 +71,7 @@ a{cursor:pointer}
 						<a href="/tags">Manage tags</a>
 					</div>
 					<div class="row">
-						<a href="/stats">Stats</a>
-					</div>
-					<div class="row">
 						<a href="/books/exportcsv">Export CSV</a>
-					</div>
-					<div class="row">
-						<a href="/readinglist">Reading List</a>
 					</div>
 					<div class="row">
 						<a href="/books/create">New book</a>
@@ -87,7 +99,7 @@ a{cursor:pointer}
 				<div th:if="${books.totalElements gt 0}" class="row">
 				<!-- Pagination -->
 					<div class="row col-12">
-						<div id="list-header-summary" class="col-md-5">
+						<div id="list-header-summary" class="col-md-4">
 							<span th:text="${books.totalElements}"></span> results<!-- Antispace device
 							--><span th:if="${books.totalPages gt 1}">, showing page <span th:text="${books.number + 1}"></span>
 							 of <span th:text="${books.totalPages}"></span></span><!-- Antispace device  
@@ -122,7 +134,7 @@ a{cursor:pointer}
 							</ul>
 							</nav>
 						</div>
-						<div id="list-header-size" class="col-md-2">
+						<div id="list-header-size" class="col-md-3">
 							<span>Show </span><select id="size">
 								<option></option>
 								<option value="10" th:selected="${books.size == 10}">10</option>
