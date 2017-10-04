@@ -14,25 +14,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker3.min.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
 <style>
-html {overflow-y: scroll;} /* Avoid centering jump */
-.tag {
-	border-width: 1px;
-	border-style: solid;
-	border-radius: 4px;
-	padding: 2px 5px;
-	margin: 5px 2px;
-	line-height: 20px;
-}
-#main-list{margin-top:20px}
-tr.row{margin:0}
-#list-header-summary{height:50px}
-ul.pagination li a{min-width:35px;text-align:center}
-ul.pagination li span{min-width:35px;text-align:center}
-a{cursor:pointer}
-.list-cell{width: 0; min-width: 100%;}
-.container{margin-top:20px}
-
+  #readings-list{margin-top:20px}
 </style>
 	</head>
 	<body>
@@ -58,7 +42,7 @@ a{cursor:pointer}
 					</div>
 				</form>
 			</div>
-			<div class="row" id="main-list">
+			<div class="row" id="readings-list">
 				<h3>Your reading history</h3>
 				<div th:if="${readings.totalElements == 0}" class="row">
 					<p>No book found</p>
