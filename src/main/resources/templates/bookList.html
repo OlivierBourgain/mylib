@@ -82,31 +82,7 @@ a{cursor:pointer}
 							  (<a id="removeSearchCriteria" href="#">remove</a>)</span>
 						</div>
 						<div id="list-header-pages" class="col-md-5">
-							<nav aria-label="Book list navigation" th:if="${books.totalPages gt 1}">
-							<ul class="pagination pagination-sm">
-							  <li th:classappend="${books.first}? disabled : enabled" class="page-item">
-								<a aria-label="First" href="#"  data-th-attr="data-page=0" class="page-link">
-								  <span aria-hidden="true">&laquo;</span>
-								</a>
-							  </li>
-							  <!-- /* Pagination is precomputed on server */ -->
-							  <li th:each="page:${pagination}" class="page-item"
-							  	  th:classappend="|${page < 0 ? 'disabled' : 'enabled'} ${books.number == page ? 'active' : ''}|" >
-								  <span
-									 th:if="${page == -1}"
-								  	 th:text="..." class="page-link">...</span>
-								  <a href="#" 
-									 th:if="${page > -1}"
-									 data-th-attr="data-page=${page}"
-									 th:text="${page + 1}" class="page-link">1</a>
-							  </li>
-							  <li th:classappend="${books.last} ? disabled : enabled" class="page-item">
-								<a href="#"  data-th-attr="data-page=${books.totalPages - 1}" aria-label="Last" class="page-link">
-								  <span aria-hidden="true">&raquo;</span>
-								</a>
-							  </li>
-							</ul>
-							</nav>
+                            <div th:replace="fragment/pagination :: pagination(${books}, ${pagination})"></div>           
 						</div>
 						<div id="list-header-size" class="col-md-3">
 							<span>Show </span><select id="size">
