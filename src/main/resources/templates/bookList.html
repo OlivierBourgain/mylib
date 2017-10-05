@@ -57,26 +57,13 @@
 				<!-- Pagination -->
 					<div class="row col-12">
 						<div id="list-header-summary" class="col-md-4">
-							<span th:text="${books.totalElements}"></span> results<!-- Antispace device
-							--><span th:if="${books.totalPages gt 1}">, showing page <span th:text="${books.number + 1}"></span>
-							 of <span th:text="${books.totalPages}"></span></span><!-- Antispace device  
-							  --><span th:if="${!#strings.isEmpty(searchCriteria)}">, 
-							  filter on <strong th:text="${searchCriteria}">Search</strong> 
-							  (<a id="removeSearchCriteria" href="#">remove</a>)</span>
+                            <div th:replace="fragment/pagination-message :: pagination(${books}, ${searchCriteria})"></div>           
 						</div>
 						<div id="list-header-pages" class="col-md-5">
                             <div th:replace="fragment/pagination :: pagination(${books}, ${pagination})"></div>           
 						</div>
 						<div id="list-header-size" class="col-md-3">
-							<span>Show </span><select id="size">
-								<option></option>
-								<option value="10" th:selected="${books.size == 10}">10</option>
-								<option value="20" th:selected="${books.size == 20}">20</option>
-								<option value="50" th:selected="${books.size == 50}">50</option>
-								<option value="100" th:selected="${books.size == 100}">100</option>
-								<option value="1000" th:selected="${books.size == 1000}">1000</option>
-							</select>
-							<span> books</span>
+                            <div th:replace="fragment/pagination-pagesize :: pagination(${books})"></div>           
 						</div>
 					</div>
 					<!-- Table principale -->

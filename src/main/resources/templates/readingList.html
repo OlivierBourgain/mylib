@@ -51,23 +51,13 @@
 				<!-- Pagination -->
 					<div class="row col-12">
 						<div id="list-header-summary" class="col-4">
-							<span th:text="${readings.totalElements}"></span> results<!-- Antispace device
-							--><span th:if="${readings.totalPages gt 1}">, showing page <span th:text="${readings.number + 1}"></span>
-							of <span th:text="${readings.totalPages}"></span></span>
+                            <div th:replace="fragment/pagination-message :: pagination(${readings}, '')"></div>           
 						</div>
 						<div id="list-header-pages" class="col-5">
 							<div th:replace="fragment/pagination :: pagination(${readings}, ${pagination})"></div>           
 						</div>
 						<div id="list-header-size" class="col-3">
-							<span>Show </span><select id="size">
-								<option></option>
-								<option value="10" th:selected="${readings.size == 10}">10</option>
-								<option value="20" th:selected="${readings.size == 20}">20</option>
-								<option value="50" th:selected="${readings.size == 50}">50</option>
-								<option value="100" th:selected="${readings.size == 100}">100</option>
-								<option value="1000" th:selected="${readings.size == 1000}">1000</option>
-							</select>
-							<span> books</span>
+                            <div th:replace="fragment/pagination-pagesize :: pagination(${readings})"></div>           
 						</div>
 					</div>
 					<table id="readingtable" class="table table-bordered table-striped table-hover table-sm">
