@@ -14,7 +14,7 @@
 	    <span th:text="${elements.number + 1}"></span> 
 	    of <span th:text="${elements.totalPages}"></span></span><!-- Antispace device  
 		--><span th:if="${!#strings.isEmpty(filter)}">, filter on <strong th:text="${filter}">Search</strong> 
-		(<a	id="removeSearchCriteria" href="#">remove</a>)
+		(<a	id="removeFilter" href="#">remove</a>)
 		</span>
 	</div>
 </body>

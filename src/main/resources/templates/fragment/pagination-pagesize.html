@@ -8,8 +8,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
   <div th:fragment="pagination(elements)">
-		<span>Show </span><select id="size">
-			<option></option>
+		<span>Show </span><select id="pagination-size">
 			<option value="10" th:selected="${elements.size == 10}">10</option>
 			<option value="20" th:selected="${elements.size == 20}">20</option>
 			<option value="50" th:selected="${elements.size == 50}">50</option>
