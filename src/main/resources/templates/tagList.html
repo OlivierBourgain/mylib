@@ -11,13 +11,13 @@
 <title>The tags</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
 	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <style>
 .tagcolor {
 	padding: 2px 3px 0px 2px; font-family: Courier; border-width: 1px;
 	border-style: solid; line-height: 12px; height: 16px;
-	display: inline-block
+	cursor:pointer
 }
 
 .tag {
@@ -85,8 +85,7 @@
 								<span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
 								<span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>							
 							</td>
-							<td><input type="text" th:value="${tag.priority}" class="input-priority"></input><a></a></td>
-							<td><a class="update-priority" href="#">update</a></td>
+							<td><input type="text" th:value="${tag.priority}" class="input-priority"></input> <a class="update-priority" href="#">update</a></td>
 							<td><a class="delete" href="#">delete</a></td>
 						</tr>
 					</tbody>
