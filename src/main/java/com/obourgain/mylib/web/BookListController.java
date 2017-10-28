@@ -29,7 +29,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,7 +68,10 @@ public class BookListController extends AbstractController {
 	 * List of books for a reader.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
-	public String bookList(HttpServletRequest request, Model model, Pageable page) {
+	public String bookList(
+			HttpServletRequest request,
+			Model model,
+			@SortDefault.SortDefaults({ @SortDefault(sort = "Updated", direction = Sort.Direction.DESC) }) Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 
@@ -152,6 +157,9 @@ public class BookListController extends AbstractController {
 				break;
 			case "Pages":
 				comparator = Comparator.comparing(Book::getPages);
+				break;
+			case "Updated":
+				comparator = Comparator.comparing(Book::getUpdated);
 				break;
 			case "Tags":
 				comparator = new TagListComparator();

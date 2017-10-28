@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +41,11 @@ public class ReadingListController extends AbstractController {
 	 * Get the reading list.
 	 */
 	@RequestMapping(value = "/readinglist", method = RequestMethod.GET)
-	public String readingList(HttpServletRequest request, Model model, Pageable page) {
+
+	public String readingList(
+			HttpServletRequest request,
+			Model model,
+			@SortDefault.SortDefaults({ @SortDefault(sort = "Date", direction = Sort.Direction.DESC) }) Pageable page) {
 		log.info("Controller bookList");
 		User user = getUserDetail();
 

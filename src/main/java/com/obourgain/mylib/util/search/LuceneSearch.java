@@ -5,6 +5,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,6 +89,7 @@ public class LuceneSearch {
 	private static final String FIELD_PUBLISHER = "publisher";
 	private static final String FIELD_COMMENT = "comment";
 	private static final String FIELD_STATUS = "status";
+	private static final String FIELD_UPDATED = "updated";
 
 	/**
 	 * Public constructor
@@ -206,6 +209,8 @@ public class LuceneSearch {
 		// the search results
 		doc.add(new StoredField(FIELD_RAW_TAG, rawTag));
 		doc.add(new StoredField(FIELD_PAGES, book.getPages()));
+		doc.add(new StoredField(FIELD_UPDATED, book.getUpdated().format(DateTimeFormatter.ISO_DATE_TIME)));
+
 		w.deleteDocuments(new Term(FIELD_ID, "" + book.getId()));
 		w.addDocument(doc);
 	}
@@ -249,7 +254,7 @@ public class LuceneSearch {
 		BooleanQuery.Builder qb = new BooleanQuery.Builder()
 				.add(q1, BooleanClause.Occur.MUST)
 				.add(q3, BooleanClause.Occur.MUST);
-		
+
 		if (!showDiscarded)
 			qb.add(q2, BooleanClause.Occur.MUST_NOT);
 		return qb.build();
@@ -300,6 +305,7 @@ public class LuceneSearch {
 		book.setPages(Integer.parseInt(doc.get(FIELD_PAGES)));
 		book.setComment(doc.get(FIELD_COMMENT));
 		book.setTagString(doc.get(FIELD_RAW_TAG));
+		book.setUpdated(LocalDateTime.parse(doc.get(FIELD_UPDATED)));
 		String status = doc.get(FIELD_STATUS);
 		if (status != null) book.setStatus(BookStatus.valueOf(status));
 		return book;
