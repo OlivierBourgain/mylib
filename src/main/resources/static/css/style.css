@@ -19,5 +19,14 @@ tr.row{margin:0}
 	line-height: 20px;
 }
 
-
+/* Tooltip on book list */
+.qtip{max-width:1000px}
+.qtip-light{
+	background-color: white;
+	border-color: #E2E2E2;
+	color: #454545;
+}
+.qtip-light .qtip-titlebar{
+	background-color: #f1f1f1;
+}
 

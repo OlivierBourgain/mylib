@@ -1,5 +1,0 @@
-Ajouter un overlay sur la liste avec détail (image, isbn, editeur)
-Import from CSV
-Export PDF (liste/détail)
-Filtrage par tag
-Filtrage par auteur ?

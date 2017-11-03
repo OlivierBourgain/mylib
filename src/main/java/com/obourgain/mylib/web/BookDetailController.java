@@ -62,6 +62,23 @@ public class BookDetailController extends AbstractController {
 		model.addAttribute("tagids", tagids);
 		return "bookDetail";
 	}
+	
+	/**
+	 * Get a tooltip popup of a book.
+	 */
+	@RequestMapping(value = "/book/tooltip/{bookId}", method = RequestMethod.GET)
+	public String bookTooltip(@PathVariable("bookId") long bookId, Model model) {
+		log.info("Controller bookTooltip");
+		User user = getUserDetail();
+		
+		Book b = bookService.findBook(user.getId(), bookId);
+		if (b == null) {
+			b = new Book();
+		}
+		log.info("Book detail " + b);
+		model.addAttribute("book", b);
+		return "bookTooltip";
+	}
 
 	/**
 	 * Update book.
