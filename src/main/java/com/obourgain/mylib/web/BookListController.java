@@ -246,8 +246,8 @@ public class BookListController extends AbstractController {
 		}
 
 		Book book = null;
-		if (isbn.startsWith("asin")) {
-			String asin = isbn.substring(isbn.indexOf('=') + 1);
+		if (isbn.toLowerCase().startsWith("asin")) {
+			String asin = isbn.substring(isbn.indexOf(':') + 1).trim();
 			book = bookService.asinLookup(user, asin);
 		} else {
 			book = bookService.isbnLookup(user, isbn);

@@ -87,7 +87,13 @@ public class ItemLookupAmazon {
 			book.setAuthor(getAuthor(doc));
 
 			parseDetail(book, doc);
-
+			
+			if (book.getIsbn() != null) {
+				String isbn10 = ISBNConvertor.isbn13to10(book.getIsbn());
+				book.setSmallImage(saveImage(isbn10, 'T'));
+				book.setMediumImage(saveImage(isbn10, 'Z'));
+				book.setLargeImage(saveImage(isbn10, 'L'));
+			}
 			log.info(() -> book.deepToString());
 			return book;
 		} catch (Exception e) {
