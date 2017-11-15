@@ -34,7 +34,7 @@ public class Reading {
 	
 	private LocalDateTime created;
 	private LocalDateTime updated;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -73,15 +73,15 @@ public class Reading {
 	}
 
 	public void setDate(LocalDate date) {
-		this.date = date;
+        this.date = date;
 	}
 
 	public LocalDateTime getCreated() {
-		return created;
+		return  created;
 	}
 
 	public void setCreated(LocalDateTime created) {
-		this.created = created;
+       this.created = created;
 	}
 
 	public LocalDateTime getUpdated() {
@@ -91,7 +91,7 @@ public class Reading {
 	public void setUpdated(LocalDateTime updated) {
 		this.updated = updated;
 	}
-
+	
 	public Book getBook() {
 		return book;
 	}

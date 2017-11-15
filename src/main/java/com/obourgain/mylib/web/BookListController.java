@@ -302,7 +302,6 @@ public class BookListController extends AbstractController {
 			sb.append(string(book.getSmallImage())).append(";");
 			sb.append(string(book.getMediumImage())).append(";");
 			sb.append(string(book.getLargeImage())).append(";");
-			sb.append(string(book.getDescription())).append(";");
 			sb.append(string(book.getComment())).append(";");
 
 			sb.append("\n");

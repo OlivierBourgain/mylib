@@ -54,8 +54,6 @@ public class ItemLookupGoogleBooks {
 		String publisher = volumeInfo.optString("publisher");
 		String lang = volumeInfo.optString("language");
 		int pages = volumeInfo.getInt("pageCount");
-		String description = volumeInfo.optString("description");
-		String googleLink = volumeInfo.optString("infoLink");
 
 		String publicationDate = volumeInfo.getString("publishedDate");
 		// Fix publication date '2014-10-08T00:00:00+02:00'
@@ -98,8 +96,6 @@ public class ItemLookupGoogleBooks {
 		book.setMediumImage(mediumImage);
 		book.setIsbn(isbn);
 		book.setLang(lang);
-		book.setDescription(description);
-		book.setGoogleURL(googleLink);
 		return book;
 	}
 
