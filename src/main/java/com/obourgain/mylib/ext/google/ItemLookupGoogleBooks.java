@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +18,7 @@ import com.obourgain.mylib.vobj.Book;
  * Non utilisée pour l'instant.
  */
 public class ItemLookupGoogleBooks {
-	private static final Logger log = LogManager.getLogger(ItemLookupGoogleBooks.class);
+	private static final Logger log = LoggerFactory.getLogger(ItemLookupGoogleBooks.class);
 	private static final String URL = "https://www.googleapis.com/books/v1/volumes?q=isbn:";
 
 	public static void main(String[] args) {

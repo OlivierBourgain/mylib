@@ -7,11 +7,11 @@ import java.time.format.DateTimeParseException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequestUtil {
-	private static Logger log = LogManager.getLogger(HttpRequestUtil.class);
+	private static Logger log = LoggerFactory.getLogger(HttpRequestUtil.class);
 
 	/**
 	 * Return the value of the request parameter as Boolean.

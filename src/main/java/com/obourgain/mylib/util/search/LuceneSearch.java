@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.document.Document;
@@ -49,7 +49,7 @@ import com.obourgain.mylib.vobj.Tag;
  */
 @Component
 public class LuceneSearch {
-	private static Logger log = LogManager.getLogger(LuceneSearch.class);
+	private static Logger log = LoggerFactory.getLogger(LuceneSearch.class);
 
 	/**
 	 * Path of the index.

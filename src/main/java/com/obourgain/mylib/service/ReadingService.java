@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ import com.obourgain.mylib.vobj.User;
 
 @Service
 public class ReadingService {
-	private static Logger log = LogManager.getLogger(TagService.class);
+	private static Logger log = LoggerFactory.getLogger(TagService.class);
 
 	@Autowired
 	private ReadingRepository readingRepository;

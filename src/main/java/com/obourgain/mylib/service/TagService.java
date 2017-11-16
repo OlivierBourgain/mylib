@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import com.obourgain.mylib.vobj.Tag;
  */
 @Service
 public class TagService {
-	private static Logger log = LogManager.getLogger(TagService.class);
+	private static Logger log = LoggerFactory.getLogger(TagService.class);
 
 	private TagRepository tagRepository;
 

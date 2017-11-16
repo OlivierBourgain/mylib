@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ import com.obourgain.mylib.vobj.User;
  */
 @Controller
 public class ReadingListController extends AbstractController {
-	private static Logger log = LogManager.getLogger(ReadingListController.class);
+	private static Logger log = LoggerFactory.getLogger(ReadingListController.class);
 
 	@Autowired
 	private ReadingService readingService;

@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +31,7 @@ public class ItemLookupAmazon {
 	private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 	private static final String AMAZON_URL = "https://www.amazon.fr/gp/product/";
 	private static final String AMAZON_IMG = "http://images.amazon.com/images/P/";
-	private static final Logger log = LogManager.getLogger(ItemLookupAmazon.class);
+	private static final Logger log = LoggerFactory.getLogger(ItemLookupAmazon.class);
 
 	public static void main(String[] args) throws Exception {
 		Book res = lookup("2290120332");
@@ -64,7 +64,7 @@ public class ItemLookupAmazon {
 			book.setMediumImage(saveImage(isbn10, 'Z'));
 			book.setLargeImage(saveImage(isbn10, 'L'));
 
-			log.info(() -> book.deepToString());
+			log.info(book.deepToString());
 			return book;
 		} catch (Exception e) {
 			log.error("Book not found", e);
@@ -94,7 +94,7 @@ public class ItemLookupAmazon {
 				book.setMediumImage(saveImage(isbn10, 'Z'));
 				book.setLargeImage(saveImage(isbn10, 'L'));
 			}
-			log.info(() -> book.deepToString());
+			log.info(book.deepToString());
 			return book;
 		} catch (Exception e) {
 			log.error("Book not found", e);

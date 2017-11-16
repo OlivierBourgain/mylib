@@ -5,11 +5,11 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SqlUtils {
-	private static final Logger log = LogManager.getLogger(SqlUtils.class);
+	private static final Logger log = LoggerFactory.getLogger(SqlUtils.class);
 
 	/**
 	 * Read a SQL request from an input stream. TODO Trim white lines & comments

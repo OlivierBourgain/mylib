@@ -3,8 +3,8 @@ package com.obourgain.mylib.web;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import com.obourgain.mylib.vobj.User;
 
 @Controller
 public class TagController extends AbstractController {
-	private static Logger log = LogManager.getLogger(TagController.class);
+	private static Logger log = LoggerFactory.getLogger(TagController.class);
 
 	@Autowired
 	private TagService tagService;

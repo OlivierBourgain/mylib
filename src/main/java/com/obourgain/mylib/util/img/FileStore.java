@@ -7,14 +7,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FileStore management.
  */
 public class FileStore {
-	private static Logger log = LogManager.getLogger(FileStore.class);
+	private static Logger log = LoggerFactory.getLogger(FileStore.class);
 	private static final String SEP = "/";
 
 	public static final String ROOT = System.getProperty("user.home") + "/mylib/store/";

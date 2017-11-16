@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import com.obourgain.mylib.util.SqlUtils;
 
 @Service
 public class StatService {
-	private static final Logger log = LogManager.getLogger(StatService.class);
+	private static final Logger log = LoggerFactory.getLogger(StatService.class);
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -98,7 +98,7 @@ public class StatService {
 		res.put("booksByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("NB").toString())));
 		res.put("pagesByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		log.info(res);
+		log.info(res.toString());
 		return res;
 	}
 
