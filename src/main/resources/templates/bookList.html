@@ -20,16 +20,16 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8">
-          <form th:action="@{/isbnlookup}" method="POST" class="row">
+          <div class="row">
             <div class="col-8">
-              <input id="isbn" name="isbn" type="text" class="form-control" value="" size="20"></input>
+              <input id="search-criteria" name="query" type="text" class="form-control" th:value="${searchCriteria}" size="20"></input>
             </div>
-            <button type="submit" class="btn btn-success col-2">Submit</button>
-          </form>
-          <p>
+            <button type="submit" onclick="search();" class="btn btn-success col-2">Submit</button>
+          </div>
+          <p style="color:#AAA;font-size:small">
+            Type a keyword to filter the list<br />
             Add a book by typing its ISBN number, or
-            <code>ASIN:Amazon ASIN number</code>
-            .
+            <code>ASIN:Amazon ASIN number</code>.
           </p>
         </div>
         <div id="menu" class="col-md-4">
@@ -40,8 +40,7 @@
             <a href="/books/create">New book</a>
           </div>
           <div class="row">
-            <input id="search-criteria" type="text" name="query" th:value="${searchCriteria}" />
-            <button type="submit" onclick="search();">Submit</button>
+
           </div>
           <div class="row">
             <label for="showDisc"> <input type="checkbox" id="showDisc" th:checked="${showDiscarded}" /> Show discarded
@@ -163,8 +162,7 @@
 		// Search
 		function search() {
 			var criteria = $("#search-criteria").val()
-			var newUrl = URI(window.location.href).setSearch(
-					"criteria", criteria).toString()
+			var newUrl = URI(window.location.href).setSearch("criteria", criteria).toString()
 			window.location.href = newUrl
 		}
 	</script>

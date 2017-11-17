@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.TagService;
 import com.obourgain.mylib.util.HttpRequestUtil;
+import com.obourgain.mylib.util.ISBNConvertor;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
@@ -66,7 +67,7 @@ public class BookListController extends AbstractController {
 	private LuceneSearch luceneSearch;
 
 	/**
-	 * List of books for a reader.
+	 * Search criteria for book list.
 	 */
 	@RequestMapping(value = "/books", method = RequestMethod.GET)
 	public String bookList(
@@ -74,9 +75,20 @@ public class BookListController extends AbstractController {
 			Model model,
 			@SortDefault.SortDefaults({ @SortDefault(sort = "Updated", direction = Sort.Direction.DESC) }) Pageable page) {
 		log.info("Controller bookList");
-		User user = getUserDetail();
 
 		String searchCriteria = request.getParameter("criteria");
+
+		// Intercept the identification request with an ISBN or an ASIN
+		if (StringUtils.isNotEmpty(searchCriteria) && 
+				(ISBNConvertor.isISBN(searchCriteria) || 
+				searchCriteria.toLowerCase().startsWith("ASIN:"))) { return isbnlookup(request, searchCriteria, model, page); }
+
+		// Else return the standard booklist
+		return internalBookList(request, model, page, searchCriteria);
+	}
+
+	private String internalBookList(HttpServletRequest request, Model model, Pageable page, String searchCriteria) {
+		User user = getUserDetail();
 		Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
 		Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
 		String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
@@ -113,8 +125,10 @@ public class BookListController extends AbstractController {
 		return "bookList";
 	}
 
-	// Generate the URL parameters that are equivalent to the given Pageable.
-	// Used when a Pageable is in session, and we want to reapply it.
+	/**
+	 * Generate the URL parameters that are equivalent to the given Pageable.
+	 * Used when a Pageable is in session, and we want to reapply it.
+	 */ 
 	private String getParams(Pageable cachedPage, String searchCriteria, Boolean showDiscarded) {
 		String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
 		if (cachedPage.getSort() != null) {
@@ -146,7 +160,7 @@ public class BookListController extends AbstractController {
 		fixTags(luceneBooks, alltags);
 
 		// Apply the pageable (sort)
-		if (page.getSort() != null) {
+		if (page != null && page.getSort() != null) {
 			Order order = page.getSort().iterator().next();
 			Comparator<Book> comparator = Comparator.comparing(Book::getTitle);
 			switch (order.getProperty()) {
@@ -187,23 +201,26 @@ public class BookListController extends AbstractController {
 	/**
 	 * Fix the tags.
 	 * 
-	 * In the lucene search, tags are stored in Book.tagString, as a list of Ids (e.g. "1,23,54"). We need to replace that and compute Book.tag, which contains
-	 * a Set of Tag objects. In order to have a nice display, we also want the Book.tag set to be ordered by Tag.priority desc.
+	 * In the lucene search, tags are stored in Book.tagString, as a list of Ids
+	 * (e.g. "1,23,54"). We need to replace that and compute Book.tag, which
+	 * contains a Set of Tag objects. In order to have a nice display, we also
+	 * want the Book.tag set to be ordered by Tag.priority desc.
 	 */
 	private void fixTags(List<Book> luceneBooks, Map<Long, Tag> alltags) {
 
 		Pattern pattern = Pattern.compile(",");
 		luceneBooks.stream()
-			.forEach(
-				book -> {
-					Set<Tag> tags = pattern
-							.splitAsStream(book.getTagString())
-							.map(Long::valueOf)
-							.map(x -> alltags.get(x))
-							.filter(Objects::nonNull)
-							.collect(Collectors.toSet());
-					book.setTags(new TreeSet<>(tags));
-				});
+				.forEach(
+						book ->
+						{
+							Set<Tag> tags = pattern
+									.splitAsStream(book.getTagString())
+									.map(Long::valueOf)
+									.map(x -> alltags.get(x))
+									.filter(Objects::nonNull)
+									.collect(Collectors.toSet());
+							book.setTags(new TreeSet<>(tags));
+						});
 	}
 
 	/**
@@ -238,14 +255,13 @@ public class BookListController extends AbstractController {
 	/**
 	 * Lookup a book with ISBN
 	 */
-	@RequestMapping(value = "/isbnlookup", method = RequestMethod.POST)
-	public String isbnlookup(HttpServletRequest request, String isbn, Model model) {
+	private String isbnlookup(HttpServletRequest request, String isbn, Model model, Pageable page) {
 		log.info("Controller isbnlookup with " + isbn);
 		User user = getUserDetail();
 
 		if (StringUtils.isBlank(isbn)) {
 			log.info("No param");
-			return "redirect:/books/";
+			return  internalBookList(request, model, page, "");
 		}
 
 		Book book = null;
@@ -257,7 +273,7 @@ public class BookListController extends AbstractController {
 		}
 		if (book == null) {
 			model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
-			return bookList(request, model, null);
+			return  internalBookList(request, model, page, "");
 		}
 		return "redirect:/book/" + book.getId();
 	}

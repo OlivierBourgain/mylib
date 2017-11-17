@@ -8,6 +8,19 @@ import org.apache.commons.lang3.StringUtils;
 
 public class ISBNConvertor {
 
+	public static boolean isISBN(String s) {
+		if (StringUtils.isBlank(s)) return false;
+		// I define an ISBN as a string which contain only digits, X, - or
+		// spaces
+		// and which length is between 10 and 15
+		if (s.length() < 10 || s.length() > 15) return false;
+		for (Character c : s.toCharArray()) {
+			if (c != ' ' && c != '-' && (c < '0' || c > '9') && c != 'X' && c != 'x')
+				return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Convert an ISBN 13 to an ISBN 10.
 	 */
@@ -41,6 +54,6 @@ public class ISBNConvertor {
 		return -1;
 	}
 
-	private final static String DIGITS = new String("0123456789X0");
+	private final static String DIGITS = "0123456789X0";
 
 }

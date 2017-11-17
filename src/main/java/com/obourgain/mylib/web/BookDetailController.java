@@ -2,6 +2,7 @@ package com.obourgain.mylib.web;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class BookDetailController extends AbstractController {
 				.collect(Collectors.toList());
 
 		// List of tag Ids for this book
-		Set<Long> tagids = b.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+		Set<Long> tagids = b.getTags() == null ? new HashSet<>() : b.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
 
 		model.addAttribute("user", user);
 		model.addAttribute("book", b);
