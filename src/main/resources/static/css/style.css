@@ -17,6 +17,7 @@ tr.row{margin:0}
 	padding: 2px 5px;
 	margin: 5px 2px;
 	line-height: 20px;
+	cursor:pointer;
 }
 
 /* Tooltip on book list */

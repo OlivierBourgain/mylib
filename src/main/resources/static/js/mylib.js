@@ -26,6 +26,16 @@ $(function() {
 		window.location.href = newUrl
 	});
 	
+	/**
+	 * Click on a Tag adds a filter criteria.
+	 */
+	$("span.tag").click(function() {
+		var tagtext = $(this).text();
+		var newUrl = URI(window.location.href)
+		.setSearch("criteria", tagtext.replace(/[^A-zÀ-ÿ0-9-_\s]/g, ''))
+		.toString()
+		window.location.href = newUrl
+	});
 	
 	/** 
 	 * Table header - Click to sort

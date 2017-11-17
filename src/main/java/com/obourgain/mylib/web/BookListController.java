@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -192,12 +193,14 @@ public class BookListController extends AbstractController {
 	private void fixTags(List<Book> luceneBooks, Map<Long, Tag> alltags) {
 
 		Pattern pattern = Pattern.compile(",");
-		luceneBooks.stream().forEach(
+		luceneBooks.stream()
+			.forEach(
 				book -> {
 					Set<Tag> tags = pattern
 							.splitAsStream(book.getTagString())
 							.map(Long::valueOf)
 							.map(x -> alltags.get(x))
+							.filter(Objects::nonNull)
 							.collect(Collectors.toSet());
 					book.setTags(new TreeSet<>(tags));
 				});
