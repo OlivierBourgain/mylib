@@ -5,8 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.util.*;
 import java.util.function.Function;
@@ -26,71 +29,76 @@ public class StatService {
     /**
      * Return a Map containing all stats for the library.
      * <p>
-     * It contains : - booksByTag - pagesByTag - booksByAuthor - pagesByAuthor
+     * It contains :
+     * - booksByTag and pagesByTag
+     * - booksByAuthor and pagesByAuthor
+     * - booksByYear and pagesByYear
+     * - booksByMonth and pagesByMonth
      *
-     * @param showDiscarded
+     * @param userId        The user Id
+     * @param showDiscarded if true, includes discarded books.
      */
     public Map<String, List<StatData>> getAllStat(String userId, Boolean showDiscarded) {
 
         Map<String, List<StatData>> res = new HashMap<>();
 
-        String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByTag.sql"));
-        List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId, showDiscarded ? 1 : 0);
-        log.info("By Tag" + byTag);
-        res.put("booksByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-        res.put("pagesByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
+        res.put("booksByTag", top10(getStatDetail(userId, showDiscarded,"booksByTag")));
+        res.put("pagesByTag", top10(getStatDetail(userId, showDiscarded,"pagesByTag")));
+        res.put("booksByAuthor", top10(getStatDetail(userId, showDiscarded,"booksByAuthor")));
+        res.put("pagesByAuthor", top10(getStatDetail(userId, showDiscarded,"pagesByAuthor")));
 
-        String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByAuthor.sql"));
-        List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId, showDiscarded ? 1 : 0);
-        //log.info("By Author " + byAuthor);
-        res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-        res.put("pagesByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
+        List<StatData> booksByYear = jdbcTemplate.query(SQL_READ_YEAR, new StatRowMapper("YEAR", "NB"), userId);
+        List<StatData> pagesByYear = jdbcTemplate.query(SQL_READ_YEAR, new StatRowMapper("YEAR", "PAGES"), userId);
+        booksByYear.sort(Comparator.comparing(StatData::getKey));
+        pagesByYear.sort(Comparator.comparing(StatData::getKey));
+        res.put("booksByYear", booksByYear);
+        res.put("pagesByYear", pagesByYear);
 
-        String sqlReadYear = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerYear.sql"));
-        List<Map<String, Object>> byYear = jdbcTemplate.queryForList(sqlReadYear, userId);
-        log.info("By Year = " + byYear);
-        res.put("booksByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-        res.put("pagesByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
-
-        String sqlReadMonth = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerMonth.sql"));
-        List<Map<String, Object>> byMonth = jdbcTemplate.queryForList(sqlReadMonth, userId);
-        log.info("By Month = " + byMonth);
-        res.put("booksByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("NB").toString())));
-        res.put("pagesByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("PAGES").toString())));
+        List<StatData> booksByMonth = jdbcTemplate.query(SQL_READ_MONTH, new StatRowMapper("MONTH", "NB"), userId);
+        List<StatData> pagesByMonth = jdbcTemplate.query(SQL_READ_MONTH, new StatRowMapper("MONTH", "PAGES"), userId);
+        res.put("booksByMonth", toMonthStat(booksByMonth));
+        res.put("pagesByMonth", toMonthStat(pagesByMonth));
 
         log.info(res.toString());
         return res;
     }
 
+    private static String SQL_TAG = SqlUtils.readSql(StatService.class.getResourceAsStream("/sql/stats/TopByTag.sql"));
+    private static String SQL_AUTHOR = SqlUtils.readSql(StatService.class.getResourceAsStream("/sql/stats/TopByAuthor.sql"));
+    private static String SQL_READ_YEAR = SqlUtils.readSql(StatService.class.getResourceAsStream("/sql/stats/ReadPerYear.sql"));
+    private static String SQL_READ_MONTH = SqlUtils.readSql(StatService.class.getResourceAsStream("/sql/stats/ReadPerMonth.sql"));
+
     /**
-     * Extract the list of stats for the stats per year
+     * Return the data for one given stat.
      */
-    private List<StatData> toYearStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
-                                      Function<Map<String, Object>, Integer> valueFunc) {
-        return datas
-                .stream()
-                .map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
-                .sorted(Comparator.comparing(StatData::getKey))
+    public List<StatData> getStatDetail(String userId, Boolean showDiscarded, String statName) {
+        switch(statName) {
+            case "booksByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, showDiscarded ? 1 : 0);
+            case "pagesByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, showDiscarded ? 1 : 0);
+            case "booksByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, showDiscarded ? 1 : 0);
+            case "pagesByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, showDiscarded ? 1 : 0);
+        }
+        throw new IllegalArgumentException("Stat doesn't exist " + statName);
+    }
+
+    private List<StatData> top10(List<StatData> list) {
+        return list.stream()
+                .sorted(Comparator.comparing(StatData::getValue).reversed())
+                .limit(10)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Extract the list of stats for the stats per Month
-     */
-    private List<StatData> toMonthStat(List<Map<String, Object>> datas, Function<Map<String, Object>, Integer> keyFunc,
-                                       Function<Map<String, Object>, Integer> valueFunc) {
 
+    private List<StatData> toMonthStat(List<StatData> datas) {
         List<StatData> res = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
             String month = new DateFormatSymbols().getMonths()[i - 1];
             StatData sd = new StatData(month, 0);
             res.add(sd);
         }
-
-        for (Map<String, Object> data : datas) {
-            int month = keyFunc.apply(data);
-            int val = valueFunc.apply(data);
-            res.get(month - 1).setValue(val);
+        for (StatData data : datas) {
+            int month = Integer.parseInt(data.key);
+            res.get(month - 1).setValue(data.value);
         }
         return res;
     }
@@ -106,6 +114,21 @@ public class StatService {
                 .sorted(Comparator.comparing(StatData::getValue).reversed())
                 .limit(10)
                 .collect(Collectors.toList());
+    }
+
+    public static class StatRowMapper implements RowMapper<StatData> {
+        String key;
+        String val;
+
+        public StatRowMapper(String key, String val) {
+            this.key = key;
+            this.val = val;
+        }
+
+        @Override
+        public StatData mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new StatData(rs.getString(key), rs.getInt(val));
+        }
     }
 
     /**
