@@ -1,12 +1,10 @@
 package com.obourgain.mylib.web;
 
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.obourgain.mylib.service.BookService;
+import com.obourgain.mylib.service.TagService;
+import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Tag;
+import com.obourgain.mylib.vobj.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,127 +14,130 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.obourgain.mylib.service.BookService;
-import com.obourgain.mylib.service.TagService;
-import com.obourgain.mylib.vobj.Book;
-import com.obourgain.mylib.vobj.Tag;
-import com.obourgain.mylib.vobj.User;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Controller for the book detail page.
  */
 @Controller
 public class BookDetailController extends AbstractController {
-	private static Logger log = LoggerFactory.getLogger(BookDetailController.class);
+    private static Logger log = LoggerFactory.getLogger(BookDetailController.class);
 
-	@Autowired
-	private BookService bookService;
-	@Autowired
-	private TagService tagService;
+    @Autowired
+    private BookService bookService;
+    @Autowired
+    private TagService tagService;
 
-	/**
-	 * Get the detail of a book.
-	 */
-	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.GET)
-	public String bookDetail(@PathVariable("bookId") long bookId, Model model) {
-		log.info("Controller bookDetail");
-		User user = getUserDetail();
-		
-		Book b = bookService.findBook(user.getId(), bookId);
-		if (b == null) {
-			b = new Book();
-		}
-		log.info("Book detail " + b);
+    /**
+     * Get the detail of a book.
+     */
+    @RequestMapping(value = "/book/{bookId}", method = RequestMethod.GET)
+    public String bookDetail(@PathVariable("bookId") long bookId, Model model) {
+        log.info("Controller bookDetail");
+        User user = getUserDetail();
 
-		// Tag list, sorted by Text.
-		List<Tag> alltags = tagService
-				.findByUserId(user.getId()).stream()
-				.sorted(Comparator.comparing(Tag::getText))
-				.collect(Collectors.toList());
+        Book b = bookService.findBook(user.getId(), bookId);
+        if (b == null) {
+            b = new Book();
+        }
+        log.info("Book detail " + b);
 
-		// List of tag Ids for this book
-		Set<Long> tagids = b.getTags() == null ? new HashSet<>() : b.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
+        // Tag list, sorted by Text.
+        List<Tag> alltags = tagService
+                .findByUserId(user.getId()).stream()
+                .sorted(Comparator.comparing(Tag::getText))
+                .collect(Collectors.toList());
 
-		model.addAttribute("user", user);
-		model.addAttribute("book", b);
-		model.addAttribute("alltags", alltags);
-		model.addAttribute("tagids", tagids);
-		return "bookDetail";
-	}
-	
-	/**
-	 * Get a tooltip popup of a book.
-	 */
-	@RequestMapping(value = "/book/tooltip/{bookId}", method = RequestMethod.GET)
-	public String bookTooltip(@PathVariable("bookId") long bookId, Model model) {
-		log.info("Controller bookTooltip");
-		User user = getUserDetail();
-		
-		Book b = bookService.findBook(user.getId(), bookId);
-		if (b == null) {
-			b = new Book();
-		}
-		log.info("Book detail " + b);
-		model.addAttribute("book", b);
-		return "bookTooltip";
-	}
+        // List of tag Ids for this book
+        Set<Long> tagids = b.getTags() == null ? new HashSet<>() : b.getTags().stream().map(Tag::getId).collect(Collectors.toSet());
 
-	/**
-	 * Update book.
-	 */
-	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=save")
-	public String updateBook(@PathVariable("bookId") Long bookId, Book book) {
-		log.info("Controller updateBook");
-		User user = getUserDetail();
+        model.addAttribute("user", user);
+        model.addAttribute("book", b);
+        model.addAttribute("alltags", alltags);
+        model.addAttribute("tagids", tagids);
+        return "bookDetail";
+    }
 
-		log.info("And the tags are : " + book.getTags());
-		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
+    /**
+     * Get a tooltip popup of a book.
+     */
+    @RequestMapping(value = "/book/tooltip/{bookId}", method = RequestMethod.GET)
+    public String bookTooltip(@PathVariable("bookId") long bookId, Model model) {
+        log.info("Controller bookTooltip");
+        User user = getUserDetail();
 
-		bookService.createOrUpdateBook(book, user, tags);
-		return "redirect:/books/";
-	}
+        Book b = bookService.findBook(user.getId(), bookId);
+        if (b == null) {
+            b = new Book();
+        }
+        log.info("Book detail " + b);
+        model.addAttribute("book", b);
+        return "bookTooltip";
+    }
 
-	/**
-	 * Update book.
-	 */
-	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=readnow")
-	public String updateBookReading(@PathVariable("bookId") Long bookId) {
-		log.info("Controller updateBookReading");
-		User user = getUserDetail();
+    /**
+     * Update book.
+     */
+    @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=save")
+    public String updateBook(@PathVariable("bookId") Long bookId, Book book) {
+        log.info("Controller updateBook");
+        User user = getUserDetail();
 
-		int year = LocalDate.now().getYear();
-		log.info("Book " + bookId + " was read in " + year);
+        log.info("And the tags are : " + book.getTags());
+        Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
-		Book book = bookService.updateBookReading(user, bookId, year);
-		if (book == null) { return "redirect:/books/"; }
-		return "redirect:/book/" + book.getId();
-	}
+        bookService.createOrUpdateBook(book, user, tags);
+        return "redirect:/books/";
+    }
 
-	/**
-	 * Delete book.
-	 */
-	@RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=delete")
-	public String deleteBook(@PathVariable("bookId") Long bookId) {
-		log.info("Controller deleteBook " + bookId);
-		User user = getUserDetail();
-		bookService.deleteBook(user.getId(), bookId);
-		return "redirect:/books/";
-	}
-	
+    /**
+     * Update book.
+     */
+    @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=readnow")
+    public String updateBookReading(@PathVariable("bookId") Long bookId) {
+        log.info("Controller updateBookReading");
+        User user = getUserDetail();
 
-	/**
-	 * Create book.
-	 */
-	@RequestMapping(value = "/book", method = RequestMethod.POST, params = "action=create")
-	public String createBook(Book book) {
-		log.info("Controller createBook");
-		User user = getUserDetail();
+        int year = LocalDate.now().getYear();
+        log.info("Book " + bookId + " was read in " + year);
 
-		log.info("And the tags are : " + book.getTagString());
-		Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
+        Book book = bookService.updateBookReading(user, bookId, year);
+        if (book == null) {
+            return "redirect:/books/";
+        }
+        return "redirect:/book/" + book.getId();
+    }
 
-		bookService.createOrUpdateBook(book, user, tags);
-		return "redirect:/books/";
-	}
+    /**
+     * Delete book.
+     */
+    @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=delete")
+    public String deleteBook(@PathVariable("bookId") Long bookId) {
+        log.info("Controller deleteBook " + bookId);
+        User user = getUserDetail();
+        bookService.deleteBook(user.getId(), bookId);
+        return "redirect:/books/";
+    }
+
+
+    /**
+     * Create book.
+     */
+    @RequestMapping(value = "/book", method = RequestMethod.POST, params = "action=create")
+    public String createBook(Book book) {
+        log.info("Controller createBook");
+        User user = getUserDetail();
+
+        log.info("And the tags are : " + book.getTagString());
+        Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
+
+        bookService.createOrUpdateBook(book, user, tags);
+        return "redirect:/books/";
+    }
 
 }

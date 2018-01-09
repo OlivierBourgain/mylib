@@ -1,19 +1,17 @@
 package com.obourgain.mylib.util.search;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Tag;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.obourgain.mylib.vobj.Book;
-import com.obourgain.mylib.vobj.Tag;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class LuceneSearchTest {
 

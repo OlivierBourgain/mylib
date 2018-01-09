@@ -1,151 +1,146 @@
 package com.obourgain.mylib.service;
 
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
+import com.obourgain.mylib.util.SqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.obourgain.mylib.util.SqlUtils;
+import java.text.DateFormatSymbols;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class StatService {
-	private static final Logger log = LoggerFactory.getLogger(StatService.class);
+    private static final Logger log = LoggerFactory.getLogger(StatService.class);
 
-	private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	public StatService(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+    @Autowired
+    public StatService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-	/**
-	 * Represents a stat (e.g. Nb of books per tag).
-	 */
-	public static class StatData {
-		public String key;
-		public int value;
+    /**
+     * Return a Map containing all stats for the library.
+     * <p>
+     * It contains : - booksByTag - pagesByTag - booksByAuthor - pagesByAuthor
+     *
+     * @param showDiscarded
+     */
+    public Map<String, List<StatData>> getAllStat(String userId, Boolean showDiscarded) {
 
-		public StatData(String key, int value) {
-			this.key = key;
-			this.value = value;
-		}
+        Map<String, List<StatData>> res = new HashMap<>();
 
-		@Override
-		public String toString() {
-			return key + "=" + value;
-		}
+        String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByTag.sql"));
+        List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId, showDiscarded ? 1 : 0);
+        log.info("By Tag" + byTag);
+        res.put("booksByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("NB").toString())));
+        res.put("pagesByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		public String getKey() {
-			return key;
-		}
+        String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByAuthor.sql"));
+        List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId, showDiscarded ? 1 : 0);
+        //log.info("By Author " + byAuthor);
+        res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
+        res.put("pagesByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		public void setKey(String key) {
-			this.key = key;
-		}
+        String sqlReadYear = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerYear.sql"));
+        List<Map<String, Object>> byYear = jdbcTemplate.queryForList(sqlReadYear, userId);
+        log.info("By Year = " + byYear);
+        res.put("booksByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
+        res.put("pagesByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		public int getValue() {
-			return value;
-		}
+        String sqlReadMonth = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerMonth.sql"));
+        List<Map<String, Object>> byMonth = jdbcTemplate.queryForList(sqlReadMonth, userId);
+        log.info("By Month = " + byMonth);
+        res.put("booksByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("NB").toString())));
+        res.put("pagesByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("PAGES").toString())));
 
-		public void setValue(int value) {
-			this.value = value;
-		}
+        log.info(res.toString());
+        return res;
+    }
 
-	}
+    /**
+     * Extract the list of stats for the stats per year
+     */
+    private List<StatData> toYearStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
+                                      Function<Map<String, Object>, Integer> valueFunc) {
+        return datas
+                .stream()
+                .map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
+                .sorted(Comparator.comparing(StatData::getKey))
+                .collect(Collectors.toList());
+    }
 
-	/**
-	 * Return a Map containing all stats for the library.
-	 * 
-	 * It contains : - booksByTag - pagesByTag - booksByAuthor - pagesByAuthor
-	 * 
-	 * @param showDiscarded
-	 */
-	public Map<String, List<StatData>> getAllStat(String userId, Boolean showDiscarded) {
+    /**
+     * Extract the list of stats for the stats per Month
+     */
+    private List<StatData> toMonthStat(List<Map<String, Object>> datas, Function<Map<String, Object>, Integer> keyFunc,
+                                       Function<Map<String, Object>, Integer> valueFunc) {
 
-		Map<String, List<StatData>> res = new HashMap<>();
+        List<StatData> res = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            String month = new DateFormatSymbols().getMonths()[i - 1];
+            StatData sd = new StatData(month, 0);
+            res.add(sd);
+        }
 
-		String sqlTag = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByTag.sql"));
-		List<Map<String, Object>> byTag = jdbcTemplate.queryForList(sqlTag, userId, showDiscarded ? 1 : 0);
-		log.info("By Tag" + byTag);
-		res.put("booksByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-		res.put("pagesByTag", toStat(byTag, x -> x.get("TAG").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
+        for (Map<String, Object> data : datas) {
+            int month = keyFunc.apply(data);
+            int val = valueFunc.apply(data);
+            res.get(month - 1).setValue(val);
+        }
+        return res;
+    }
 
-		String sqlAuthor = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/TopByAuthor.sql"));
-		List<Map<String, Object>> byAuthor = jdbcTemplate.queryForList(sqlAuthor, userId, showDiscarded ? 1 : 0);
-		//log.info("By Author " + byAuthor);
-		res.put("booksByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-		res.put("pagesByAuthor", toStat(byAuthor, x -> x.get("AUTHOR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
+    /**
+     * Extract the List of Stat from the Raw result of the SQL request.
+     */
+    private List<StatData> toStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
+                                  Function<Map<String, Object>, Integer> valueFunc) {
+        return datas
+                .stream()
+                .map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
+                .sorted(Comparator.comparing(StatData::getValue).reversed())
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 
-		String sqlReadYear = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerYear.sql"));
-		List<Map<String, Object>> byYear = jdbcTemplate.queryForList(sqlReadYear, userId);
-		log.info("By Year = " + byYear);
-		res.put("booksByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("NB").toString())));
-		res.put("pagesByYear", toYearStat(byYear, x -> x.get("YEAR").toString(), x -> Integer.parseInt(x.get("PAGES").toString())));
+    /**
+     * Represents a stat (e.g. Nb of books per tag).
+     */
+    public static class StatData {
+        public String key;
+        public int value;
 
-		String sqlReadMonth = SqlUtils.readSql(this.getClass().getResourceAsStream("/sql/stats/ReadPerMonth.sql"));
-		List<Map<String, Object>> byMonth = jdbcTemplate.queryForList(sqlReadMonth, userId);
-		log.info("By Month = " + byMonth);
-		res.put("booksByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("NB").toString())));
-		res.put("pagesByMonth", toMonthStat(byMonth, x -> Integer.parseInt(x.get("MONTH").toString()), x -> Integer.parseInt(x.get("PAGES").toString())));
+        public StatData(String key, int value) {
+            this.key = key;
+            this.value = value;
+        }
 
-		log.info(res.toString());
-		return res;
-	}
+        @Override
+        public String toString() {
+            return key + "=" + value;
+        }
 
-	/**
-	 * Extract the list of stats for the stats per year
-	 */
-	private List<StatData> toYearStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
-			Function<Map<String, Object>, Integer> valueFunc) {
-		return datas
-				.stream()
-				.map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
-				.sorted(Comparator.comparing(StatData::getKey))
-				.collect(Collectors.toList());
-	}
+        public String getKey() {
+            return key;
+        }
 
-	/**
-	 * Extract the list of stats for the stats per Month
-	 */
-	private List<StatData> toMonthStat(List<Map<String, Object>> datas, Function<Map<String, Object>, Integer> keyFunc,
-			Function<Map<String, Object>, Integer> valueFunc) {
+        public void setKey(String key) {
+            this.key = key;
+        }
 
-		List<StatData> res = new ArrayList<>();
-		for (int i = 1; i <= 12; i++) {
-			String month = new DateFormatSymbols().getMonths()[i - 1];
-			StatData sd = new StatData(month, 0);
-			res.add(sd);
-		}
+        public int getValue() {
+            return value;
+        }
 
-		for(Map<String, Object> data:datas) {
-			int month = keyFunc.apply(data);
-			int val = valueFunc.apply(data);
-			res.get(month-1).setValue(val);
-		}
-		return res;
-	}
+        public void setValue(int value) {
+            this.value = value;
+        }
 
-	/**
-	 * Extract the List of Stat from the Raw result of the SQL request.
-	 */
-	private List<StatData> toStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
-			Function<Map<String, Object>, Integer> valueFunc) {
-		return datas
-				.stream()
-				.map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
-				.sorted(Comparator.comparing(StatData::getValue).reversed())
-				.limit(10)
-				.collect(Collectors.toList());
-	}
+    }
 
 }
