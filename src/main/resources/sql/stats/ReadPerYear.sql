@@ -1,11 +1,12 @@
+-- List # of books & # of pages read per year
 SELECT
-	reading.year as year,
-	count(*) as nb,
-	sum(book.pages) as pages
+  reading.year    AS year,
+  count(*)        AS nb,
+  sum(book.pages) AS pages
 FROM
-	reading, book
-WHERE 
-	book.id = reading.book_id
-	and book.user_id = ?
+  reading
+  INNER JOIN book ON book.id = reading.book_id
+WHERE
+  book.user_id = ?
 GROUP BY reading.year
 ORDER BY reading.year

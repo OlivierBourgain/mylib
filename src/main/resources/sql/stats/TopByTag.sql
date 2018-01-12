@@ -1,12 +1,13 @@
+-- List # of books & # of pages read author
 SELECT
-	tag.text as tag,
-	count(*) as nb,
-	sum(pages) as pages
+  tag.text   AS tag,
+  count(*)   AS nb,
+  sum(pages) AS pages
 FROM
-	tag, book, book_tag
-WHERE 
-	tag.id = book_tag.tags_id
-	and book.id = book_tag.books_id
-	and book.user_id = ?
-	and (book.status is null or book.status <> 'DISCARDED' or ? = 1)
+  tag
+  LEFT JOIN book_tag ON tag.id = book_tag.tags_id
+  LEFT JOIN book ON book.id = book_tag.books_id
+WHERE
+  book.user_id = ?
+  AND (book.status IS NULL OR book.status <> 'DISCARDED' OR ? = 1)
 GROUP BY tag.text

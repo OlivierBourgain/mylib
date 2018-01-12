@@ -1,10 +1,11 @@
+-- List # of books & # of pages read author
 SELECT
-	author,
-	count(*) as nb,
-	sum(pages) as pages
+  author,
+  count(*)   AS nb,
+  sum(pages) AS pages
 FROM
-	book
-WHERE 
-	user_id = ?
-	and (status is null or status <> 'DISCARDED' or ? = 1)
+  book
+WHERE
+  user_id = ?
+  AND (status IS NULL OR status <> 'DISCARDED' OR ? = 1)
 GROUP BY author

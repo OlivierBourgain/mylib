@@ -72,15 +72,19 @@ public class StatService {
      * Return the data for one given stat.
      */
     public List<StatData> getStatDetail(String userId, Boolean showDiscarded, String statName) {
+        int discardedFlag = showDiscarded ? 1 : 0;
         switch(statName) {
-            case "booksByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, showDiscarded ? 1 : 0);
-            case "pagesByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, showDiscarded ? 1 : 0);
-            case "booksByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, showDiscarded ? 1 : 0);
-            case "pagesByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, showDiscarded ? 1 : 0);
+            case "booksByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag);
+            case "pagesByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag);
+            case "booksByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag);
+            case "pagesByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag);
         }
         throw new IllegalArgumentException("Stat doesn't exist " + statName);
     }
 
+    /**
+     * Return the top 10 of a given list of StatData (ordered by value desc).
+     */
     private List<StatData> top10(List<StatData> list) {
         return list.stream()
                 .sorted(Comparator.comparing(StatData::getValue).reversed())
