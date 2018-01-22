@@ -83,9 +83,9 @@ public class BookListController extends AbstractController {
         String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
         Boolean cachedShowDiscarded = (Boolean) httpSession.getAttribute("bookListShowDiscarded");
 
-        log.info("Request Pageable is " + page);
-        log.info("Cached  Pageable is " + cachedPage);
-        log.info("searchCriteria " + searchCriteria);
+        log.info("Request Pageable is : " + page);
+        log.info("Cached  Pageable is : " + cachedPage);
+        log.info("SearchCriteria   is : " + searchCriteria);
 
         if (request.getParameter("page") == null
                 && request.getParameter("sort") == null
@@ -101,7 +101,6 @@ public class BookListController extends AbstractController {
 
         Page<Book> books;
         // Use Lucene
-        log.info("Getting the list of books from Lucene");
         books = getBooks(searchCriteria, showDiscarded, page, user);
 
         List<Integer> pagination = computePagination(books);
@@ -181,8 +180,6 @@ public class BookListController extends AbstractController {
             newPage = new PageRequest(0, page.getPageSize(), page.getSort());
         }
         int end = (start + page.getPageSize()) > luceneBooks.size() ? luceneBooks.size() : (start + page.getPageSize());
-        log.info(page.getOffset() + "/" + page.getPageNumber() + "/" + page.getPageSize());
-        log.info(start + "/" + end);
         Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
         return books;
     }
@@ -237,7 +234,7 @@ public class BookListController extends AbstractController {
      */
     @RequestMapping(value = "/books/create", method = RequestMethod.GET)
     public String bookCreate(Model model) {
-        log.info("Controller bookNew");
+        log.info("Controller bookCreate");
         return "bookCreate";
     }
 
@@ -245,7 +242,7 @@ public class BookListController extends AbstractController {
      * Lookup a book with ISBN
      */
     private String isbnlookup(HttpServletRequest request, String isbn, Model model, Pageable page) {
-        log.info("Controller isbnlookup with " + isbn);
+        log.info("ISBN lookup for  " + isbn);
         User user = getUserDetail();
 
         if (StringUtils.isBlank(isbn)) {
@@ -272,7 +269,7 @@ public class BookListController extends AbstractController {
      */
     @RequestMapping(value = "/books/exportcsv", method = RequestMethod.GET)
     public void exportcsv(HttpServletResponse response) throws IOException {
-        log.info("Controller export");
+        log.info("Controller exportcsv");
         User user = getUserDetail();
 
         response.setContentType("text/csv");

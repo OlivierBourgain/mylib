@@ -45,7 +45,7 @@ public class BookDetailController extends AbstractController {
         if (b == null) {
             b = new Book();
         }
-        log.info("Book detail " + b);
+        log.info("Found " + b);
 
         // Tag list, sorted by Text.
         List<Tag> alltags = tagService
@@ -75,7 +75,7 @@ public class BookDetailController extends AbstractController {
         if (b == null) {
             b = new Book();
         }
-        log.info("Book detail " + b);
+        log.info("Found " + b);
         model.addAttribute("book", b);
         return "bookTooltip";
     }
