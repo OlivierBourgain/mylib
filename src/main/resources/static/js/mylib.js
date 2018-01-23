@@ -63,4 +63,29 @@ $(function() {
 		
 		window.location.href = newUrl
 	});
+
+    /**
+     * Show tooltip on book title.
+     */
+    $('.book-title').qtip({
+        style: {
+            classes:"qtip-light",
+            width: 350
+        },
+        position: {adjust: { x: 10} },
+        content: {
+            text: function(event, api) {
+                $.ajax({
+                    url: 'book/tooltip/' +  api.elements.target.attr('data-bookid')
+                }).then(function(content) {
+                    // Set the tooltip content upon successful retrieval
+                    api.set('content.text', content);
+                }, function(xhr, status, error) {
+                    // Upon failure... set the tooltip content to the status and error value
+                    api.set('content.text', status + ': ' + error);
+                });
+                return 'Loading...'; // Set some initial text
+            }
+        }
+    });
 });

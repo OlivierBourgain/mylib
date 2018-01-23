@@ -79,7 +79,7 @@
                     class="fa fa-sort-desc" aria-hidden="true"></span> <span th:if="${sort != null && sort.property == 'Title' && sort.descending}"
                     class="fa fa-sort-asc" aria-hidden="true"></span>
                 </a></th>
-                <th class="col-2"><a href="#" data-col="Author">Author <span th:if="${sort != null && sort.property == 'Author' && sort.ascending}"
+                <th class="col-3"><a href="#" data-col="Author">Author <span th:if="${sort != null && sort.property == 'Author' && sort.ascending}"
                     class="fa fa-sort-desc" aria-hidden="true"></span> <span th:if="${sort != null && sort.property == 'Author' && sort.descending}"
                     class="fa fa-sort-asc" aria-hidden="true"></span>
                 </a></th>
@@ -87,7 +87,7 @@
                     class="fa fa-sort-desc" aria-hidden="true"></span> <span th:if="${sort != null && sort.property == 'Pages' && sort.descending}"
                     class="fa fa-sort-asc" aria-hidden="true"></span>
                 </a></th>
-                <th class="col-4"><a href="#" data-col="Tags">Tags <span th:if="${sort != null && sort.property == 'Tags' && sort.ascending}"
+                <th class="col-3"><a href="#" data-col="Tags">Tags <span th:if="${sort != null && sort.property == 'Tags' && sort.ascending}"
                     class="fa fa-sort-desc" aria-hidden="true"></span> <span th:if="${sort != null && sort.property == 'Tags' && sort.descending}"
                     class="fa fa-sort-asc" aria-hidden="true"></span>
                 </a></th>
@@ -100,9 +100,9 @@
                   class="book-title" data-th-attr="data-bookid=${book.id}">Title</a> 
                   <span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">(Discarded)</span>
                 </td>
-                <td class="col-2" th:text="${book.author}">Author</td>
+                <td class="col-3" th:text="${book.author}">Author</td>
                 <td class="col-1" th:text="${book.pages}">Pages</td>
-                <td class="col-4 text-nowrap">
+                <td class="col-3 text-nowrap">
                   <div class="booklist-cell">
                     <span class="tag" th:each="tag: ${book.tags}" th:text="${tag.text}" data-th-attr="data-tagid=${tag.id}"
                       th:style="'background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor}"> tag </span>
@@ -131,31 +131,6 @@
 				else
 					newUrl.setSearch("showDisc", "").toString()
 				window.location.href = newUrl
-			});
-			
-			$('.book-title').qtip({
-				//hide:'click',
-			    style: {
-			    		classes:"qtip-light",
-			    		width: 350
-			    	},
-				position: {adjust: { x: 10} },
-				content: {
-			        text: function(event, api) {
-			            $.ajax({
-			                url: 'book/tooltip/' +  api.elements.target.attr('data-bookid')
-			            })
-			            .then(function(content) {
-			                // Set the tooltip content upon successful retrieval
-			                api.set('content.text', content);
-			            }, function(xhr, status, error) {
-			                // Upon failure... set the tooltip content to the status and error value
-			                api.set('content.text', status + ': ' + error);
-			            });
-
-			            return 'Loading...'; // Set some initial text
-			        }
-			    }
 			});
 		});
 
