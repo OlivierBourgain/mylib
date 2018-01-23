@@ -2,7 +2,7 @@
 html {overflow-y: scroll;} /* Avoid centering jump */
 .container{margin-top:20px}
 a{cursor:pointer}
-
+.hidden{display:none}
 
 /* Lists */
 #list-header-summary{height:50px}

@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,24 +70,38 @@ public class StatService {
     /**
      * Return the data for one given stat.
      */
-    public List<StatData> getStatDetail(String userId, Boolean showDiscarded, String statName) {
+    private List<StatData> innerStatDetail(String userId, Boolean showDiscarded, String statName) {
         int discardedFlag = showDiscarded ? 1 : 0;
-        switch(statName) {
-            case "booksByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag);
-            case "pagesByTag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag);
-            case "booksByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag);
-            case "pagesByAuthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag);
+        switch(statName.toLowerCase()) {
+            case "booksbytag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag);
+            case "pagesbytag": return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag);
+            case "booksbyauthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag);
+            case "pagesbyauthor": return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag);
         }
         throw new IllegalArgumentException("Stat doesn't exist " + statName);
     }
 
     /**
-     * Return the top 10 of a given list of StatData (ordered by value desc).
+     * Return the data for one given stat.
      */
-    private List<StatData> top10(List<StatData> list) {
+    public List<StatData> getStatDetail(String userId, Boolean showDiscarded, String statName) {
+        return innerStatDetail(userId, showDiscarded, statName)
+                .stream()
+                .sorted(Comparator.comparing(StatData::getValue).reversed())
+                .limit(30)
+                .collect(Collectors.toList());
+    }
+
+
+    private List<StatData> top10(List<StatData> list) { return top(list, 10); }
+
+    /**
+     * Return the top of a given list of StatData (ordered by value desc).
+     */
+    private List<StatData> top(List<StatData> list, int nb) {
         return list.stream()
                 .sorted(Comparator.comparing(StatData::getValue).reversed())
-                .limit(10)
+                .limit(nb)
                 .collect(Collectors.toList());
     }
 
@@ -107,18 +120,6 @@ public class StatService {
         return res;
     }
 
-    /**
-     * Extract the List of Stat from the Raw result of the SQL request.
-     */
-    private List<StatData> toStat(List<Map<String, Object>> datas, Function<Map<String, Object>, String> keyFunc,
-                                  Function<Map<String, Object>, Integer> valueFunc) {
-        return datas
-                .stream()
-                .map(line -> new StatData(keyFunc.apply(line), valueFunc.apply(line)))
-                .sorted(Comparator.comparing(StatData::getValue).reversed())
-                .limit(10)
-                .collect(Collectors.toList());
-    }
 
     public static class StatRowMapper implements RowMapper<StatData> {
         String key;

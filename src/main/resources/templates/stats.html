@@ -2,215 +2,179 @@
 <html lang="en">
 <th:block xmlns:th="http://www.thymeleaf.org">
 
-	<head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-<title>The stats</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="/css/style.css" />
+        <title>The stats</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+              integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="/css/style.css"/>
 
-<style>
-.stat-box{padding:0}
-.container{box-sizing:content-box}
-.inner-stat-box{color:white;text-align:center;padding:10px;margin:5px 5px;}
+        <style>
+            .stat-box { padding: 0 }
+            .container { box-sizing: content-box }
 
-#booksbytag  {background: linear-gradient(to left bottom, #9bc500,#69a700)}
-#pagesbytag{background: linear-gradient(to left bottom, #f8c600,#f5ab00)}
-#booksbyauthor{background: linear-gradient(to left bottom, #dc504c,#cd3632)}
-#pagesbyauthor{background: linear-gradient(to left bottom, #a14ea0,#713470)}
+            .inner-stat-box {
+                color: white;
+                text-align: center;
+                padding: 10px;
+                margin: 5px 5px;
+            }
 
-#booksbyyear{background: linear-gradient(to left bottom, #a7d1f2,#7fbdee)}
-#pagesbyyear{background: linear-gradient(to left bottom, #a7d1f2,#7fbdee)}
+            #booksbytag { background: linear-gradient(to left bottom, #9BC500, #69A700) }
+            #pagesbytag { background: linear-gradient(to left bottom, #F8C600, #F5AB00) }
+            #booksbyauthor { background: linear-gradient(to left bottom, #DC504C, #CD3632) }
+            #pagesbyauthor { background: linear-gradient(to left bottom, #A14EA0, #713470) }
+            #booksbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
+            #pagesbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
+            #booksbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
+            #pagesbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
 
-#booksbymonth{background: linear-gradient(to left bottom, #edc7df,#e5abcf)}
-#pagesbymonth{background: linear-gradient(to left bottom, #edc7df,#e5abcf)}
-</style>
-	</head>
-	<body>
-        <div th:insert="~{fragment/navbar :: navbar('stats')}"></div>
+            .fa-expand, .fa-times {
+                float: right;
+                cursor: pointer
+            }
+        </style>
+    </head>
+    <body>
+    <div th:insert="~{fragment/navbar :: navbar('stats')}"></div>
+    <div class="container">
+        <p class="lead">
+            <strong th:text="${#numbers.formatInteger(nbBooks,0,'DEFAULT')}">13</strong> books (<strong
+                th:text="${#numbers.formatInteger(nbPages,0,'DEFAULT')}">1234</strong> pages)
+        </p>
+        <div class="row">
+            <label for="showDisc"><input type="checkbox" id="showDisc" th:checked="${showDiscarded}"/> Show
+                discarded</label>
+        </div>
+        <!-- Hidden div for stat detail -->
+        <div id="stat-extended" class="row hidden">
+            <div class="stat-box col-md-12">
+                <div id="statdetail" class="inner-stat-box">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                    <h4>Title</h4>
+                    <canvas id="detailChart" width="80" height="24"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="stat-box col-md-3">
+                <div id="booksbytag" class="inner-stat-box">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                    <h4>Top tags (books)</h4>
+                    <canvas id="booksByTagChart" width="80" height="80"></canvas>
+                </div>
+            </div>
+            <div class="stat-box col-md-3">
+                <div id="pagesbytag" class="inner-stat-box">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                    <h4>Top tags (pages)</h4>
+                    <canvas id="pagesByTagChart" width="80" height="80"></canvas>
+                </div>
+            </div>
+            <div id="" class="stat-box col-md-3">
+                <div id="booksbyauthor" class="inner-stat-box">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                    <h4>Top authors (books)</h4>
+                    <canvas id="booksByAuthorChart" width="80" height="80"></canvas>
+                </div>
+            </div>
+            <div id="" class="stat-box col-md-3">
+                <div id="pagesbyauthor" class="inner-stat-box">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                    <h4>Top authors (pages)</h4>
+                    <canvas id="pagesByAuthorChart" width="80" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="" class="stat-box col-md-6">
+                <div id="booksbymonth" class="inner-stat-box">
+                    <h4>Books per month</h4>
+                    <canvas id="booksPerMonthChart" width="80" height="30"></canvas>
+                </div>
+            </div>
+            <div id="" class="stat-box col-md-6">
+                <div id="pagesbymonth" class="inner-stat-box">
+                    <h4>Pages per month</h4>
+                    <canvas id="pagesPerMonthChart" width="80" height="30"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="" class="stat-box col-md-6">
+                <div id="booksbyyear" class="inner-stat-box">
+                    <h4>Books per year</h4>
+                    <canvas id="booksPerYearChart" width="80" height="30"></canvas>
+                </div>
+            </div>
+            <div id="" class="stat-box col-md-6">
+                <div id="pagesbyyear" class="inner-stat-box">
+                    <h4>Pages per year</h4>
+                    <canvas id="pagesPerYearChart" width="80" height="30"></canvas>
+                </div>
+            </div>
+        </div>
 
-		<div class="container">
-			<p class="lead">
-				<strong th:text="${#numbers.formatInteger(nbBooks,0,'DEFAULT')}">13</strong> books (<strong
-					th:text="${#numbers.formatInteger(nbPages,0,'DEFAULT')}">1234</strong> pages)
-			</p>
-			<div class="row">
-				<label for="showDisc"><input type="checkbox" id="showDisc" th:checked="${showDiscarded}" /> Show discarded</label>
-			</div>
-			<div class="row">
-				<div class="stat-box col-md-3">
-					<div id="booksbytag" class="inner-stat-box">
-						<h4>Top tags (#books)</h4>
-						<canvas id="booksByTagChart" width="80" height="80"></canvas>
-					</div>
-				</div>
-				<div class="stat-box col-md-3">
-					<div id="pagesbytag" class="inner-stat-box">
-						<h4>Top tags (#pages)</h4>
-						<canvas id="pagesByTagChart" width="80" height="80"></canvas>
-					</div>
-				</div>
-				<div id="" class="stat-box col-md-3">
-					<div id="booksbyauthor" class="inner-stat-box">
-						<h4>Top authors (#books)</h4>
-						<canvas id="booksByAuthorChart" width="80" height="80"></canvas>
-					</div>
-				</div>
-				<div id="" class="stat-box col-md-3">
-					<div id="pagesbyauthor" class="inner-stat-box">
-						<h4>Top authors (#pages)</h4>
-						<canvas id="pagesByAuthorChart" width="80" height="80"></canvas>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="" class="stat-box col-md-6">
-					<div id="booksbymonth" class="inner-stat-box">
-						<h4>Books per month</h4>
-						<canvas id="booksPerMonthChart" width="80" height="30"></canvas>
-					</div>
-				</div>
-				<div id="" class="stat-box col-md-6">
-					<div id="pagesbymonth" class="inner-stat-box">
-						<h4>Pages per month</h4>
-						<canvas id="pagesPerMonthChart" width="80" height="30"></canvas>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="" class="stat-box col-md-6">
-					<div id="booksbyyear" class="inner-stat-box">
-						<h4>Books per year</h4>
-						<canvas id="booksPerYearChart" width="80" height="30"></canvas>
-					</div>
-				</div>
-				<div id="" class="stat-box col-md-6">
-					<div id="pagesbyyear" class="inner-stat-box">
-						<h4>Pages per year</h4>
-						<canvas id="pagesPerYearChart" width="80" height="30"></canvas>
-					</div>
-				</div>
-			</div>
 
+    </div>
 
+    <!-- Bootstrap core JavaScript ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
+    <script src="/js/stats.js"></script>
 
-		</div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        new Chart($("#booksByTagChart"), {
+            type: 'horizontalBar',
+            data: [(${booksByTag})],
+        });
+        new Chart($("#pagesByTagChart"), {
+            type: 'horizontalBar',
+            data: [(${pagesByTag})],
+        });
+        new Chart($("#booksByAuthorChart"), {
+            type: 'horizontalBar',
+            data: [(${booksByAuthor})],
+        });
+        new Chart($("#pagesByAuthorChart"), {
+            type: 'horizontalBar',
+            data: [(${pagesByAuthor})],
+        });
+        new Chart($("#booksPerYearChart"), {
+            type: 'bar',
+            data: [(${booksByYear})],
+        });
+        new Chart($("#pagesPerYearChart"), {
+            type: 'bar',
+            data: [(${pagesByYear})],
+        });
+        new Chart($("#booksPerMonthChart"), {
+            type: 'bar',
+            data: [(${booksByMonth})],
+        });
+        new Chart($("#pagesPerMonthChart"), {
+            type: 'bar',
+            data: [(${pagesByMonth})],
+        });
 
-		<!-- Bootstrap core JavaScript ================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
-
-
-		<script th:inline="javascript">
-	/*<![CDATA[*/
-	Chart.defaults.global.defaultFontColor = 'white'
-	Chart.defaults.global.legend.display = false
-
-	new Chart($("#booksByTagChart"), {
-		type: 'horizontalBar',
-		data: {
-			[(${booksByTag})]
-		},
-		options: {
-			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-		}
- 
-	});
-	new Chart($("#pagesByTagChart"), {
-		type: 'horizontalBar',
-		data: {
-			[(${pagesByTag})]
-		},
-		options: {
-			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-		}
-	});
-	new Chart($("#booksByAuthorChart"), {
-		type: 'horizontalBar',
-		data: {
-			[(${booksByAuthor})]
-		},
-		options: {
-			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-		}
- 
-	});
-	new Chart($("#pagesByAuthorChart"), {
-		type: 'horizontalBar',
-		data: {
-			[(${pagesByAuthor})]
-		},
-		options: {
-			scales: {xAxes: [{ticks: {beginAtZero:true}}]},
-		}
-	});
-    new Chart($("#booksPerYearChart"), {
-      type: 'bar',
-      data: {
-        [(${booksByYear})]
-      },
-      options: {
-            scales: {
-              xAxes: [{maxBarThickness : 40}], 
-              yAxes: [{ticks: {beginAtZero:true}}]
-            },            
-      }
-    });
-    new Chart($("#pagesPerYearChart"), {
-      type: 'bar',
-      data: {
-        [(${pagesByYear})]
-      },
-      options: {
-            scales: {
-              xAxes: [{maxBarThickness : 40}], 
-              yAxes: [{ticks: {beginAtZero:true}}]
-            },
-      }
-    });
-	
-    new Chart($("#booksPerMonthChart"), {
-      type: 'bar',
-      data: {
-        [(${booksByMonth})]               
-      },
-      options: {
-            scales: {yAxes: [{ticks: {beginAtZero:true}}]},            
-      }
-    });  
-    new Chart($("#pagesPerMonthChart"), {
-      type: 'bar',
-      data: {
-        [(${pagesByMonth})]               
-
-      },
-      options: {
-            scales: {
-              yAxes: [{ticks: {beginAtZero:true}}]
-            },
-      }
-    });  
-	// Check box show discarded
-	$("#showDisc").click(function() {
-		var checked = $(this)[0].checked 
-		var newUrl = URI(window.location.href)
-		if (checked)
-			newUrl.setSearch("showDisc", "true").toString()
-		else 
-			newUrl.setSearch("showDisc","").toString()
-		window.location.href = newUrl
-	});
-	/*]]
-	/*]]>*/
-	</script>
-	</body>
+        /*]]
+        /*]]>*/
+    </script>
+    </body>
 </th:block>
 </html>

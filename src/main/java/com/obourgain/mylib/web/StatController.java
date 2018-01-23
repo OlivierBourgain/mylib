@@ -12,10 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,34 +70,55 @@ public class StatController extends AbstractController {
 
 
     /**
-     * Getting the data into the thymeleaf format is a bit painful (especially
-     * because I'm a newbie in thymeleaf). Lets do it in Java.
+     * Stat detail.
+     */
+    @RequestMapping(value = "/stat/{statName}", method = RequestMethod.GET)
+    public void stat(HttpServletRequest request, HttpServletResponse response, @PathVariable("statName") String statName, Model model) throws IOException {
+        log.info("Controller stat " + statName);
+        Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
+
+        User user = getUserDetail();
+
+        List<StatData> stat = statService.getStatDetail(user.getId(), showDiscarded, statName);
+        response.setContentType("application/json");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        response.getWriter().print(toHighChartJs(stat));
+        return;
+    }
+
+
+    /**
+     * Getting the stat data in the Chart JS format.
      * <p>
      * We want to generate:
      * <p>
      * <pre>
-     *      labels: ["SF", "Policier", "..."],
-     *       datasets: [{
-     *           data: [3, 2, ...],
-     *           backgroundColor: 'rgb(255, 255, 255)',
-     *           borderWidth: 0
-     *       }]
+     *      {
+     *          "labels": ["SF", "Policier", "..."],
+     *          "datasets": [{
+     *              "data": [3, 2, ...],
+     *              "backgroundColor": 'rgb(255, 255, 255)',
+     *              "borderWidth": 0
+     *          }]
+     *       }
      * </pre>
      */
     private String toHighChartJs(List<StatData> datas) {
         StringBuilder sb = new StringBuilder();
-        sb.append("labels: [");
+        sb.append("{\"labels\": [");
         for (StatData data : datas)
-            sb.append("'").append(data.key.replace('\'', ' ')).append("',");
+            sb.append("\"").append(data.key.replace('\'', ' ')).append("\",");
+        sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append("],");
-        sb.append("datasets: [{");
-        sb.append("data: [");
+        sb.append("\"datasets\": [{");
+        sb.append("\"data\": [");
         for (StatData data : datas)
             sb.append(data.value).append(",");
+        sb.deleteCharAt(sb.lastIndexOf(","));
         sb.append("],");
-        sb.append("backgroundColor: 'rgb(255, 255, 255)',");
-        sb.append("borderWidth: 0");
-        sb.append("}]");
+        sb.append("\"backgroundColor\": \"rgb(255, 255, 255)\",");
+        sb.append("\"borderWidth\": 0");
+        sb.append("}]}");
         log.info(sb.toString());
         return sb.toString();
     }
