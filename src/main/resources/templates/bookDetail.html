@@ -19,7 +19,8 @@
 	th:utext="'#tagdiv li[title=\'' + ${tag.text} + '\'], #tagdiv li[title=\'' + ${tag.text} + '\'] span {background-color:' + ${tag.backgroundColor} + ';color:' + ${tag.color} + ';border-color:'+ ${tag.borderColor} + '}'"></style>
 	</head>
 	<body>
-		<div class="container">
+	<div th:replace="~{fragment/navbar :: navbar('books')}"></div>
+	<div class="container">
 			<div class="row">
 				<h1>Reading list</h1>
 			</div>
