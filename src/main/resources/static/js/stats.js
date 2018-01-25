@@ -1,7 +1,12 @@
 Chart.defaults.global.defaultFontColor = 'white'
 Chart.defaults.global.legend.display = false
 Chart.defaults.scale.ticks.beginAtZero = true;
+Chart.defaults.scale.ticks.autoSkip = false;
+Chart.defaults.scale.ticks.callback = truncate;
 Chart.defaults.scale.maxBarThickness = 40
+
+Chart.defaults.global.tooltips.callbacks.title = function(items, data) {return data.labels[items[0].index]};
+Chart.defaults.horizontalBar.tooltips.callbacks.title = Chart.defaults.global.tooltips.callbacks.title
 
 var chartDetail;
 
@@ -46,27 +51,7 @@ function showDetail(parent) {
             if (chartDetail) chartDetail.destroy();
             chartDetail = new Chart($("#detailChart"), {
                 type: 'bar',
-                data: chartData,
-                options: {
-                    scales: {
-                        xAxes: [{
-                            ticks: {
-                                autoSkip: false,
-                                callback: truncate,
-                            }
-                        }]
-                    },
-                    tooltips: {
-                        enabled: true,
-                        mode: 'label',
-                        callbacks: {
-                            title: function (tooltipItems, data) {
-                                var idx = tooltipItems[0].index;
-                                return data.labels[idx];//Use full label for tooltip
-                            },
-                        }
-                    },
-                }
+                data: chartData
             });
         },
         error: function (resultat, statut, erreur) {

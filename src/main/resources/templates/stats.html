@@ -18,6 +18,7 @@
         <style>
             .stat-box { padding: 0 }
             .container { box-sizing: content-box }
+            .fa-expand, .fa-times { float: right; cursor: pointer }
 
             .inner-stat-box {
                 color: white;
@@ -35,10 +36,10 @@
             #booksbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
             #pagesbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
 
-            .fa-expand, .fa-times {
-                float: right;
-                cursor: pointer
-            }
+            /* Detail */
+            #stat-extended {position:absolute; z-index:50}
+            #statdetail {width:1140px; height:296px}
+
         </style>
     </head>
     <body>
@@ -58,7 +59,7 @@
                 <div id="statdetail" class="inner-stat-box">
                     <i class="fa fa-times" aria-hidden="true"></i>
                     <h4>Title</h4>
-                    <canvas id="detailChart" width="80" height="24"></canvas>
+                    <canvas id="detailChart" width="1000px" height="250px"></canvas>
                 </div>
             </div>
         </div>
@@ -171,7 +172,6 @@
             type: 'bar',
             data: [(${pagesByMonth})],
         });
-
         /*]]
         /*]]>*/
     </script>
