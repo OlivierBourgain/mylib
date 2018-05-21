@@ -6,6 +6,7 @@ import com.obourgain.mylib.service.StatService.StatData;
 import com.obourgain.mylib.util.HttpRequestUtil;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Book.BookStatus;
+import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,16 +47,21 @@ public class StatController extends AbstractController {
         User user = getUserDetail();
 
         Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
+        Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
         List<Book> allBooks = bookService.findByUserId(user.getId());
 
-        if (!showDiscarded)
+        // If the year is set, the discarded flag is ignored.
+        if (year != null)
+            allBooks = allBooks.stream().filter(b -> readInYear(b, year)).collect(Collectors.toList());
+        else if (!showDiscarded)
             allBooks = allBooks.stream().filter(b -> b.getStatus() != BookStatus.DISCARDED).collect(Collectors.toList());
+
 
         model.addAttribute("nbBooks", allBooks.size());
         model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
 
-        Map<String, List<StatData>> stats = statService.getAllStat(user.getId(), showDiscarded);
+        Map<String, List<StatData>> stats = statService.getAllStat(user.getId(), year != null || showDiscarded, year);
         model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
         model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
         model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));
@@ -65,7 +71,19 @@ public class StatController extends AbstractController {
         model.addAttribute("pagesByMonth", toHighChartJs(stats.get("pagesByMonth")));
         model.addAttribute("booksByMonth", toHighChartJs(stats.get("booksByMonth")));
         model.addAttribute("showDiscarded", showDiscarded);
+        model.addAttribute("year", year);
+
         return "stats";
+    }
+
+    /**
+     * Return true if the book b was read in a given year.
+     */
+    private boolean readInYear(Book b, int year) {
+        for(Reading reading : b.getReadings()) {
+            if (reading.getYear() == year) return true;
+        }
+        return false;
     }
 
 
@@ -76,10 +94,11 @@ public class StatController extends AbstractController {
     public void stat(HttpServletRequest request, HttpServletResponse response, @PathVariable("statName") String statName, Model model) throws IOException {
         log.info("Controller stat " + statName);
         Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
+        Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
         User user = getUserDetail();
 
-        List<StatData> stat = statService.getStatDetail(user.getId(), showDiscarded, statName);
+        List<StatData> stat = statService.getStatDetail(user.getId(), showDiscarded, year, statName);
         response.setContentType("application/json");
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         response.getWriter().print(toHighChartJs(stat));

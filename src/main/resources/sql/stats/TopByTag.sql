@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 -- List # of books & # of pages read author
 SELECT
   tag.text   AS tag,
@@ -7,7 +9,9 @@ FROM
   tag
   LEFT JOIN book_tag ON tag.id = book_tag.tags_id
   LEFT JOIN book ON book.id = book_tag.books_id
+  LEFT JOIN reading ON book.id = reading.book_id
 WHERE
   book.user_id = ?
   AND (book.status IS NULL OR book.status <> 'DISCARDED' OR ? = 1)
+  AND (? IS NULL OR reading.year = ?)
 GROUP BY tag.text

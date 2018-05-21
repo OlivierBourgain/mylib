@@ -50,8 +50,19 @@
                 th:text="${#numbers.formatInteger(nbPages,0,'DEFAULT')}">1234</strong> pages)
         </p>
         <div class="row">
-            <label for="showDisc"><input type="checkbox" id="showDisc" th:checked="${showDiscarded}"/> Show
-                discarded</label>
+            <label for="year">
+                Year <select id="year">
+                    <option value="">All</option>
+                    <option value="2017" th:selected="${ year==2017 }">2017</option>
+                    <option value="2018" th:selected="${ year==2018 }">2018</option>
+                </select>
+            </label>
+        </div>
+        <div class="row">
+            <label for="showDisc">
+                <input type="checkbox" id="showDisc" th:checked="${showDiscarded}" th:disabled="${year != null}"/> Show
+                discarded
+            </label>
         </div>
         <!-- Hidden div for stat detail -->
         <div id="stat-extended" class="row hidden">

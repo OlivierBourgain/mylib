@@ -8,5 +8,6 @@ FROM
   INNER JOIN book ON book.id = reading.book_id
 WHERE
   book.user_id = ?
+  AND (? is NULL OR reading.year = ?)
 GROUP BY reading.year
 ORDER BY reading.year

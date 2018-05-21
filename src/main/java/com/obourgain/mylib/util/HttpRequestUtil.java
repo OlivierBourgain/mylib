@@ -51,6 +51,23 @@ public class HttpRequestUtil {
         }
     }
 
+
+    /**
+     * Return the value of the request parameter as Integer.
+     * <p>
+     * If the param doesn't exists or is not numeric, returns null.
+     */
+    public static Integer getParamAsInteger(HttpServletRequest request, String paramName) {
+        String s = request.getParameter(paramName);
+        if (StringUtils.isBlank(s)) return null;
+        try {
+            return Integer.valueOf(s);
+        } catch (NumberFormatException e) {
+            log.warn("Trying to get a long, but value is " + s, e);
+            return null;
+        }
+    }
+
     /**
      * Return the value of the request parameter as a LocalDate.
      * <p>
