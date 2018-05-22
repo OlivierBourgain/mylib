@@ -38,7 +38,7 @@
 
             /* Detail */
             #stat-extended {position:absolute; z-index:50}
-            #statdetail {width:1140px; height:296px}
+            #statdetail {width:1140px; height:297px}
 
         </style>
     </head>
@@ -50,19 +50,21 @@
                 th:text="${#numbers.formatInteger(nbPages,0,'DEFAULT')}">1234</strong> pages)
         </p>
         <div class="row">
-            <label for="year">
-                Year <select id="year">
-                    <option value="">All</option>
-                    <option value="2017" th:selected="${ year==2017 }">2017</option>
-                    <option value="2018" th:selected="${ year==2018 }">2018</option>
-                </select>
-            </label>
-        </div>
-        <div class="row">
-            <label for="showDisc">
-                <input type="checkbox" id="showDisc" th:checked="${showDiscarded}" th:disabled="${year != null}"/> Show
-                discarded
-            </label>
+            <div class="col-2">
+                <label for="year">
+                    Year <select id="year">
+                        <option value="">All</option>
+                        <option value="2017" th:selected="${ year==2017 }">2017</option>
+                        <option value="2018" th:selected="${ year==2018 }">2018</option>
+                    </select>
+                </label>
+            </div>
+            <div class="col-2"  th:classappend="${year != null} ? hidden : ''">
+                <label for="showDisc">
+                    <input type="checkbox" id="showDisc" th:checked="${showDiscarded}"/> Show
+                    discarded
+                </label>
+            </div>
         </div>
         <!-- Hidden div for stat detail -->
         <div id="stat-extended" class="row hidden">
