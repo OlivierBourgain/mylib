@@ -9,36 +9,38 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
         <title>The stats</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-              integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-              crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+              integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
         <link rel="stylesheet" href="/css/style.css"/>
 
         <style>
-            .stat-box { padding: 0 }
+            .stat-box { padding: 0}
             .container { box-sizing: content-box }
-            .fa-expand, .fa-times { float: right; cursor: pointer }
-
+            .fa-expand, .fa-times {
+                float: right;
+                cursor: pointer
+            }
             .inner-stat-box {
                 color: white;
                 text-align: center;
                 padding: 10px;
                 margin: 5px 5px;
             }
-
             #booksbytag { background: linear-gradient(to left bottom, #9BC500, #69A700) }
             #pagesbytag { background: linear-gradient(to left bottom, #F8C600, #F5AB00) }
             #booksbyauthor { background: linear-gradient(to left bottom, #DC504C, #CD3632) }
             #pagesbyauthor { background: linear-gradient(to left bottom, #A14EA0, #713470) }
-            #booksbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
+            #booksbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE)}
             #pagesbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
             #booksbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
-            #pagesbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
-
+            #pagesbymonth {background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF)}
             /* Detail */
-            #stat-extended {position:absolute; z-index:50}
-            #statdetail {width:1140px; height:297px}
+            #stat-extended {
+                position: absolute;
+                z-index: 50
+            }
+            #statdetail {width:1160px;height:319px}
 
         </style>
     </head>
@@ -53,13 +55,13 @@
             <div class="col-2">
                 <label for="year">
                     Year <select id="year">
-                        <option value="">All</option>
-                        <option value="2017" th:selected="${ year==2017 }">2017</option>
-                        <option value="2018" th:selected="${ year==2018 }">2018</option>
-                    </select>
+                    <option value="">All</option>
+                    <option value="2017" th:selected="${ year==2017 }">2017</option>
+                    <option value="2018" th:selected="${ year==2018 }">2018</option>
+                </select>
                 </label>
             </div>
-            <div class="col-2"  th:classappend="${year != null} ? hidden : ''">
+            <div class="col-2" th:classappend="${year != null} ? hidden : ''">
                 <label for="showDisc">
                     <input type="checkbox" id="showDisc" th:checked="${showDiscarded}"/> Show
                     discarded
@@ -140,14 +142,10 @@
 
     <!-- Bootstrap core JavaScript ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.12/URI.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.min.js"></script>
     <script src="/js/stats.js"></script>
 
