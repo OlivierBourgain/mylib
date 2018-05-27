@@ -20,9 +20,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(csrfTokenRepository());
         http.authorizeRequests()
-                .antMatchers("/healthcheck", "/")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
+                .anyRequest().authenticated()
+                .and().logout().logoutSuccessUrl("/").permitAll()
+        ;
     }
 }

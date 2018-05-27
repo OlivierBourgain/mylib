@@ -11,4 +11,9 @@ public class HomeController extends AbstractController {
     public String home() {
         return "home";
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        return "home";
+    }
 }

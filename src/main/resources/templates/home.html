@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title th:text="Welcome">Welcome</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-    <!-- Bootstrap -->
-    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"></link>
-  </head>
-  <body>
-    <a href="/books">Please login</a>
+<th:block xmlns:th="http://www.thymeleaf.org">
 
+    <head>
+        <title th:text="Welcome">Welcome</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+
+        <!-- Bootstrap -->
+        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"></link>
+    </head>
+    <body>
+    <h1>Welcome to your library manager</h1>
+    <a href="/books">Login with Google</a>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
-  </body>
+    </body>
+</th:block>
 </html>
