@@ -65,10 +65,12 @@ public class BookListController extends AbstractController {
 
         String searchCriteria = request.getParameter("criteria");
 
+        log.info("Search criteria " + searchCriteria);
+
         // Intercept the identification request with an ISBN or an ASIN
         if (StringUtils.isNotEmpty(searchCriteria) &&
                 (ISBNConvertor.isISBN(searchCriteria) ||
-                        searchCriteria.toLowerCase().startsWith("ASIN:"))) {
+                        searchCriteria.toUpperCase().startsWith("ASIN:"))) {
             return isbnlookup(request, searchCriteria, model, page);
         }
 
