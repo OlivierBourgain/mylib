@@ -37,7 +37,7 @@
                     </select>
                 </div>
                 <div class="col-2">
-                    <input id="readdate" name="readdate" type="text" placeholder="2017-12-23" class="form-control"></input>
+                    <input id="readdate" name="readdate" type="text" th:value="${#temporals.format(today, 'yyyy-MM-dd')}" class="form-control"></input>
                 </div>
                 <div class="col-4">
                     <input type="submit" value="Add" class="btn btn-success"/>

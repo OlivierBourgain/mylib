@@ -55,6 +55,7 @@ public class ReadingListController extends AbstractController {
         model.addAttribute("pagination", pagination);
         model.addAttribute("readings", readings);
         model.addAttribute("books", books);
+        model.addAttribute("today", LocalDate.now());
         model.addAttribute("sort", readings.getSort() == null ? null : readings.getSort().iterator().next());
 
         return "readingList";
