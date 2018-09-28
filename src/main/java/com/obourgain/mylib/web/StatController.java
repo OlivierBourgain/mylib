@@ -122,7 +122,8 @@ public class StatController extends AbstractController {
      *       }
      * </pre>
      */
-    private String toHighChartJs(List<StatData> datas) {
+    protected String toHighChartJs(List<StatData> datas) {
+        if (datas.isEmpty()) return "{}";
         StringBuilder sb = new StringBuilder();
         sb.append("{\"labels\": [");
         for (StatData data : datas)

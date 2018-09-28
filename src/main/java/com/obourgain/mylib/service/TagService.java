@@ -31,7 +31,8 @@ public class TagService {
     /**
      * Transform a list of tag names, to a list a tags. If a tag doesn't exists, create it in the Tag table.
      *
-     * @param tags The tag list, e.g. "SF,Cycle Fondation"
+     * @param in The tag list, e.g. "SF,Cycle Fondation"
+     * @param userId The user id
      * @return the list of Tag
      */
     public Set<Tag> getTags(String in, String userId) {

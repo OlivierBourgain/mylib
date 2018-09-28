@@ -175,11 +175,11 @@ public class BookListController extends AbstractController {
         }
 
         // Apply the pageable (size, and page)
-        int start = page.getOffset();
+        int start = (int) page.getOffset();
         Pageable newPage = page;
         if (start > luceneBooks.size()) {
             start = 0;
-            newPage = new PageRequest(0, page.getPageSize(), page.getSort());
+            newPage =  PageRequest.of(0, page.getPageSize(), page.getSort());
         }
         int end = (start + page.getPageSize()) > luceneBooks.size() ? luceneBooks.size() : (start + page.getPageSize());
         Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
@@ -203,6 +203,7 @@ public class BookListController extends AbstractController {
                         {
                             Set<Tag> tags = pattern
                                     .splitAsStream(book.getTagString())
+                                    .filter(s -> StringUtils.isNumeric(s))
                                     .map(Long::valueOf)
                                     .map(x -> alltags.get(x))
                                     .filter(Objects::nonNull)

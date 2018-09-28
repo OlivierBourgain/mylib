@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReadingService {
@@ -43,13 +44,13 @@ public class ReadingService {
      * Returns null if the reading is not found, or if the reading is not linked to the user.
      */
     public Reading findReading(String userId, long readingId) {
-        Reading r = readingRepository.findOne(readingId);
-        if (r == null) return null;
-        if (!r.getUserId().equals(userId)) {
+        Optional<Reading> r = readingRepository.findById(readingId);
+        if (!r.isPresent()) return null;
+        if (!r.get().getUserId().equals(userId)) {
             log.warn("Access error to " + r + " from " + userId);
             throw new IllegalArgumentException("User " + userId + " cannot access " + r);
         }
-        return r;
+        return r.get();
     }
 
     /**
@@ -59,7 +60,7 @@ public class ReadingService {
      */
     public void delete(Long readingId) {
         log.info("Deleting reading " + readingId);
-        readingRepository.delete(readingId);
+        readingRepository.deleteById(readingId);
     }
 
     /**

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -52,13 +53,13 @@ public class BookService {
      * Returns null if the book is not found, or if the book is not linked to the user.
      */
     public Book findBook(String userId, long bookId) {
-        Book b = bookRepository.findOne(bookId);
-        if (b == null) return null;
-        if (!b.getUserId().equals(userId)) {
+        Optional<Book> b = bookRepository.findById(bookId);
+        if (!b.isPresent()) return null;
+        if (!b.get().getUserId().equals(userId)) {
             log.warn("Access error to " + b + " from " + userId);
             throw new IllegalArgumentException("User " + userId + " cannot delete " + b);
         }
-        return b;
+        return b.get();
     }
 
     /**
