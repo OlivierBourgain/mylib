@@ -53,7 +53,7 @@ public class BookService {
      * Returns null if the book is not found, or if the book is not linked to the user.
      */
     public Book findBook(String userId, long bookId) {
-        Optional<Book> b = bookRepository.findById(bookId);
+        var b = bookRepository.findById(bookId);
         if (!b.isPresent()) return null;
         if (!b.get().getUserId().equals(userId)) {
             log.warn("Access error to " + b + " from " + userId);

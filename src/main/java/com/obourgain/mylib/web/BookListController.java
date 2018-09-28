@@ -152,26 +152,26 @@ public class BookListController extends AbstractController {
         // Apply the pageable (sort)
         if (page != null && page.getSort() != null) {
             Order order = page.getSort().iterator().next();
-            Comparator<Book> comparator = Comparator.comparing(Book::getTitle);
+            var bookComparator = Comparator.comparing(Book::getTitle);
             switch (order.getProperty()) {
                 case "Title":
-                    comparator = Comparator.comparing(Book::getTitle);
+                    bookComparator = Comparator.comparing(Book::getTitle);
                     break;
                 case "Author":
-                    comparator = Comparator.comparing(Book::getAuthor);
+                    bookComparator = Comparator.comparing(Book::getAuthor);
                     break;
                 case "Pages":
-                    comparator = Comparator.comparing(Book::getPages);
+                    bookComparator = Comparator.comparing(Book::getPages);
                     break;
                 case "Updated":
-                    comparator = Comparator.comparing(Book::getUpdated);
+                    bookComparator = Comparator.comparing(Book::getUpdated);
                     break;
                 case "Tags":
-                    comparator = new TagListComparator();
+                    bookComparator = new TagListComparator();
                     break;
             }
-            if (order.isDescending()) comparator = comparator.reversed();
-            Collections.sort(luceneBooks, comparator);
+            if (order.isDescending()) bookComparator = bookComparator.reversed();
+            Collections.sort(luceneBooks, bookComparator);
         }
 
         // Apply the pageable (size, and page)
@@ -219,8 +219,8 @@ public class BookListController extends AbstractController {
 
         @Override
         public int compare(Book o1, Book o2) {
-            Iterator<Tag> tags1 = o1.getTags().iterator();
-            Iterator<Tag> tags2 = o2.getTags().iterator();
+            var tags1 = o1.getTags().iterator();
+            var tags2 = o2.getTags().iterator();
             while (tags1.hasNext() && tags2.hasNext()) {
                 int c = tags1.next().compareTo(tags2.next());
                 if (c != 0) return c;

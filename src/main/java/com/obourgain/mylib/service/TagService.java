@@ -38,10 +38,11 @@ public class TagService {
     public Set<Tag> getTags(String in, String userId) {
         if (in == null || in.trim().length() == 0)
             return new HashSet<>();
-        List<String> texts = Arrays.asList(in.split(","));
+
+        var texts = Arrays.asList(in.split(","));
         Set<Tag> res = new HashSet<>();
 
-        List<Tag> alltags = tagRepository.findByUserId(userId);
+        var alltags = tagRepository.findByUserId(userId);
 
         alltags.stream().forEach(System.out::println);
         for (String text : texts) {

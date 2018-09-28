@@ -29,7 +29,7 @@ public class TagController extends AbstractController {
         log.info("Controller tagList");
         User user = getUserDetail();
 
-        List<Tag> tags = tagService.findByUserId(user.getId());
+        var tags = tagService.findByUserId(user.getId());
         Collections.sort(tags);
         model.addAttribute("tags", tags);
         model.addAttribute("user", user);

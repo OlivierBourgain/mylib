@@ -48,11 +48,10 @@ public class ReadingListController extends AbstractController {
         User user = getUserDetail();
 
         Page<Reading> readings = readingService.findByUserId(user.getId(), page);
-        List<Book> books = bookService.findByUserId(user.getId());
+        var books = bookService.findByUserId(user.getId());
         books.sort(Comparator.comparing(Book::getTitle));
 
-        List<Integer> pagination = computePagination(readings);
-        model.addAttribute("pagination", pagination);
+        model.addAttribute("pagination", computePagination(readings));
         model.addAttribute("readings", readings);
         model.addAttribute("books", books);
         model.addAttribute("today", LocalDate.now());

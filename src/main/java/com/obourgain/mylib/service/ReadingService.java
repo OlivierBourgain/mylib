@@ -44,13 +44,13 @@ public class ReadingService {
      * Returns null if the reading is not found, or if the reading is not linked to the user.
      */
     public Reading findReading(String userId, long readingId) {
-        Optional<Reading> r = readingRepository.findById(readingId);
-        if (!r.isPresent()) return null;
-        if (!r.get().getUserId().equals(userId)) {
-            log.warn("Access error to " + r + " from " + userId);
-            throw new IllegalArgumentException("User " + userId + " cannot access " + r);
+        var reading = readingRepository.findById(readingId);
+        if (!reading.isPresent()) return null;
+        if (!reading.get().getUserId().equals(userId)) {
+            log.warn("Access error to " + reading + " from " + userId);
+            throw new IllegalArgumentException("User " + userId + " cannot access " + reading);
         }
-        return r.get();
+        return reading.get();
     }
 
     /**
