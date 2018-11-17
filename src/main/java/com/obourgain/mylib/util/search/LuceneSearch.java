@@ -13,6 +13,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queries.CustomScoreQuery;
 import org.apache.lucene.queries.function.FunctionQuery;
+import org.apache.lucene.queries.function.FunctionScoreQuery;
 import org.apache.lucene.queries.function.valuesource.LongFieldSource;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -259,9 +260,6 @@ public class LuceneSearch {
     protected List<Book> executeQuery(Query query, int nbHits) throws IOException {
         log.debug("Real query :" + query.toString());
 
-        FunctionQuery boostQuery = new FunctionQuery(new LongFieldSource("boost"));
-        Query q = new CustomScoreQuery(query, boostQuery);
-
         DirectoryReader newReader = DirectoryReader.openIfChanged(reader);
         if (newReader != null) {
             log.debug("Reopening the reader");
@@ -270,7 +268,7 @@ public class LuceneSearch {
         }
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        TopDocs results = searcher.search(q, nbHits);
+        TopDocs results = searcher.search(query, nbHits);
         ScoreDoc[] hits = results.scoreDocs;
 
         List<Book> res = new ArrayList<>();
