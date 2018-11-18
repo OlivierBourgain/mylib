@@ -29,3 +29,10 @@ mvn spring-boot:run
 
 where `secret.sh` file exports `GOOGLE_CLIENT_SECRET` and `GOOGLE_CLIENT_ID`
 
+## Deployment
+Run `mvn package` and deploy the `target\mylib-x.y.jar` on your server.
+Then run the app with `java -jar mylib-x.y.jar`.
+
+The application will create 3 subdirectories : `db`, `store` and `search`.
+
+
