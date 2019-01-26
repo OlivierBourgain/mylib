@@ -1,4 +1,4 @@
-package com.obourgain.mylib.util.auth;
+package com.obourgain.mylib;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +20,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(csrfTokenRepository());
         http.authorizeRequests()
+                .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
         ;

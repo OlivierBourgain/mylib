@@ -1,5 +1,7 @@
 package com.obourgain.mylib.vobj;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -25,6 +27,7 @@ public class Tag implements Comparable<Tag> {
     private LocalDateTime updated;
 
     @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
     private Set<Book> books;
 
     @Override
