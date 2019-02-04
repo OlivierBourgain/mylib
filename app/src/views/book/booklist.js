@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Col, Container, Row, Table} from 'reactstrap';
 import Tag from './tag';
 
-import {fetchBooks} from '../../actions/index';
+import {fetchBooks} from '../../actions/book.action';
 
 class BookList extends Component {
 
@@ -15,7 +15,6 @@ class BookList extends Component {
 
     render() {
         const {books} = this.props;
-        console.log(books);
         return (
             <Container>
                 <Row>

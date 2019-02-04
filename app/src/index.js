@@ -13,9 +13,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+export const store = createStoreWithMiddleware(reducers);
 
 ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers)}>
+    <Provider store={store}>
         <App />
     </Provider>,
     document.getElementById('root'));

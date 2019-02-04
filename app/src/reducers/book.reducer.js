@@ -1,10 +1,10 @@
-import { FETCH_BOOKS } from '../actions/index';
+import {FETCH_BOOKS} from '../actions/book.action';
 
-export default function(state = {}, action) {
-    switch(action.type) {
+export default function (state = {}, action) {
+    switch (action.type) {
         case FETCH_BOOKS: {
             return {
-                data:  action.payload.data,
+                data: action.payload.data,
             };
         }
         default:
