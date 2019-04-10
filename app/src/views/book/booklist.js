@@ -15,6 +15,12 @@ class BookList extends Component {
 
     render() {
         const {books} = this.props;
+        if (books.error) {
+            return (<Row><Col>Something went wrong</Col></Row>);
+        }
+        if (books.pending) {
+            return (<Row><Col>Loading...</Col></Row>);
+        }
         return (
             <Container>
                 <Row>
@@ -22,13 +28,14 @@ class BookList extends Component {
                         <h3>Your library</h3>
                     </Col>
                 </Row>
-                {books === undefined && <Row>
-                    <Col>Loading...</Col>
-                </Row>}
-                {books === [] && <Row>
+                {!books.data && <Row>
                     <Col>No book found</Col>
                 </Row>}
-                {books && <Row>
+                {books.data && <>
+                    <Row>
+                        <Col>{books.data.length} results</Col>
+                    </Row>
+                    <Row>
                     <Col>
                         <Table bordered striped size={"sm"}>
                             <thead>
@@ -40,7 +47,7 @@ class BookList extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {books && books.map(book => (
+                            {books.data && books.data.map(book => (
                                 <tr key={`book-${book.id}`}>
                                     <td>{book.title}</td>
                                     <td>{book.author}</td>
@@ -55,7 +62,8 @@ class BookList extends Component {
                             </tbody>
                         </Table>
                     </Col>
-                </Row>}
+                </Row>
+                </>}
             </Container>);
     }
 }
@@ -65,8 +73,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({books}) {
+    console.log("State", books);
     return {
-        books: books.data
+        books: books
     };
 }
 
