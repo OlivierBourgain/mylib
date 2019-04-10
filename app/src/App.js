@@ -49,7 +49,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
         logged: state.account.logged
     };

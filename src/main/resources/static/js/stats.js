@@ -49,8 +49,6 @@ function showDetail(parent) {
     var discarded= $("#showDisc")[0].checked
     var year = $("#year")[0].value
 
-    console.log("Detail for " + stat + ", year=" + year);
-
     $.ajax({
         url: '/stat/' + stat + "?showDisc=" + discarded+ "&year=" + year,
         type: 'GET',

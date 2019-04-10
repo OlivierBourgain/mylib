@@ -107,7 +107,6 @@
             var color = rgb2hex($(this).css('color'));
             var border = rgb2hex($(this).css('border-color'));
             var csrf = $("#csrf").val();
-            console.log("New color for " + tagid);
             $.post("updateTagColor", {
                 tagId: tagid,
                 backgroundColor: back,
@@ -136,8 +135,6 @@
                 var tagid = $(this).closest('tr').attr('id'); // table row ID
                 var priority = $(this).siblings('input').val();
                 var csrf = $("#csrf").val();
-                console.log("Modifying priority to " + priority
-                    + " for tag " + tagid)
                 $.post("updateTagPriority", {
                     tagId: tagid,
                     priority: priority,
