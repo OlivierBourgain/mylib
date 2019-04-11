@@ -26,14 +26,14 @@ public class AbstractResource {
     public Optional<String> getClient(HttpServletRequest req) throws Exception {
 
         String tokenStr = req.getHeader("Authorization");
-        log.info("Header in request " + tokenStr);
+        log.debug("Header in request " + tokenStr);
 
         if (StringUtils.isBlank(tokenStr) || !tokenStr.startsWith(BEARER)) {
             return Optional.empty();
         }
 
         String token = tokenStr.substring(BEARER.length());
-        log.info("token " + token);
+        log.debug("token " + token);
 
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), jsonFactory)
                 .setAudience(Collections.singletonList(CLIENT_ID))
@@ -43,7 +43,7 @@ public class AbstractResource {
         GoogleIdToken idToken = verifier.verify(token);
         if (idToken != null) {
             GoogleIdToken.Payload payload = idToken.getPayload();
-
+            log.info("Google token verified");
             // Print user identifier
             return Optional.of(payload.getSubject());
         }

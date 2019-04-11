@@ -6,6 +6,7 @@ import {GoogleLogin} from 'react-google-login';
 import './app.scss';
 import Header from './views/header';
 import BookList from './views/booklist';
+import BookDetail from './views/bookdetail';
 import ReadingList from './views/readinglist';
 import TagList from './views/taglist';
 import Stats from './views/stats';
@@ -28,12 +29,12 @@ class App extends Component {
 
     render() {
         const {logged} = this.props;
-        console.log("Logged?", logged);
 
         return (
             <div className="App">
                 {logged && <Router>
                     <Header/>
+                    <Route exact path="/book/:id" render={props => <BookDetail id={props.match.params.id} />}/>
                     <Route exact path="/books" render={() => <BookList/>} />
                     <Route exact path="/readings" render={() => <ReadingList/>} />
                     <Route exact path="/stats" render={() => <Stats/>} />

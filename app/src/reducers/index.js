@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux';
 
 import BookReducer from './book.reducer';
+import ReadingReducer from './reading.reducer';
 import AccountReducer from './account.reducer';
 
 /**
@@ -12,7 +13,8 @@ export const FAILURE = actionType => `${actionType}_REJECTED`;
 
 
 const rootReducer = combineReducers({
-    books: BookReducer,
+    book: BookReducer,
+    reading: ReadingReducer,
     account: AccountReducer
 });
 
