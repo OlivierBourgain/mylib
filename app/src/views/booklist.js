@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import {Col, Container, Row, Table} from 'reactstrap';
 import Tag from './tag';
 
-import {fetchBooks} from '../../actions/book.action';
+import {fetchBooks} from '../actions/book.action';
 
 class BookList extends Component {
 
     constructor(props) {
         super(props);
-        this.props.fetchBooks();
+        if (!this.props.books.data) this.props.fetchBooks();
     }
 
     render() {
@@ -21,21 +21,20 @@ class BookList extends Component {
         if (books.pending) {
             return (<Row><Col>Loading...</Col></Row>);
         }
-        return (
-            <Container>
+        return (<Container>
+            <Row>
+                <Col>
+                    <h3>Your library</h3>
+                </Col>
+            </Row>
+            {!books.data && <Row>
+                <Col>No book found</Col>
+            </Row>}
+            {books.data && <>
                 <Row>
-                    <Col>
-                        <h3>Your library</h3>
-                    </Col>
+                    <Col>{books.data.length} results</Col>
                 </Row>
-                {!books.data && <Row>
-                    <Col>No book found</Col>
-                </Row>}
-                {books.data && <>
-                    <Row>
-                        <Col>{books.data.length} results</Col>
-                    </Row>
-                    <Row>
+                <Row>
                     <Col>
                         <Table bordered striped size={"sm"}>
                             <thead>
@@ -47,24 +46,28 @@ class BookList extends Component {
                             </tr>
                             </thead>
                             <tbody>
-                            {books.data && books.data.map(book => (
-                                <tr key={`book-${book.id}`}>
-                                    <td>{book.title}</td>
-                                    <td>{book.author}</td>
-                                    <td>{book.pages}</td>
-                                    <td>
-                                        {book.tags.map(tag =>
-                                            <Tag key={`tag-${tag.id}`} tag={tag}/>
-                                        )}
-                                    </td>
-                                </tr>))
-                            }
+                                {books.data && books.data.map(book => this.renderBook(book))}
                             </tbody>
                         </Table>
                     </Col>
                 </Row>
-                </>}
-            </Container>);
+            </>}
+        </Container>);
+    }
+
+    renderBook(book) {
+        return (
+            <tr key={`book-${book.id}`}>
+                <td>
+                    {book.title}
+                    {book.status === 'DISCARDED' && <span>{' '}(discarded)</span>}
+                </td>
+                <td>{book.author}</td>
+                <td>{book.pages}</td>
+                <td>
+                    {book.tags.map(tag => <Tag key={`tag-${tag.id}`} tag={tag}/>)}
+                </td>
+            </tr>);
     }
 }
 
@@ -73,10 +76,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({books}) {
-    console.log("State", books);
-    return {
-        books: books
-    };
+    return {books};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookList);

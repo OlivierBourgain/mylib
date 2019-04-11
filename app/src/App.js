@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from "react-redux";
-import {GoogleLogin, GoogleLogout} from 'react-google-login';
+import {GoogleLogin} from 'react-google-login';
 
 import './app.scss';
 import Header from './views/header';
-import BookList from './views/book/booklist';
+import BookList from './views/booklist';
+import ReadingList from './views/readinglist';
+import TagList from './views/taglist';
+import Stats from './views/stats';
 import {login, logout} from "./actions/account.action";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 class App extends Component {
 
@@ -24,13 +28,17 @@ class App extends Component {
 
     render() {
         const {logged} = this.props;
+        console.log("Logged?", logged);
 
         return (
             <div className="App">
-                {logged && <>
+                {logged && <Router>
                     <Header/>
-                    <BookList/>
-                </>}
+                    <Route exact path="/books" render={() => <BookList/>} />
+                    <Route exact path="/readings" render={() => <ReadingList/>} />
+                    <Route exact path="/stats" render={() => <Stats/>} />
+                    <Route exact path="/tags" render={() => <TagList/>} />
+                </Router>}
                 {!logged && <>
                     <h1>Welcome to your library manager</h1>
                     <GoogleLogin

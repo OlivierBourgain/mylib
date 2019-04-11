@@ -11,7 +11,7 @@ import {
     NavLink,
     UncontrolledDropdown
 } from 'reactstrap';
-
+import { Link } from "react-router-dom";
 
 class Header extends React.Component {
     constructor(props) {
@@ -37,16 +37,16 @@ class Header extends React.Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav navbar>
                             <NavItem>
-                                <NavLink href="">Books</NavLink>
+                                <Link className="nav-link" to="/books">Books</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="">Reading list</NavLink>
+                                <Link className="nav-link" to="/readings">Reading list</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="">Stats</NavLink>
+                                <Link className="nav-link" to="/stats">Stats</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="">Tags</NavLink>
+                                <Link className="nav-link" to="/tags">Tags</Link>
                             </NavItem>
                             <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret>

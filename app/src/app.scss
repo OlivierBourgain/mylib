@@ -1,4 +1,7 @@
 
+html {overflow-y: scroll;} /* Avoid centering jump */
+.container{margin-top:20px;}
+.hidden{display:none}
 
 .tag {
   border-width: 1px;
