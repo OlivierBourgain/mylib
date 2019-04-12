@@ -15,7 +15,7 @@ function Pagination(props) {
             <Link className="page-link" to="/books?page=1">&laquo;</Link>
         </li>
         {start > 0 && <li className="page-item disabled" key="page-break-start">
-            <Link className="page-link">...</Link>
+            <span className="page-link">...</span>
         </li>}
         {
             [...Array(end - start).keys()].map(i =>
@@ -24,7 +24,7 @@ function Pagination(props) {
             </li>
         )}
         <li className="page-item disabled" key="page-break-end">
-            <Link className="page-link" to="/books">...</Link>
+            <span className="page-link">...</span>
         </li>
         <li className="page-item" key="page-end">
             <Link className="page-link" to={`/books?page=${nbPages}`}>&raquo;</Link>
