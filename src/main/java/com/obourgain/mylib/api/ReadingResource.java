@@ -1,7 +1,6 @@
 package com.obourgain.mylib.api;
 
 import com.obourgain.mylib.service.ReadingService;
-import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class ReadingResource extends AbstractResource {
     @GetMapping(value = "/readings")
     public ResponseEntity<List<Reading>> getBooks(HttpServletRequest request) throws Exception {
         log.info("REST - readings");
-        String userId = getClient(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
         List<Reading> readings = readingService.findByUserId(userId);
         return new ResponseEntity<>(readings, HttpStatus.OK);
     }

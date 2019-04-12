@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {fetchBook, fetchBooks} from '../actions/book.action'
+import {fetchBook} from '../actions/book.action'
 import {Col, Container, Row} from 'reactstrap'
 import {Link} from 'react-router-dom'
 import {bindActionCreators} from "redux";

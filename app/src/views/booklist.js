@@ -6,6 +6,7 @@ import {Col, Container, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
 import {fetchBooks} from '../actions/book.action'
+import Pagination from "./tools/pagination";
 
 class BookList extends Component {
 
@@ -30,7 +31,15 @@ class BookList extends Component {
                 </Row>}
                 {book.list && <>
                     <Row className="col-12">
-                        <Col>{book.list.length} results</Col>
+                        <Col className="col-4">
+                            {book.list.size} results
+                            {book.list.totalPages > 1 && <span>
+                                , showing page {book.list.number + 1} of {book.list.totalPages}
+                            </span>}
+                        </Col>
+                        <Col className="col-5">
+                            <Pagination page={book.list.number} nbPages={book.list.totalPages}/>
+                        </Col>
                     </Row>
                     <Table bordered striped size="sm">
                         <thead>
@@ -42,7 +51,7 @@ class BookList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                            {book.list && book.list.map(book => this.renderBook(book))}
+                            {book.list.content && book.list.content.map(book => this.renderBook(book))}
                         </tbody>
                     </Table>
                 </>}

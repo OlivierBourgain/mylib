@@ -23,7 +23,7 @@ public class AbstractResource {
     /**
      * Retrieve the clientId from the Google Auth token.
      */
-    public Optional<String> getClient(HttpServletRequest req) throws Exception {
+    public Optional<String> getClientId(HttpServletRequest req) throws Exception {
 
         String tokenStr = req.getHeader("Authorization");
         log.debug("Header in request " + tokenStr);
@@ -49,4 +49,6 @@ public class AbstractResource {
         }
         return Optional.empty();
     }
+
+
 }

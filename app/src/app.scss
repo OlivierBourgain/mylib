@@ -4,6 +4,9 @@ html {overflow-y: scroll;} /* Avoid centering jump */
 .hidden{display:none}
 tr.row{margin:0}
 
+ul.pagination li a{min-width:35px;text-align:center;}
+ul.pagination li span{min-width:35px;text-align:center}
+
 .tag {
   border-width: 1px;
   border-style: solid;
