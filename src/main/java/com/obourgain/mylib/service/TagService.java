@@ -83,6 +83,19 @@ public class TagService {
     /**
      * Update a tag.
      */
+    public Tag updateTag(Tag tag, String userId) {
+        Tag existing = tagRepository.getOne(tag.getId());
+        if (!existing.getUserId().equals(userId) || !tag.getUserId().equals(existing.getUserId())) {
+            log.error("Bad user id " + existing.getUserId() + " vs " + userId);
+            throw new IllegalArgumentException("Not your stuff");
+        }
+        tagRepository.save(tag);
+        return tag;
+    }
+
+    /**
+     * Update a tag.
+     */
     public Tag updateTag(Long tagId, String backgroundColor, String color, String borderColor, String userId) {
         Tag tag = tagRepository.getOne(tagId);
         if (!tag.getUserId().equals(userId)) {

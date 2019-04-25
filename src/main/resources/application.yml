@@ -12,6 +12,7 @@ spring:
   thymeleaf:
     cache: false
 
+logging.level.org.springframework.web: DEBUG
 
 # Web
 server:

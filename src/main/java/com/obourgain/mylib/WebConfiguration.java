@@ -13,7 +13,8 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // Allow request from the front-end in dev mode.
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("*");
     }
 
     @Override
