@@ -234,7 +234,7 @@ public class BookListController extends AbstractController {
         log.info("Controller rebuildindex");
         User user = getUserDetail();
 
-        List<Book> books = bookService.findByUserId(user.getId());
+        List<Book> books = bookService.findAll();
         luceneSearch.clearIndex();
         luceneSearch.addAll(books);
         return "redirect:/books/";

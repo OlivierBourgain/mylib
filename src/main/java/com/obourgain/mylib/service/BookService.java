@@ -232,6 +232,13 @@ public class BookService {
     }
 
     /**
+     * @return all the books in the database (from all users).
+     */
+    public List<Book> findAll() {
+        return bookRepository.findAll();
+    }
+
+    /**
      * Compare two books based on the their list of tags
      */
     public class TagListComparator implements Comparator<Book> {
