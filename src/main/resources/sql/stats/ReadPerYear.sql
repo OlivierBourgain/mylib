@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
 -- List # of books & # of pages read per year
 SELECT
   reading.year    AS year,

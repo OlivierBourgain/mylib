@@ -7,17 +7,28 @@ import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
 import com.obourgain.mylib.vobj.User;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 /**
@@ -29,6 +40,9 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private TagService tagService;
 
     @Autowired
     private LuceneSearch luceneSearch;
@@ -151,5 +165,92 @@ public class BookService {
         b.getReadings().add(reading);
         bookRepository.save(b);
         return b;
+    }
+
+    private static final int MAX_RESULTS = 100000;
+
+    /**
+     * Get the list of book from Lucene, as a Page<Book>.
+     */
+    public Page<Book> getBooks(String criteria, boolean showDiscarded, Pageable page, String userId) {
+        // First get the list of tags.
+        Map<Long, Tag> alltags = tagService
+                .findByUserId(userId).stream()
+                .collect(Collectors.toMap(Tag::getId, Function.identity()));
+
+        List<Book> luceneBooks = luceneSearch.search(userId, criteria, showDiscarded, MAX_RESULTS);
+        fixTags(luceneBooks, alltags);
+
+        // Apply the pageable (sort)
+        if (page != null && page.getSort() != null && page.getSort() != Sort.unsorted()) {
+            Sort.Order order = page.getSort().iterator().next();
+            var bookComparator = switch (order.getProperty()) {
+                case "Title" -> Comparator.comparing(Book::getTitle);
+                case "Author" -> Comparator.comparing(Book::getAuthor);
+                case "Pages" -> Comparator.comparing(Book::getPages);
+                case "Updated" -> Comparator.comparing(Book::getUpdated);
+                case "Tags" -> new TagListComparator();
+                default -> Comparator.comparing(Book::getTitle);
+            };
+            if (order.isDescending()) bookComparator = bookComparator.reversed();
+            Collections.sort(luceneBooks, bookComparator);
+        }
+
+        // Apply the pageable (size, and page)
+        int start = (int) page.getOffset();
+        Pageable newPage = page;
+        if (start > luceneBooks.size()) {
+            start = 0;
+            newPage = PageRequest.of(0, page.getPageSize(), page.getSort());
+        }
+        int end = Math.min(start + page.getPageSize(), luceneBooks.size());
+        Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
+        return books;
+    }
+
+    /**
+     * Fix the tags.
+     * <p>
+     * In the lucene search, tags are stored in Book.tagString, as a list of Ids
+     * (e.g. "1,23,54"). We need to replace that and compute Book.tag, which
+     * contains a Set of Tag objects. In order to have a nice display, we also
+     * want the Book.tag set to be ordered by Tag.priority desc.
+     */
+    private void fixTags(List<Book> books, Map<Long, Tag> alltags) {
+
+        Pattern pattern = Pattern.compile(",");
+        books.stream()
+                .forEach(
+                        book ->
+                        {
+                            Set<Tag> tags = pattern
+                                    .splitAsStream(book.getTagString())
+                                    .filter(s -> StringUtils.isNumeric(s))
+                                    .map(Long::valueOf)
+                                    .map(x -> alltags.get(x))
+                                    .filter(Objects::nonNull)
+                                    .collect(Collectors.toSet());
+                            book.setTags(new TreeSet<>(tags));
+                        });
+    }
+
+    /**
+     * Compare two books based on the their list of tags
+     */
+    public class TagListComparator implements Comparator<Book> {
+
+        @Override
+        public int compare(Book o1, Book o2) {
+            var tags1 = o1.getTags().iterator();
+            var tags2 = o2.getTags().iterator();
+            while (tags1.hasNext() && tags2.hasNext()) {
+                int c = tags1.next().compareTo(tags2.next());
+                if (c != 0) return c;
+            }
+            if (tags1.hasNext()) return 1;
+            if (tags2.hasNext()) return -1;
+            return 0;
+        }
+
     }
 }
