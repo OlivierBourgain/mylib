@@ -217,21 +217,18 @@ public class BookService {
      * want the Book.tag set to be ordered by Tag.priority desc.
      */
     private void fixTags(List<Book> books, Map<Long, Tag> alltags) {
+        books.stream().forEach(book -> book.setTags(getTags(alltags, book)));
+    }
 
+    private Set<Tag> getTags(Map<Long, Tag> alltags, Book book) {
         Pattern pattern = Pattern.compile(",");
-        books.stream()
-                .forEach(
-                        book ->
-                        {
-                            Set<Tag> tags = pattern
-                                    .splitAsStream(book.getTagString())
-                                    .filter(s -> StringUtils.isNumeric(s))
-                                    .map(Long::valueOf)
-                                    .map(x -> alltags.get(x))
-                                    .filter(Objects::nonNull)
-                                    .collect(Collectors.toSet());
-                            book.setTags(new TreeSet<>(tags));
-                        });
+        return pattern
+                .splitAsStream(book.getTagString())
+                .filter(s -> StringUtils.isNumeric(s))
+                .map(Long::valueOf)
+                .map(x -> alltags.get(x))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
     /**
