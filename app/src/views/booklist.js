@@ -2,17 +2,21 @@ import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {Col, Container, Row, Table} from 'reactstrap'
+import {Col, Container, Row, Table, Input} from 'reactstrap'
 
 import Tag from './tag'
 import {fetchBooks} from '../actions/book.action'
 import Pagination from "./tools/pagination";
 
 class BookList extends Component {
+    state = {
+        page: 0,
+        size: 20
+    }
 
     constructor(props) {
         super(props);
-        if (!this.props.book.list) this.props.fetchBooks();
+        if (!this.props.book.list) this.props.fetchBooks(0);
     }
 
     render() {
@@ -31,14 +35,25 @@ class BookList extends Component {
                 </Row>}
                 {book.list && <>
                     <Row className="col-12">
-                        <Col className="col-4">
+                        <Col className="col-4" id="list-header-summary">
                             {book.list.size} results
                             {book.list.totalPages > 1 && <span>
                                 , showing page {book.list.number + 1} of {book.list.totalPages}
                             </span>}
                         </Col>
                         <Col className="col-5">
-                            <Pagination page={book.list.number} nbPages={book.list.totalPages}/>
+                            <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.updatePage}/>
+                        </Col>
+                        <Col className="col-3">
+                            <span>Show{' '}</span>
+                            <select value={this.state.size} onChange={this.changeSize}>
+                                <option value={10}>10</option>
+                                <option value={20}>20</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                                <option value={1000}>1000</option>
+                            </select>
+                            <span> books</span>
                         </Col>
                     </Row>
                     <Table bordered striped size="sm">
@@ -59,6 +74,17 @@ class BookList extends Component {
         </Container>);
     }
 
+    changeSize = event => {
+        const size = event.target.value;
+        this.setState({ size });
+        this.props.fetchBooks(this.state.page, size);
+    }
+
+    updatePage = page => {
+        this.setState({ page });
+        this.props.fetchBooks(page, this.state.size);
+    }
+
     renderBook(book) {
         return (
             <tr className="row" key={`book-${book.id}`}>
@@ -73,6 +99,8 @@ class BookList extends Component {
                 </td>
             </tr>);
     }
+
+
 }
 
 function mapDispatchToProps(dispatch) {

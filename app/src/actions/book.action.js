@@ -6,8 +6,8 @@ const ROOT_URL = 'http://127.0.0.1:2017/api';
 export const FETCH_BOOKS = 'FETCH_BOOKS';
 export const FETCH_BOOK = 'FETCH_BOOK';
 
-export function fetchBooks() {
-    const url = `${ROOT_URL}/books`;
+export function fetchBooks(page, size = 20) {
+    const url = `${ROOT_URL}/books?page=${page}&size=${size}`;
     const idToken = store.getState().account.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}, withCredentials: true });
 
