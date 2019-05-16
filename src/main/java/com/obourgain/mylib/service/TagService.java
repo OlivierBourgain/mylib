@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +38,7 @@ public class TagService {
      * @param userId The user id
      * @return the list of Tag
      */
+    @Transactional(readOnly = true)
     public Set<Tag> getTags(String in, String userId) {
         if (in == null || in.trim().length() == 0)
             return new HashSet<>();
@@ -60,7 +64,9 @@ public class TagService {
      * Return the list of tags for a user.
      */
     public List<Tag> findByUserId(String userId) {
-        return tagRepository.findByUserId(userId);
+        List<Tag> res=  tagRepository.findByUserId(userId);
+        Collections.sort(res);
+        return res;
     }
 
     /**
@@ -96,6 +102,7 @@ public class TagService {
     /**
      * Update a tag.
      */
+    @Transactional
     public Tag updateTag(Long tagId, String backgroundColor, String color, String borderColor, String userId) {
         Tag tag = tagRepository.getOne(tagId);
         if (!tag.getUserId().equals(userId)) {

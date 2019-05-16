@@ -14,7 +14,9 @@ public class WebConfiguration implements WebMvcConfigurer {
         // Allow request from the front-end in dev mode.
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:3000")
-                .allowedMethods("*");
+                .allowedHeaders("*")
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 
     @Override
