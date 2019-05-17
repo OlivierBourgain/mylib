@@ -12,12 +12,14 @@ class BookList extends Component {
     state = {
         page: 0,
         size: 20,
-        term: ''
+        activeFilter: '',
+        term: '',
+        discarded: false
     }
 
     constructor(props) {
         super(props);
-        if (!this.props.book.list) this.props.fetchBooks(this.state.page, this.state.size, this.state.term);
+        if (!this.props.book.list) this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
     }
 
     render() {
@@ -25,39 +27,37 @@ class BookList extends Component {
         if (book.error) {
             return (<Container>Something went wrong</Container>);
         }
-        if (!book || book.pending) {
-            return (<Container>Loading...</Container>);
-        }
+
         return (<Container>
             <Row>
                 <Col className="col-8">
                     <Row>
-                        <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.updateTerm}/></Col>
+                        <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
                         <Button type="button" color="success" className="col-2" onClick={this.searchTerm}>Submit</Button>
                     </Row>
                 </Col>
                 <Col className="col-4">
                     <div className="row">
                         <label htmlFor="showDisc">
-                            <input type="checkbox" id="showDisc" /> Show discarded
+                            <input type="checkbox" id="showDisc" onChange={this.changeDiscarded} /> Show discarded
                         </label>
                     </div>
                 </Col>
             </Row>
             <h3>Your library</h3>
-            {!book.list && <Row>
-                <Col>No book found</Col>
-            </Row>}
             {book.list && <>
                 <Row>
                     <Col className="col-4" id="list-header-summary">
-                        {book.list.size} results
+                        {book.list.numberOfElements} results
                         {book.list.totalPages > 1 && <span>
                             , showing page {book.list.number + 1} of {book.list.totalPages}
                         </span>}
+                        {this.state.activeFilter && <span>
+                            , filter on <strong>{this.state.activeFilter}</strong> (<a id="removeFilter" href="#" onClick={this.clearFilter}>remove</a>)
+                        </span>}
                     </Col>
                     <Col className="col-5">
-                        <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.updatePage}/>
+                        <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.changePage}/>
                     </Col>
                     <Col className="col-3">
                         <span>Show{' '}</span>
@@ -71,7 +71,10 @@ class BookList extends Component {
                         <span> books</span>
                     </Col>
                 </Row>
-                <Table bordered striped size="sm">
+                {book.list.numberOfElements === 0 && <Row>
+                    <Col>No book found</Col>
+                </Row>}
+                {book.list.numberOfElements > 0 && <Table bordered striped size="sm">
                     <thead>
                     <tr className="row">
                         <th className="col-5">Title</th>
@@ -81,29 +84,38 @@ class BookList extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                        {book.list.content && book.list.content.map(book => this.renderBook(book))}
+                    {book.list.content && book.list.content.map(book => this.renderBook(book))}
                     </tbody>
                 </Table>
+                }
             </>}
         </Container>);
     }
 
     searchTerm = () => {
-        this.props.fetchBooks(this.state.page, this.state.size, this.state.term);
+        this.setState({activeFilter: this.state.term})
+        this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
     }
 
-    updateTerm = event => {
+    changeTerm = event => {
         this.setState({term: event.target.value});
+        // This doesn't trigger automatic reload for now... Not sure I should do it...
     }
 
     changeSize = event => {
-        this.setState({ size : event.target.value });
-        this.props.fetchBooks(this.state.page, event.target.value, this.state.term);
+        this.setState({ size : event.target.value }, this.searchTerm);
     }
 
-    updatePage = page => {
-        this.setState({ page });
-        this.props.fetchBooks(page, this.state.size, this.state.term);
+    changeDiscarded = event => {
+        this.setState({ discarded : event.target.checked }, this.searchTerm);
+    }
+
+    changePage = page => {
+        this.setState({ page }, this.searchTerm);
+    }
+
+    clearFilter = () => {
+        this.setState({term: ''}, this.searchTerm)
     }
 
 

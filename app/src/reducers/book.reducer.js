@@ -3,9 +3,7 @@ import {FETCH_BOOKS, FETCH_BOOK} from '../actions/book.action';
 
 export default function (state = {}, action) {
     switch (action.type) {
-        case PENDING(FETCH_BOOKS): {
-            return {...state, error:false};
-        }
+        case PENDING(FETCH_BOOKS):
         case PENDING(FETCH_BOOK): {
             return {...state, pending: true, error:false};
         }

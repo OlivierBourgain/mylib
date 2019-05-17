@@ -5,7 +5,7 @@ function Pagination(props) {
     const page = props.page;
     const nbPages = props.nbPages;
 
-    if (nbPages === 1) return null;
+    if (nbPages <= 1) return null;
 
     var start = 0;
     var end = nbPages;

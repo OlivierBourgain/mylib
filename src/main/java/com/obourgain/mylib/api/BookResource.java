@@ -29,10 +29,9 @@ public class BookResource extends AbstractResource {
      * @return the list of books for a user.
      */
     @GetMapping(value = "/books")
-    public ResponseEntity<Page<Book>> getBooks(HttpServletRequest request, Pageable page, String criteria) throws Exception {
+    public ResponseEntity<Page<Book>> getBooks(HttpServletRequest request, Pageable page, String criteria, boolean discarded) throws Exception {
         log.info("REST - books, " + Objects.toString(page));
         String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
-        boolean discarded = false;
         Page<Book> books = bookService.getBooks(criteria, discarded, page, userId);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
