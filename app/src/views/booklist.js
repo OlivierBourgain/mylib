@@ -19,7 +19,7 @@ class BookList extends Component {
 
     constructor(props) {
         super(props);
-        if (!this.props.book.list) this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
+        this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
     }
 
     render() {
