@@ -9,7 +9,7 @@ export const UPDATE_TAG = 'UPDATE_TAG';
 export function fetchTags() {
     const url = `${ROOT_URL}/tags`;
     const idToken = store.getState().account.tokenObj.id_token;
-    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}, withCredentials: true });
+    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
         type: FETCH_TAGS,
@@ -20,15 +20,7 @@ export function fetchTags() {
 export function updateTag(tag) {
     const url = `${ROOT_URL}/tag`;
     const idToken = store.getState().account.tokenObj.id_token;
-    const csrf = store.getState().account.csrfToken;
-
-    const request = axios.post(url, tag,{
-        headers: {
-            "Authorization" : `Bearer ${idToken}`,
-            "X-XSRF-TOKEN" : csrf
-        },
-        withCredentials: true
-    });
+    const request = axios.post(url, tag,{ headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
         type: UPDATE_TAG,

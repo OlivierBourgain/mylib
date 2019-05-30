@@ -2,6 +2,7 @@ package com.obourgain.mylib.api;
 
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.vobj.Book;
+import com.obourgain.mylib.vobj.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.Objects;
 
 @RestController
@@ -46,5 +50,17 @@ public class BookResource extends AbstractResource {
         Book book = bookService.findBook(userId, id);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
+
+    /**
+     * Updates a book
+     */
+    @PostMapping(value = "/book")
+    public ResponseEntity<Book> update(HttpServletRequest request, @RequestBody Book book) throws Exception {
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        bookService.createOrUpdateBook(book, userId, new HashSet<Tag>());
+        return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
+
 }
 

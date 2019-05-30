@@ -10,14 +10,13 @@ import BookDetail from './views/bookdetail';
 import ReadingList from './views/readinglist';
 import TagList from './views/taglist';
 import Stats from './views/stats';
-import {login, csrf, logout} from "./actions/account.action";
+import {login, logout} from "./actions/account.action";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 class App extends Component {
 
     login(response) {
         this.props.login(response)
-        this.props.csrf(response)
     }
 
     error() {
@@ -57,7 +56,7 @@ class App extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({login, csrf, logout}, dispatch);
+    return bindActionCreators({login, logout}, dispatch);
 }
 
 function mapStateToProps(state) {

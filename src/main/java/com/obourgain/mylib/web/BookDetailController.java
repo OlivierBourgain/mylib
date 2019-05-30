@@ -91,7 +91,7 @@ public class BookDetailController extends AbstractController {
         log.info("And the tags are : " + book.getTags());
         Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
-        bookService.createOrUpdateBook(book, user, tags);
+        bookService.createOrUpdateBook(book, user.getId(), tags);
         return "redirect:/books/";
     }
 
@@ -136,7 +136,7 @@ public class BookDetailController extends AbstractController {
         log.info("And the tags are : " + book.getTagString());
         Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
-        bookService.createOrUpdateBook(book, user, tags);
+        bookService.createOrUpdateBook(book, user.getId(), tags);
         return "redirect:/books/";
     }
 

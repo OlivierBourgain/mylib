@@ -53,7 +53,8 @@ class BookList extends Component {
                             , showing page {book.list.number + 1} of {book.list.totalPages}
                         </span>}
                         {this.state.activeFilter && <span>
-                            , filter on <strong>{this.state.activeFilter}</strong> (<a id="removeFilter" href="#" onClick={this.clearFilter}>remove</a>)
+                            , filter on <strong>{this.state.activeFilter}</strong>{' '}
+                            (<button id="removeFilter" onClick={this.clearFilter} className="link-button">remove</button>)
                         </span>}
                     </Col>
                     <Col className="col-5">

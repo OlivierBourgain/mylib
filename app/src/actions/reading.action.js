@@ -8,7 +8,7 @@ export const FETCH_READINGS = 'FETCH_READINGS';
 export function fetchReadings() {
     const url = `${ROOT_URL}/readings`;
     const idToken = store.getState().account.tokenObj.id_token;
-    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}, withCredentials: true });
+    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
         type: FETCH_READINGS,

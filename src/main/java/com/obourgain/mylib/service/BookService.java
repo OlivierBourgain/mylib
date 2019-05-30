@@ -95,8 +95,8 @@ public class BookService {
     /**
      * If the book has an Id, and exists in database, update it. If not, create it.
      */
-    public void createOrUpdateBook(Book book, User user, Set<Tag> tags) {
-        Book existing = book.getId() == null ? null : findBook(user.getId(), book.getId());
+    public void createOrUpdateBook(Book book, String userId, Set<Tag> tags) {
+        Book existing = book.getId() == null ? null : findBook(userId, book.getId());
         if (existing != null) {
             existing.setStatus(book.getStatus());
             existing.setTitle(book.getTitle());
@@ -112,7 +112,7 @@ public class BookService {
             bookRepository.save(existing);
             luceneSearch.addToIndex(existing);
         } else {
-            book.setUserId(user.getId());
+            book.setUserId(userId);
             book.setCreated(LocalDateTime.now());
             book.setUpdated(LocalDateTime.now());
             book.setTags(tags);

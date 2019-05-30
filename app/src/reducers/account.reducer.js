@@ -1,14 +1,7 @@
-import {FETCH_CSRF, LOGIN, LOGOUT} from '../actions/account.action';
-import {SUCCESS} from "./index";
+import {LOGIN, LOGOUT} from '../actions/account.action';
 
 export default function (state = {}, action) {
     switch (action.type) {
-        case SUCCESS(FETCH_CSRF) : {
-            return {
-                ...state,
-                csrfToken: action.payload.data
-            }
-        }
         case LOGIN: {
             return {
                 ...state,
