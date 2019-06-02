@@ -1,6 +1,7 @@
 package com.obourgain.mylib.api;
 
 import com.obourgain.mylib.service.BookService;
+import com.obourgain.mylib.service.TagService;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -28,6 +30,9 @@ public class BookResource extends AbstractResource {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private TagService tagService;
 
     /**
      * @return the list of books for a user.
@@ -57,10 +62,9 @@ public class BookResource extends AbstractResource {
     @PostMapping(value = "/book")
     public ResponseEntity<Book> update(HttpServletRequest request, @RequestBody Book book) throws Exception {
         String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
-        bookService.createOrUpdateBook(book, userId, new HashSet<Tag>());
+        Set<Tag> tags = tagService.getTags(book.getTagString(), userId);
+        bookService.createOrUpdateBook(book, userId, tags);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
-
-
 }
 

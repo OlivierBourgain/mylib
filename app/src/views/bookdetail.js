@@ -1,30 +1,101 @@
 import React, {Component} from 'react'
-import {fetchBook, updateBook} from '../actions/book.action'
-import {Button, Col, Container, FormGroup, Label, Row} from 'reactstrap'
 import {Link} from 'react-router-dom'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+
+import {fetchTags} from '../actions/tag.action'
+import {fetchBook, updateBook} from '../actions/book.action'
+
+import {Button, Col, Container, FormGroup, Label, Row} from 'reactstrap'
 import {Field, Form, Formik} from 'formik';
 
+import CreatableSelect from 'react-select/creatable';
+
 class BookDetail extends Component {
+    state = {
+        selectedTags: null,
+    }
 
     constructor(props) {
         super(props);
         this.props.fetchBook(props.id);
+        this.props.fetchTags();
     }
 
     handleSubmit = values => {
+        values.tagString = this.state.selectedTags ? this.state.selectedTags.map(tag => tag.value).join(",") : "";
         this.props.updateBook(values);
     }
 
+    tagChange = values => {
+        this.setState({selectedTags: values});
+    }
+
     render() {
-        const book = this.props;
+        const book = this.props.book;
 
         if (book.pending || !book.detail || book.detail === {}) {
             return (<Container>Loading...</Container>);
         }
 
+        const allTags = this.props.tag.pending ? [] : this.props.tag.list.map(tag => ({
+            value: tag.text,
+            label: tag.text
+        }));
+        const bookTags = book.detail.tags.map(tag => ({value: tag.text, label: tag.text}));
         const imgUrl = `http://localhost:2017/store/${book.detail.largeImage}`;
+
+        const customStyles = {
+            multiValue: (styles, {data}) => {
+                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    border: '1px solid black',
+                    borderRadius: '4px'
+                }
+                else return {
+                    ...styles,
+                    backgroundColor: tag[0].backgroundColor,
+                    border: '1px solid ' + tag[0].borderColor,
+                    borderRadius: '4px'
+                };
+            },
+            multiValueLabel: (styles, {data}) => {
+                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    fontSize: '1em',
+                    padding: '0px'
+                }
+                else return {
+                    ...styles,
+                    color: tag[0].color,
+                    fontSize: '1em',
+                    padding: '0px'
+                };
+            },
+            multiValueRemove: (styles, {data}) => {
+                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    ':hover': {// Clear background color
+                        }
+                }
+
+                return {
+                    ...styles,
+                    color: tag[0].color,
+                    ':hover': {
+                        backgroundColor: tag[0].backgroungColor,
+                        color: tag[0].color,
+                        fontWeight: 'bolder',
+                        fontSize:'120%'
+                    },
+                }
+            },
+            dropdownIndicator: (style) => { return {display: 'none'} },
+            indicatorSeparator: (style) => { return { display: 'none'} }
+        }
 
         return <Container>
             <Row>
@@ -99,7 +170,15 @@ class BookDetail extends Component {
                                 <FormGroup row>
                                     <Label for="tagString" sm={3}>Tags</Label>
                                     <Col sm={9}>
-                                        TODO
+                                        <CreatableSelect
+                                            isMulti={true}
+                                            isClearable={false}
+                                            defaultValue={bookTags}
+                                            placeHolder=""
+                                            options={allTags}
+                                            styles={customStyles}
+                                            onChange={this.tagChange}
+                                        />
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
@@ -125,12 +204,14 @@ class BookDetail extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBook, updateBook}, dispatch);
+    return bindActionCreators({fetchBook, updateBook, fetchTags}, dispatch);
 }
 
 function mapStateToProps(state) {
-    console.log("State", state);
-    return state.book;
+    return {
+        book: state.book,
+        tag: state.tag
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookDetail);
