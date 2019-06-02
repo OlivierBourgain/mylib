@@ -20,7 +20,7 @@ function Pagination(props) {
 
     return <ul className="pagination pagination-sm">
         <li className="page-item" key="page-start">
-            <Link className="page-link" to="/books?page=1" onClick={() => props.updatePage(0)}>&laquo;</Link>
+            <Link to='/books' className="page-link" onClick={() => props.updatePage(0)}>&laquo;</Link>
         </li>
         {start > 0 && <li className="page-item disabled" key="page-break-start">
             <span className="page-link">...</span>
@@ -28,7 +28,7 @@ function Pagination(props) {
         {
             [...Array(end - start).keys()].map(i =>
             <li className={"page-item " + (start + i === page ? 'active':'')} key={`page-${start + i}`}>
-                <Link className="page-link" to={`/books?page=${start + i}`} onClick={() => props.updatePage(start + i)}>
+                <Link to='/books' className="page-link" onClick={() => props.updatePage(start + i)}>
                     {start + i + 1}
                 </Link>
             </li>
@@ -38,7 +38,7 @@ function Pagination(props) {
             </li>
         }
         <li className="page-item" key="page-end">
-            <Link className="page-link" to={`/books?page=${nbPages}`} onClick={() => props.updatePage(nbPages - 1)}>&raquo;</Link>
+            <Link to='/books' className="page-link" onClick={() => props.updatePage(nbPages - 1)}>&raquo;</Link>
         </li>
     </ul>;
 }

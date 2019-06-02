@@ -14,13 +14,53 @@ class BookList extends Component {
         size: 20,
         activeFilter: '',
         term: '',
-        discarded: false
+        discarded: false,
+        sort: 'Updated',
+        descending: true
     }
 
     constructor(props) {
         super(props);
-        this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
+        this.updateList()
     }
+
+    updateList = () => {
+        this.setState({activeFilter: this.state.term})
+        this.props.fetchBooks(
+            this.state.page,
+            this.state.size,
+            this.state.term,
+            this.state.discarded,
+            this.state.sort,
+            this.state.descending);
+    }
+
+    changeTerm = event => {
+        this.setState({term: event.target.value});
+        // This doesn't trigger automatic reload for now... Not sure I should do it...
+    }
+
+    changeSize = event => {
+        this.setState({ size : event.target.value }, this.updateList);
+    }
+
+    changeDiscarded = event => {
+        this.setState({ discarded : event.target.checked }, this.updateList);
+    }
+
+    changePage = page => {
+        this.setState({ page }, this.updateList);
+    }
+
+    changeSort = col => {
+        if (this.state.sort === col) this.setState({descending: !this.state.descending}, this.updateList)
+        else this.setState({sort: col}, this.updateList)
+    }
+
+    clearFilter = () => {
+        this.setState({term: ''}, this.updateList)
+    }
+
 
     render() {
         const {book} = this.props;
@@ -33,7 +73,7 @@ class BookList extends Component {
                 <Col className="col-8">
                     <Row>
                         <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
-                        <Button type="button" color="success" className="col-2" onClick={this.searchTerm}>Submit</Button>
+                        <Button type="button" color="success" className="col-2" onClick={this.updateList}>Submit</Button>
                     </Row>
                 </Col>
                 <Col className="col-4">
@@ -48,7 +88,7 @@ class BookList extends Component {
             {book.list && <>
                 <Row>
                     <Col className="col-4" id="list-header-summary">
-                        {book.list.numberOfElements} results
+                        {book.list.totalElements} results
                         {book.list.totalPages > 1 && <span>
                             , showing page {book.list.number + 1} of {book.list.totalPages}
                         </span>}
@@ -78,10 +118,10 @@ class BookList extends Component {
                 {book.list.numberOfElements > 0 && <Table bordered striped size="sm">
                     <thead>
                     <tr className="row">
-                        <th className="col-5">Title</th>
-                        <th className="col-3">Author</th>
-                        <th className="col-1">Pages</th>
-                        <th className="col-3">Tags</th>
+                        <th className="col-5"><Link to='/books' onClick={() => this.changeSort('Title')}>Title</Link></th>
+                        <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Author')}>Author</Link></th>
+                        <th className="col-1"><Link to='/books' onClick={() => this.changeSort('Pages')}>Pages</Link></th>
+                        <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -92,33 +132,6 @@ class BookList extends Component {
             </>}
         </Container>);
     }
-
-    searchTerm = () => {
-        this.setState({activeFilter: this.state.term})
-        this.props.fetchBooks(this.state.page, this.state.size, this.state.term, this.state.discarded);
-    }
-
-    changeTerm = event => {
-        this.setState({term: event.target.value});
-        // This doesn't trigger automatic reload for now... Not sure I should do it...
-    }
-
-    changeSize = event => {
-        this.setState({ size : event.target.value }, this.searchTerm);
-    }
-
-    changeDiscarded = event => {
-        this.setState({ discarded : event.target.checked }, this.searchTerm);
-    }
-
-    changePage = page => {
-        this.setState({ page }, this.searchTerm);
-    }
-
-    clearFilter = () => {
-        this.setState({term: ''}, this.searchTerm)
-    }
-
 
     renderBook(book) {
         return (

@@ -7,8 +7,9 @@ export const FETCH_BOOKS = 'FETCH_BOOKS';
 export const FETCH_BOOK = 'FETCH_BOOK';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
 
-export function fetchBooks(page, size, term, discarded) {
-    const url = `${ROOT_URL}/books?page=${page}&size=${size}&criteria=${term}&discarded=${discarded}`;
+export function fetchBooks(page, size, term, discarded, sort, descending) {
+    const url = `${ROOT_URL}/books?page=${page}&size=${size}&criteria=${term}&discarded=${discarded}`
+                + `&sort=${sort},${descending?'DESC':'ASC'}`;
     const idToken = store.getState().account.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
