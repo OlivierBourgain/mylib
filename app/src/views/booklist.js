@@ -69,7 +69,7 @@ class BookList extends Component {
         }
 
         return (<Container>
-            <Row>
+            <Row className="filter-bar">
                 <Col className="col-8">
                     <Row>
                         <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
@@ -84,10 +84,10 @@ class BookList extends Component {
                     </div>
                 </Col>
             </Row>
-            <h3>Your library</h3>
+            <Row><h3>Your library</h3></Row>
             {book.list && <>
                 <Row>
-                    <Col className="col-4" id="list-header-summary">
+                    <Col className="col-5" id="list-header-summary">
                         {book.list.totalElements} results
                         {book.list.totalPages > 1 && <span>
                             , showing page {book.list.number + 1} of {book.list.totalPages}
@@ -100,7 +100,7 @@ class BookList extends Component {
                     <Col className="col-5">
                         <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.changePage}/>
                     </Col>
-                    <Col className="col-3">
+                    <Col className="col-2">
                         <span>Show{' '}</span>
                         <select value={this.state.size} onChange={this.changeSize}>
                             <option value={10}>10</option>
@@ -115,20 +115,21 @@ class BookList extends Component {
                 {book.list.numberOfElements === 0 && <Row>
                     <Col>No book found</Col>
                 </Row>}
-                {book.list.numberOfElements > 0 && <Table bordered striped size="sm">
-                    <thead>
-                    <tr className="row">
-                        <th className="col-5"><Link to='/books' onClick={() => this.changeSort('Title')}>Title</Link></th>
-                        <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Author')}>Author</Link></th>
-                        <th className="col-1"><Link to='/books' onClick={() => this.changeSort('Pages')}>Pages</Link></th>
-                        <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {book.list.content && book.list.content.map(book => this.renderBook(book))}
-                    </tbody>
-                </Table>
-                }
+                {book.list.numberOfElements > 0 && <Row>
+                    <Table bordered striped size="sm">
+                        <thead>
+                        <tr className="row">
+                            <th className="col-5"><Link to='/books' onClick={() => this.changeSort('Title')}>Title</Link></th>
+                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Author')}>Author</Link></th>
+                            <th className="col-1"><Link to='/books' onClick={() => this.changeSort('Pages')}>Pages</Link></th>
+                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {book.list.content && book.list.content.map(book => this.renderBook(book))}
+                        </tbody>
+                    </Table>
+                </Row>}
             </>}
         </Container>);
     }

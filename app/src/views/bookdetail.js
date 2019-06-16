@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import moment from 'moment'
 
 import {fetchTags} from '../actions/tag.action'
 import {fetchBook, updateBook} from '../actions/book.action'
@@ -47,7 +48,7 @@ class BookDetail extends Component {
 
         const customStyles = {
             multiValue: (styles, {data}) => {
-                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
                 if (!tag || tag.length === 0) return {
                     ...styles,
                     border: '1px solid black',
@@ -61,7 +62,7 @@ class BookDetail extends Component {
                 };
             },
             multiValueLabel: (styles, {data}) => {
-                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
                 if (!tag || tag.length === 0) return {
                     ...styles,
                     fontSize: '1em',
@@ -75,7 +76,7 @@ class BookDetail extends Component {
                 };
             },
             multiValueRemove: (styles, {data}) => {
-                const tag = this.props.tag.list.filter(tag => tag.text === data.label)
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
                 if (!tag || tag.length === 0) return {
                     ...styles,
                     ':hover': {// Clear background color
@@ -138,6 +139,20 @@ class BookDetail extends Component {
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
+                                    <Label for="tagString" sm={3}>Tags</Label>
+                                    <Col sm={9}>
+                                        <CreatableSelect
+                                            isMulti={true}
+                                            isClearable={false}
+                                            defaultValue={bookTags}
+                                            placeHolder=""
+                                            options={allTags}
+                                            styles={customStyles}
+                                            onChange={this.tagChange}
+                                        />
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
                                     <Label for="author" sm={3}>Author</Label>
                                     <Col sm={9}>
                                         <Field type="text" name="author" className="form-control"/>
@@ -168,20 +183,6 @@ class BookDetail extends Component {
                                     </Col>
                                 </FormGroup>
                                 <FormGroup row>
-                                    <Label for="tagString" sm={3}>Tags</Label>
-                                    <Col sm={9}>
-                                        <CreatableSelect
-                                            isMulti={true}
-                                            isClearable={false}
-                                            defaultValue={bookTags}
-                                            placeHolder=""
-                                            options={allTags}
-                                            styles={customStyles}
-                                            onChange={this.tagChange}
-                                        />
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
                                     <Label for="comment" sm={3}>Comment</Label>
                                     <Col sm={9}>
                                         <Field type="text" name="comment" className="form-control"/>
@@ -191,6 +192,18 @@ class BookDetail extends Component {
                                     <Label for="lang" sm={3}>Language</Label>
                                     <Col sm={9}>
                                         <Field type="text" name="lang" className="form-control"/>
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="lang" sm={3}>Creation date</Label>
+                                    <Col sm={9} className="col-form-label">
+                                        {moment(book.detail.created).format('DD/MM/YYYY h:mm:ss')}
+                                    </Col>
+                                </FormGroup>
+                                <FormGroup row>
+                                    <Label for="lang" sm={3}>Update date</Label>
+                                    <Col sm={9} className="col-form-label">
+                                        {moment(book.detail.updated).format('DD/MM/YYYY h:mm:ss')}
                                     </Col>
                                 </FormGroup>
 
