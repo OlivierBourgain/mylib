@@ -184,14 +184,7 @@ public class BookService {
         // Apply the pageable (sort)
         if (page != null && page.getSort() != null && page.getSort() != Sort.unsorted()) {
             Sort.Order order = page.getSort().iterator().next();
-            var bookComparator = switch (order.getProperty()) {
-                case "Title" -> Comparator.comparing(Book::getTitle);
-                case "Author" -> Comparator.comparing(Book::getAuthor);
-                case "Pages" -> Comparator.comparing(Book::getPages);
-                case "Updated" -> Comparator.comparing(Book::getUpdated);
-                case "Tags" -> new TagListComparator();
-                default -> Comparator.comparing(Book::getTitle);
-            };
+            Comparator<Book> bookComparator = getBookComparator(order);
             if (order.isDescending()) bookComparator = bookComparator.reversed();
             Collections.sort(luceneBooks, bookComparator);
         }
@@ -206,6 +199,17 @@ public class BookService {
         int end = Math.min(start + page.getPageSize(), luceneBooks.size());
         Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
         return books;
+    }
+
+    private Comparator<Book> getBookComparator(Sort.Order order) {
+        switch (order.getProperty()) {
+            case "Title" : return Comparator.comparing(Book::getTitle);
+            case "Author" : return Comparator.comparing(Book::getAuthor);
+            case "Pages" : return Comparator.comparing(Book::getPages);
+            case "Updated" : return Comparator.comparing(Book::getUpdated);
+            case "Tags" : return new TagListComparator();
+            default : return Comparator.comparing(Book::getTitle);
+        }
     }
 
     /**

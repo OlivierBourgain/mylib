@@ -26,7 +26,7 @@ public class MylibApplicationTests {
 
     @Test
     public void testBooks() {
-        PageRequest page = new PageRequest(0, 5);
+        PageRequest page = PageRequest.of(0, 5);
         Page<Book> books = bookRepository.findByUserId("111025875593718684632", page);
         assertTrue(books.getSize() > 0);
     }
