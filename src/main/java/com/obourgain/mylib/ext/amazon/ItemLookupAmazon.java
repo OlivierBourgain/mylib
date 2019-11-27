@@ -53,24 +53,12 @@ public class ItemLookupAmazon {
             String url = getUrl(isbn10);
             log.info("Calling amazon {} at {}", isbn10, url);
             Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
-            Book book = new Book();
-            book.setTitle(getTitle(doc));
-            book.setAuthor(getAuthor(doc));
-
-            parseDetail(book, doc);
-
-            book.setSmallImage(saveImage(isbn10, 'T'));
-            book.setMediumImage(saveImage(isbn10, 'Z'));
-            book.setLargeImage(saveImage(isbn10, 'L'));
-
-            log.info(book.deepToString());
-            return book;
+            return parseHtmlPage(isbn10, doc);
         } catch (Exception e) {
             log.error("Book not found", e);
             return null;
         }
     }
-
 
     /**
      * Lookup a book on Amazon, given it's ASIN.
@@ -81,22 +69,26 @@ public class ItemLookupAmazon {
             String url = "https://www.amazon.fr/exec/obidos/ASIN/" + asin;
             log.info("Calling amazon asin={} at {}", asin, url);
             Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
-            Book book = new Book();
-            book.setTitle(getTitle(doc));
-            book.setAuthor(getAuthor(doc));
-
-            parseDetail(book, doc);
-
-            book.setSmallImage(saveImage(asin, 'T'));
-            book.setMediumImage(saveImage(asin, 'Z'));
-            book.setLargeImage(saveImage(asin, 'L'));
-
-            log.info(book.deepToString());
-            return book;
+            return parseHtmlPage(asin, doc);
         } catch (Exception e) {
             log.error("Book not found", e);
             return null;
         }
+    }
+
+    protected static Book parseHtmlPage(String asin, Document doc) throws IOException {
+        Book book = new Book();
+        book.setTitle(getTitle(doc));
+        book.setAuthor(getAuthor(doc));
+
+        parseDetail(book, doc);
+
+        book.setSmallImage(saveImage(asin, 'T'));
+        book.setMediumImage(saveImage(asin, 'Z'));
+        book.setLargeImage(saveImage(asin, 'L'));
+
+        log.info(book.deepToString());
+        return book;
     }
 
     /**
