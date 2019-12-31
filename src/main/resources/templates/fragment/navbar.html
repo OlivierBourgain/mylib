@@ -13,7 +13,9 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item" th:classappend="${selected == 'books'}? active : ''"><a class="nav-link" href="/books">Books</a></li>
           <li class="nav-item" th:classappend="${selected == 'readings'}? active : ''"><a class="nav-link" href="/readinglist">Reading list</a></li>
-          <li class="nav-item" th:classappend="${selected == 'stats'}? active : ''"><a class="nav-link" href="/stats">Stats</a></li>
+          <li class="nav-item" th:classappend="${selected == 'stats'}? active : ''">
+            <a class="nav-link" th:href="@{/stats?year={y}(y=${#dates.year(#dates.createNow())})}">Stats</a>
+          </li>
           <li class="nav-item" th:classappend="${selected == 'tags'}? active : ''"><a class="nav-link" href="/tags">Tags</a></li>
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
             aria-expanded="false">More...</a>
