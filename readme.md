@@ -6,7 +6,7 @@ It uses Spring boot 2, with an H2 database, a search index using Lucene, and thy
 You can add a new book with its ISBN number (information is scrapped from amazon), and associate tags to books.
 The application also provides basic export, and some statistics. 
 
-The application runs with java 12 (with the --enable-preview flag).
+The application runs with java 13
 
 ## Authentication
 Authentication is done through Oauth2 with Google, so the application needs two variables.
@@ -20,7 +20,7 @@ The data is stored in a local h2 database.
 The application also download pictures from books, which are stored as files in `~/mylib/store`.
 
 ## Starting the application
-To start application, you need java 10.
+To start application, you need java 13.
 
 ```
 source secret.sh

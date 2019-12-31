@@ -5,7 +5,7 @@
 
     <groupId>com.obourgain</groupId>
     <artifactId>mylib</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>mylib</name>
@@ -121,4 +121,12 @@
             <artifactId>jaxb-api</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
