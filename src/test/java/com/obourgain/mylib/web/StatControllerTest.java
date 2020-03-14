@@ -27,6 +27,16 @@ public class StatControllerTest {
         datas.add(new StatService.StatData("k2", 2));
         datas.add(new StatService.StatData("k3", 3));
         String res= fixture.toHighChartJs(datas);
-        assertEquals("{\"labels\": [\"k1\",\"k2\",\"k3\"],\"datasets\": [{\"data\": [1,2,3],\"backgroundColor\": \"rgb(255, 255, 255)\",\"borderWidth\": 0}]}", res);
+        assertEquals("""
+                    {
+                        "labels": ["k1","k2","k3"],
+                        "datasets": [{
+                            "data": [1,2,3],
+                            "backgroundColor": "rgb(255, 255, 255)",
+                            "borderWidth": 0
+                        }]
+                    }
+                    """
+                , res);
     }
 }

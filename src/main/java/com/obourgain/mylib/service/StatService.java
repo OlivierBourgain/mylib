@@ -74,13 +74,13 @@ public class StatService {
     private List<StatData> innerStatDetail(String userId, Boolean showDiscarded, Integer year, String statName) {
         log.info("Getting stat for year " + year);
         var discardedFlag = showDiscarded ? 1 : 0;
-        switch (statName.toLowerCase()) {
-            case "booksbytag" : return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag, year, year);
-            case "pagesbytag" : return jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag, year, year);
-            case "booksbyauthor" : return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag, year, year);
-            case "pagesbyauthor" : return jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag, year, year);
-            default : throw new IllegalArgumentException("Stat doesn't exist " + statName);
-        }
+        return switch (statName.toLowerCase()) {
+            case "booksbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag, year, year);
+            case "pagesbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag, year, year);
+            case "booksbyauthor" -> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag, year, year);
+            case "pagesbyauthor"-> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag, year, year);
+            default -> throw new IllegalArgumentException("Stat doesn't exist " + statName);
+        };
     }
 
     /**

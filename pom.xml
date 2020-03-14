@@ -5,7 +5,7 @@
 
     <groupId>com.obourgain</groupId>
     <artifactId>mylib</artifactId>
-    <version>1.1</version>
+    <version>13-preview</version>
     <packaging>jar</packaging>
 
     <name>mylib</name>
@@ -126,6 +126,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>
+                        --enable-preview
+                    </jvmArguments>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

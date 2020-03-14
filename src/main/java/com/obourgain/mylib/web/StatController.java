@@ -125,23 +125,27 @@ public class StatController extends AbstractController {
     protected String toHighChartJs(List<StatData> datas) {
         if (datas.isEmpty()) return "{}";
 
-        var sb = new StringBuilder();
-        sb.append("{\"labels\": [");
-        for (StatData data : datas)
-            sb.append("\"").append(data.key.replace('\'', ' ')).append("\",");
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append("],");
-        sb.append("\"datasets\": [{");
-        sb.append("\"data\": [");
-        for (StatData data : datas)
-            sb.append(data.value).append(",");
-        sb.deleteCharAt(sb.lastIndexOf(","));
-        sb.append("],");
-        sb.append("\"backgroundColor\": \"rgb(255, 255, 255)\",");
-        sb.append("\"borderWidth\": 0");
-        sb.append("}]}");
-        log.info(sb.toString());
-        return sb.toString();
+
+        var keys = new StringBuilder();
+        var vals = new StringBuilder();
+        for (StatData data : datas) {
+            keys.append("\"").append(data.key.replace('\'', ' ')).append("\",");
+            vals.append(data.value).append(",");
+        }
+        keys.deleteCharAt(keys.lastIndexOf(","));
+        vals.deleteCharAt(vals.lastIndexOf(","));
+
+        return """
+                {
+                    "labels": [{keys}],
+                    "datasets": [{
+                        "data": [{values}],
+                        "backgroundColor": "rgb(255, 255, 255)",
+                        "borderWidth": 0
+                    }]
+                }
+                """.replace("{keys}", keys)
+                .replace("{values}", vals);
     }
 
 
