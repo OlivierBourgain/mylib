@@ -113,7 +113,7 @@ public class StatService {
     private List<StatData> toMonthStat(List<StatData> datas) {
         List<StatData> res = new ArrayList<>();
         for (int i = 1; i <= 12; i++) {
-            String month = new DateFormatSymbols().getMonths()[i - 1];
+            String month = new DateFormatSymbols(Locale.ENGLISH).getMonths()[i - 1];
             StatData sd = new StatData(month, 0);
             res.add(sd);
         }
