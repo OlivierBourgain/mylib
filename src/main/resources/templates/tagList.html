@@ -64,8 +64,8 @@
                 <tr>
                     <th></th>
                     <th></th>
-                    <th>Priority</th>
                     <th></th>
+                    <th>Priority</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -84,6 +84,7 @@
                         <span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
                         <span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>
                     </td>
+                    <td th:align="right"><span th:text="${#lists.size(tag.books)}">-1</span> books</td>
                     <td><input type="text" th:value="${tag.priority}" class="input-priority"></input> <a class="update-priority" href="#">update</a></td>
                     <td><a class="delete" href="#">delete</a></td>
                 </tr>
