@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
+
 /**
  * Controller for the stat page.
  */
@@ -80,10 +82,7 @@ public class StatController extends AbstractController {
      * Return true if the book b was read in a given year.
      */
     private boolean readInYear(Book b, int year) {
-        for(Reading reading : b.getReadings()) {
-            if (reading.getYear() == year) return true;
-        }
-        return false;
+        return b.getReadings().stream().anyMatch(r -> r.getYear() == year);
     }
 
 
@@ -125,15 +124,13 @@ public class StatController extends AbstractController {
     protected String toHighChartJs(List<StatData> datas) {
         if (datas.isEmpty()) return "{}";
 
-
-        var keys = new StringBuilder();
-        var vals = new StringBuilder();
-        for (StatData data : datas) {
-            keys.append("\"").append(data.key.replace('\'', ' ')).append("\",");
-            vals.append(data.value).append(",");
-        }
-        keys.deleteCharAt(keys.lastIndexOf(","));
-        vals.deleteCharAt(vals.lastIndexOf(","));
+        var keys = datas.stream()
+                .map(e ->  "\"" + e.key.replace('\'', ' ') + "\"")
+                .collect(joining(","));
+        var vals = datas.stream()
+                .map(e -> e.value)
+                .map(String::valueOf)
+                .collect(joining(","));
 
         return """
                 {
