@@ -5,7 +5,7 @@
 
     <groupId>com.obourgain</groupId>
     <artifactId>mylib</artifactId>
-    <version>13-preview</version>
+    <version>14-preview</version>
     <packaging>jar</packaging>
 
     <name>mylib</name>
@@ -14,14 +14,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>13</java.version>
+        <java.version>14</java.version>
         <lucene.version>8.4.1</lucene.version>
     </properties>
 
@@ -136,8 +136,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>13</source>
-                    <target>13</target>
+                    <source>14</source>
+                    <target>14</target>
                     <compilerArgs>
                         --enable-preview
                     </compilerArgs>
