@@ -63,10 +63,15 @@ class BookList extends Component {
 
     render() {
         const {book} = this.props;
+
         if (book.error) {
             return (<Container>Something went wrong</Container>);
         }
+        if (book.pending) {
+            return (<Container>Loading...</Container>);
+        }
 
+        const list = this.props.book.list;
         return (<Container>
             <Row className="filter-bar">
                 <Col className="col-8">
@@ -84,12 +89,12 @@ class BookList extends Component {
                 </Col>
             </Row>
             <Row><h3>Your library</h3></Row>
-            {book.list && <>
+            {list && <>
                 <Row>
                     <Col className="col-4" id="list-header-summary">
-                        {book.list.totalElements} results
-                        {book.list.totalPages > 1 && <span>
-                            , showing page {book.list.number + 1} of {book.list.totalPages}
+                        {list.totalElements} results
+                        {list.totalPages > 1 && <span>
+                            , showing page {list.number + 1} of {list.totalPages}
                         </span>}
                         {this.state.activeFilter && <span>
                             , filter on <strong>{this.state.activeFilter}</strong>{' '}
@@ -97,7 +102,7 @@ class BookList extends Component {
                         </span>}
                     </Col>
                     <Col className="col-5">
-                        <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.changePage}/>
+                        <Pagination path="/books" page={list.number} nbPages={list.totalPages} updatePage={this.changePage}/>
                     </Col>
                     <Col className="col-3">
                         <span>Show{' '}</span>
@@ -111,10 +116,10 @@ class BookList extends Component {
                         <span> books</span>
                     </Col>
                 </Row>
-                {book.list.numberOfElements === 0 && <Row>
+                {list.numberOfElements === 0 && <Row>
                     <Col>No book found</Col>
                 </Row>}
-                {book.list.numberOfElements > 0 && <Row>
+                {list.numberOfElements > 0 && <Row>
                     <Table bordered striped size="sm">
                         <thead>
                         <tr className="row">
@@ -125,7 +130,7 @@ class BookList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {book.list.content && book.list.content.map(book => this.renderBook(book))}
+                        {list.content && list.content.map(book => this.renderBook(book))}
                         </tbody>
                     </Table>
                 </Row>}
