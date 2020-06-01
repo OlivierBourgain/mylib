@@ -16,10 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-<<<<<<< HEAD
-=======
-import org.springframework.data.domain.Sort.Order;
->>>>>>> Migration react - Pagination
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -50,9 +46,6 @@ public class BookService {
 
     @Autowired
     private LuceneSearch luceneSearch;
-
-    @Autowired
-    private TagService tagService;
 
     /**
      * Return the list of books for a user.
