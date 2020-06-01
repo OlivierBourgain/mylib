@@ -11,7 +11,7 @@ import Pagination from "./tools/pagination";
 class BookList extends Component {
     state = {
         page: 0,
-        size: 20,
+        size: 100,
         activeFilter: '',
         term: '',
         discarded: false,
@@ -19,8 +19,7 @@ class BookList extends Component {
         descending: true
     }
 
-    constructor(props) {
-        super(props);
+    componentDidMount() {
         this.updateList()
     }
 
@@ -87,7 +86,7 @@ class BookList extends Component {
             <Row><h3>Your library</h3></Row>
             {book.list && <>
                 <Row>
-                    <Col className="col-5" id="list-header-summary">
+                    <Col className="col-4" id="list-header-summary">
                         {book.list.totalElements} results
                         {book.list.totalPages > 1 && <span>
                             , showing page {book.list.number + 1} of {book.list.totalPages}
@@ -100,7 +99,7 @@ class BookList extends Component {
                     <Col className="col-5">
                         <Pagination page={book.list.number} nbPages={book.list.totalPages} updatePage={this.changePage}/>
                     </Col>
-                    <Col className="col-2">
+                    <Col className="col-3">
                         <span>Show{' '}</span>
                         <select value={this.state.size} onChange={this.changeSize}>
                             <option value={10}>10</option>
