@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,19 @@ public class BookResource extends AbstractResource {
 
     @Autowired
     private TagService tagService;
+
+
+    /**
+     * Lookup for a new book (on Amazon, based on the ASIN or the ISBN).
+     *
+     * @return the book, or null if not found.
+     */
+    @GetMapping(value = "/lookup")
+    public ResponseEntity<Book> lookup(HttpServletRequest request, @RequestParam String term) throws Exception {
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        Book book = bookService.lookup(userId, term);
+        return new ResponseEntity<>(book, HttpStatus.OK);
+    }
 
     /**
      * @return the list of books for a user.

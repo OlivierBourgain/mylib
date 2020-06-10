@@ -155,9 +155,9 @@ public class BookListController extends AbstractController {
         Book book = null;
         if (isbn.toLowerCase().startsWith("asin")) {
             String asin = isbn.substring(isbn.indexOf(':') + 1).trim();
-            book = bookService.asinLookup(user, asin);
+            book = bookService.asinLookup(user.getId(), asin);
         } else {
-            book = bookService.isbnLookup(user, isbn);
+            book = bookService.isbnLookup(user.getId(), isbn);
         }
         if (book == null) {
             model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");

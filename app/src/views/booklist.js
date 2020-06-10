@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import { Redirect } from 'react-router';
 import {Col, Container, Row, Table, Input, Button} from 'reactstrap'
 
 import Tag from './tag'
-import {fetchBooks} from '../actions/book.action'
+import {fetchBooks, lookup} from '../actions/book.action'
 import Pagination from "./tools/pagination";
 
 class BookList extends Component {
@@ -24,6 +25,12 @@ class BookList extends Component {
     }
 
     updateList = () => {
+        const term = this.state.term;
+        if (this.isIsbn(term) || this.isAsin(term)) {
+            this.props.lookup(term);
+            return;
+        }
+
         this.setState({activeFilter: this.state.term})
         this.props.fetchBooks(
             this.state.page,
@@ -60,10 +67,26 @@ class BookList extends Component {
         this.setState({term: ''}, this.updateList)
     }
 
+    /** Check if the search term looks like an ISBN number */
+    isIsbn = s => {
+        if (!s) return false;
+        const isbnRegex = /^(97(8|9))?\d{9}(\d|X)$/
+        return s.replace(/[-\s]/g, '').match(isbnRegex) !== null;
+    }
+
+    /** Check if the search term looks like an ASIN number */
+    isAsin = s => {
+        if (!s) return false;
+        return s.toLowerCase().startsWith("asin:")
+    }
+
 
     render() {
         const {book} = this.props;
 
+        if (book.redirectTo) {
+            return (<Redirect to={'book/' + book.redirectTo}/>)
+        }
         if (book.error) {
             return (<Container>Something went wrong</Container>);
         }
@@ -157,7 +180,7 @@ class BookList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBooks}, dispatch);
+    return bindActionCreators({fetchBooks, lookup}, dispatch);
 }
 
 function mapStateToProps({book}) {
