@@ -106,7 +106,7 @@ class BookList extends Component {
                 <Col className="col-4">
                     <div className="row">
                         <label htmlFor="showDisc">
-                            <input type="checkbox" id="showDisc" onChange={this.changeDiscarded} /> Show discarded
+                            <input type="checkbox" id="showDisc" checked={this.state.discarded} onChange={this.changeDiscarded} /> Show discarded
                         </label>
                     </div>
                 </Col>
