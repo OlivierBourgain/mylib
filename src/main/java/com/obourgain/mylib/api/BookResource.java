@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -80,6 +81,16 @@ public class BookResource extends AbstractResource {
         Set<Tag> tags = tagService.getTags(book.getTagString(), userId);
         bookService.createOrUpdateBook(book, userId, tags);
         return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
+    /**
+     * Delete a book
+     */
+    @DeleteMapping(value = "/book/{id}")
+    public void delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        bookService.deleteBook(userId, id);
+        return;
     }
 }
 

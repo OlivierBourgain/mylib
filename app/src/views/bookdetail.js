@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import {Redirect} from 'react-router';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import moment from 'moment'
 
 import {fetchTags} from '../actions/tag.action'
-import {fetchBook, updateBook} from '../actions/book.action'
+import {fetchBook, updateBook, deleteBook} from '../actions/book.action'
 
 import {Button, Col, Container, FormGroup, Label, Row} from 'reactstrap'
 import {Field, Form, Formik} from 'formik';
@@ -32,8 +33,16 @@ class BookDetail extends Component {
         this.setState({selectedTags: values});
     }
 
+    deleteBook = (id) => {
+        this.props.deleteBook(id);
+    }
+
     render() {
         const book = this.props.book;
+
+        if (book.redirectTo) {
+            return (<Redirect to={book.redirectTo}/>)
+        }
 
         if (book.pending || !book.detail || book.detail === {}) {
             return (<Container>Loading...</Container>);
@@ -46,6 +55,7 @@ class BookDetail extends Component {
         const bookTags = book.detail.tags ? book.detail.tags.map(tag => ({value: tag.text, label: tag.text})) : [];
         const imgUrl = `http://localhost:2017/store/${book.detail.largeImage}`;
 
+        // Styling the tag list
         const customStyles = {
             multiValue: (styles, {data}) => {
                 const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
@@ -122,6 +132,9 @@ class BookDetail extends Component {
                             <Form>
                                 <FormGroup row>
                                     <div className="text-right col-12">
+                                        <Button className="btn btn-danger"
+                                                onClick={() => { if (window.confirm('Are you sure?')) this.deleteBook(book.detail.id) }}>Delete
+                                        </Button>{' '}
                                         <Button type="submit" disabled={isSubmitting}
                                                 color="success">Submit</Button>{' '}
                                     </div>
@@ -217,7 +230,7 @@ class BookDetail extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBook, updateBook, fetchTags}, dispatch);
+    return bindActionCreators({fetchBook, updateBook, fetchTags, deleteBook}, dispatch);
 }
 
 function mapStateToProps(state) {

@@ -82,6 +82,7 @@ public class BookService {
     public void deleteBook(String userId, Long bookId) {
         Book b = findBook(userId, bookId);
         if (b == null) return;
+        luceneSearch.removeFromIndex(b.getId());
         bookRepository.delete(b);
     }
 

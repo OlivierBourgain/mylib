@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import { Redirect } from 'react-router';
-import {Col, Container, Row, Table, Input, Button} from 'reactstrap'
+import {Redirect} from 'react-router';
+import {Button, Col, Container, Input, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
 import {fetchBooks, lookup} from '../actions/book.action'
@@ -47,15 +47,15 @@ class BookList extends Component {
     }
 
     changeSize = event => {
-        this.setState({ size : event.target.value }, this.updateList);
+        this.setState({size: event.target.value}, this.updateList);
     }
 
     changeDiscarded = event => {
-        this.setState({ discarded : event.target.checked }, this.updateList);
+        this.setState({discarded: event.target.checked}, this.updateList);
     }
 
     changePage = page => {
-        this.setState({ page }, this.updateList);
+        this.setState({page}, this.updateList);
     }
 
     changeSort = col => {
@@ -83,9 +83,8 @@ class BookList extends Component {
 
     render() {
         const {book} = this.props;
-
         if (book.redirectTo) {
-            return (<Redirect to={'book/' + book.redirectTo}/>)
+            return (<Redirect to={book.redirectTo}/>)
         }
         if (book.error) {
             return (<Container>Something went wrong</Container>);
@@ -99,14 +98,17 @@ class BookList extends Component {
             <Row className="filter-bar">
                 <Col className="col-8">
                     <Row>
-                        <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
-                        <Button type="button" color="success" className="col-2" onClick={this.updateList}>Submit</Button>
+                        <Col className="col-8"><Input type="text" value={this.state.term}
+                                                      onChange={this.changeTerm}/></Col>
+                        <Button type="button" color="success" className="col-2"
+                                onClick={this.updateList}>Submit</Button>
                     </Row>
                 </Col>
                 <Col className="col-4">
                     <div className="row">
                         <label htmlFor="showDisc">
-                            <input type="checkbox" id="showDisc" checked={this.state.discarded} onChange={this.changeDiscarded} /> Show discarded
+                            <input type="checkbox" id="showDisc" checked={this.state.discarded}
+                                   onChange={this.changeDiscarded}/> Show discarded
                         </label>
                     </div>
                 </Col>
@@ -121,11 +123,13 @@ class BookList extends Component {
                         </span>}
                         {this.state.activeFilter && <span>
                             , filter on <strong>{this.state.activeFilter}</strong>{' '}
-                            (<button id="removeFilter" onClick={this.clearFilter} className="link-button">remove</button>)
+                            (<button id="removeFilter" onClick={this.clearFilter}
+                                     className="link-button">remove</button>)
                         </span>}
                     </Col>
                     <Col className="col-5">
-                        <Pagination path="/books" page={list.number} nbPages={list.totalPages} updatePage={this.changePage}/>
+                        <Pagination path="/books" page={list.number} nbPages={list.totalPages}
+                                    updatePage={this.changePage}/>
                     </Col>
                     <Col className="col-3">
                         <span>Show{' '}</span>
@@ -146,10 +150,14 @@ class BookList extends Component {
                     <Table bordered striped size="sm">
                         <thead>
                         <tr className="row">
-                            <th className="col-5"><Link to='/books' onClick={() => this.changeSort('Title')}>Title</Link></th>
-                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Author')}>Author</Link></th>
-                            <th className="col-1"><Link to='/books' onClick={() => this.changeSort('Pages')}>Pages</Link></th>
-                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link></th>
+                            <th className="col-5"><Link to='/books'
+                                                        onClick={() => this.changeSort('Title')}>Title</Link></th>
+                            <th className="col-3"><Link to='/books'
+                                                        onClick={() => this.changeSort('Author')}>Author</Link></th>
+                            <th className="col-1"><Link to='/books'
+                                                        onClick={() => this.changeSort('Pages')}>Pages</Link></th>
+                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>

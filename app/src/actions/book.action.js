@@ -7,6 +7,7 @@ export const FETCH_BOOKS = 'FETCH_BOOKS';
 export const FETCH_BOOK = 'FETCH_BOOK';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
 export const LOOKUP_BOOK = 'LOOKUP_BOOK';
+export const DELETE_BOOK = 'DELETE_BOOK';
 
 export const lookup = (term) => {
     const url = `${ROOT_URL}/lookup?term=${term}`
@@ -49,6 +50,17 @@ export function updateBook(book) {
 
     return {
         type: UPDATE_BOOK,
+        payload: request
+    }
+}
+
+export function deleteBook(bookId) {
+    const url = `${ROOT_URL}/book/${bookId}`;
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.delete(url, {headers: {"Authorization" : `Bearer ${idToken}`}});
+
+    return {
+        type: DELETE_BOOK,
         payload: request
     }
 }

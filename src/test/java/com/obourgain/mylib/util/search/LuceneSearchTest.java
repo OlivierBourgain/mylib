@@ -167,4 +167,23 @@ public class LuceneSearchTest {
     }
 
 
+    @Test
+    public void addAndDelete() {
+        Book book = new Book();
+        book.setId(78L);
+        book.setUserId("TEST");
+        book.setTitle("WRONG BOOK");
+        book.setTags(new HashSet<>());
+        book.setUpdated(LocalDateTime.now());
+        fixture.addToIndex(book);
+
+        List<Book> res1 = fixture.search("TEST", "WRONG BOOK", false, 10);
+        assertEquals(78L, res1.get(0).getId().longValue());
+
+        fixture.removeFromIndex(78L);
+        List<Book> res2 = fixture.search("TEST", "WRONG BOOK", false, 10);
+        assertEquals(0, res2.size());
+    }
+
+
 }

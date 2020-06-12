@@ -6,14 +6,24 @@ import com.obourgain.mylib.vobj.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
-import org.apache.lucene.document.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StoredField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
@@ -168,6 +178,20 @@ public class LuceneSearch {
         }
     }
 
+    /**
+     * Remove a document from the index
+     */
+    public void removeFromIndex(Long bookId) {
+        log.info("Removing book from index " + bookId);
+        IndexWriterConfig config = new IndexWriterConfig(ANALYSER);
+        try (IndexWriter writer = new IndexWriter(index, config)) {
+            Term term = new Term(FIELD_ID, "" + bookId);
+            writer.deleteDocuments(term);
+        } catch (IOException e) {
+            throw new SearchUnavailableException("Index non disponible", e);
+        }
+    }
+
     // Add one document to index, using the writer passed as an argument.
     private void addOneDocToIndex(IndexWriter w, Book book) throws IOException {
         Document doc = new Document();
@@ -291,5 +315,6 @@ public class LuceneSearch {
         if (status != null) book.setStatus(BookStatus.valueOf(status));
         return book;
     }
+
 
 }
