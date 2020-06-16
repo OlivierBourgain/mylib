@@ -47,12 +47,10 @@ public class TagService {
         Set<Tag> res = new HashSet<>();
 
         var alltags = tagRepository.findByUserId(userId);
-
-        alltags.stream().forEach(System.out::println);
         for (String text : texts) {
             Tag t = alltags
                     .stream()
-                    .filter(x -> x.getText().equals(text.trim()))
+                    .filter(tag -> tag.getText().equals(text.trim()))
                     .findFirst()
                     .orElseGet(() -> createNewTag(text, userId));
             res.add(t);

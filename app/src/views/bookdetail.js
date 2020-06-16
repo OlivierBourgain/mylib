@@ -25,7 +25,9 @@ class BookDetail extends Component {
     }
 
     handleSubmit = values => {
-        values.tagString = this.state.selectedTags ? this.state.selectedTags.map(tag => tag.value).join(",") : "";
+        values.tagString = this.state.selectedTags ?
+            this.state.selectedTags.map(tag => tag.value).join(",") :
+            this.props.book.detail.tags.map(tag => tag.text).join(",");
         this.props.updateBook(values);
     }
 

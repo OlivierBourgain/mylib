@@ -73,7 +73,8 @@ public class BookResource extends AbstractResource {
     }
 
     /**
-     * Updates a book
+     * Updates a book.
+     * The tag list is updated from the tagstring value of the book.
      */
     @PostMapping(value = "/book")
     public ResponseEntity<Book> update(HttpServletRequest request, @RequestBody Book book) throws Exception {
