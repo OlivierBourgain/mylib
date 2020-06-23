@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
@@ -59,6 +62,17 @@ public class BookResource extends AbstractResource {
         String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
         Page<Book> books = bookService.getBooks(criteria, discarded, page, userId);
         return new ResponseEntity<>(books, HttpStatus.OK);
+    }
+
+    /**
+     * @return the list of book titles for a user.
+     */
+    @GetMapping(value = "/booktitles")
+    public ResponseEntity<Map<Long, String>> getBooks(HttpServletRequest request) throws Exception {
+        log.info("REST - booktitles");
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        Map<Long, String> res = bookService.findByUserId(userId).stream().collect(Collectors.toMap(Book::getId, Book::getTitle));
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     /**

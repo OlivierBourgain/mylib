@@ -15,6 +15,7 @@ export const FAILURE = actionType => `${actionType}_REJECTED`;
 
 const rootReducer = combineReducers({
     book: BookReducer,
+    booktitles: BookReducer,
     reading: ReadingReducer,
     account: AccountReducer,
     tag: TagReducer

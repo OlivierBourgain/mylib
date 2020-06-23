@@ -4,6 +4,7 @@ import {store} from "../index";
 const ROOT_URL = 'http://127.0.0.1:2017/api';
 
 export const FETCH_BOOKS = 'FETCH_BOOKS';
+export const FETCH_BOOK_TITLES = 'FETCH_BOOK_TITLES';
 export const FETCH_BOOK = 'FETCH_BOOK';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
 export const LOOKUP_BOOK = 'LOOKUP_BOOK';
@@ -28,6 +29,17 @@ export function fetchBooks(page, size, term, discarded, sort, descending) {
 
     return {
         type: FETCH_BOOKS,
+        payload: request
+    }
+}
+
+export function fetchBookTitles() {
+    const url = `${ROOT_URL}/booktitles`;
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
+
+    return {
+        type: FETCH_BOOK_TITLES,
         payload: request
     }
 }

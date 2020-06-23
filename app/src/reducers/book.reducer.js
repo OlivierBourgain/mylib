@@ -1,5 +1,5 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
-import {FETCH_BOOKS, FETCH_BOOK, LOOKUP_BOOK, DELETE_BOOK, UPDATE_BOOK} from '../actions/book.action';
+import {FETCH_BOOKS, FETCH_BOOK_TITLES, FETCH_BOOK, LOOKUP_BOOK, DELETE_BOOK, UPDATE_BOOK} from '../actions/book.action';
 
 export default function (state = {}, action) {
     switch (action.type) {
@@ -22,6 +22,17 @@ export default function (state = {}, action) {
         }
         case SUCCESS(FETCH_BOOKS): {
             return {...state, pending: false, error: false, list: action.payload.data, redirectTo: undefined};
+        }
+        case SUCCESS(FETCH_BOOK_TITLES): {
+            // Transform the result
+            // from  {1: "Fondation", 2: "Dune"}
+            // to    [{ value: '1', label: 'Fondation }, { value: '2', label: 'Dune'}]
+            const titleList = [];
+            for (const item in action.payload.data) {
+                titleList.push({ value: item, label: action.payload.data[item]})
+            }
+            titleList.sort((a, b) => a.label.localeCompare(b.label));
+            return {...state, list: titleList };
         }
         case SUCCESS(UPDATE_BOOK): {
             return {...state, pending: false, error: false, redirectTo: "/books"};

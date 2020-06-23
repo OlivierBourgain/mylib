@@ -66,9 +66,9 @@ public class ReadingService {
     /**
      * Save a new reading.
      */
-    public void save(User user, Book book, LocalDate date) {
+    public void save(String userId, Book book, LocalDate date) {
         Reading r = new Reading();
-        r.setUserId(user.getId());
+        r.setUserId(userId);
         r.setBook(book);
         r.setDate(date);
         r.setYear(date.getYear());

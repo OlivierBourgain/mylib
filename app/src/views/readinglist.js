@@ -1,21 +1,31 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Col, Container, Row, Table} from 'reactstrap';
-import {fetchReadings, deleteReading} from '../actions/reading.action';
+import {Button, Col, Container, Input, Row, Table} from 'reactstrap';
 import {Link} from "react-router-dom";
+import Select, {createFilter} from "react-select";
 import Pagination from "./tools/pagination";
 
+import {addReading, deleteReading, fetchReadings} from '../actions/reading.action';
+import {fetchBookTitles} from '../actions/book.action';
+
+/**
+ * State: page, size, sort
+ * Props: reading{error, pending, list}, booktitles{list}
+ */
 class ReadingList extends Component {
     state = {
         page: 0,
         size: 100,
         sort: 'date',
-        descending: true
+        descending: true,
+        selectedBook: undefined,
+        selectedDate: new Date().toISOString().split('T')[0]
     }
 
     componentDidMount() {
         this.updateList()
+        this.props.fetchBookTitles();
     }
 
     updateList = () => {
@@ -27,11 +37,11 @@ class ReadingList extends Component {
     }
 
     changeSize = event => {
-        this.setState({ size : event.target.value }, this.updateList);
+        this.setState({size: event.target.value}, this.updateList);
     }
 
-     changePage = page => {
-        this.setState({ page }, this.updateList);
+    changePage = page => {
+        this.setState({page}, this.updateList);
     }
 
     changeSort = col => {
@@ -40,12 +50,20 @@ class ReadingList extends Component {
     }
 
     delete = (reading) => {
-        console.log("deleting", reading);
         this.props.deleteReading(reading);
+    }
+
+    addReading = (e) => {
+        e.preventDefault();
+        if (!this.state.selectedBook || !this.state.selectedDate) return;
+        this.props.addReading(this.state.selectedBook, this.state.selectedDate);
     }
 
     render() {
         const reading = this.props.reading;
+        const titlelist = this.props.booktitles.list;
+        // Get today's date formatted yyyy-mm-dd
+        const today = new Date().toISOString().split('T')[0];
 
         if (reading.error) {
             return (<Container>Something went wrong</Container>);
@@ -56,50 +74,73 @@ class ReadingList extends Component {
 
         const list = this.props.reading.list;
         return (<Container>
-            <Row id="readings-list">
-                <h3>Your reading history</h3>
-                {!list && <Row className="col-12">
-                    <Col>No book read</Col>
-                </Row>}
-                {list && <>
-                    <Row className="col-12">
-                        <Col id="list-header-summary" className="col-4">
-                            {list.totalElements} results
-                            {list.totalPages > 1 && <span>
+            <Row className="filter-bar">
+                <Col className="col-12">
+                    <form onSubmit={this.addReading}>
+                        <Row>
+                            <Col className="col-5">
+                                <Select name="title" filterOption={createFilter({ignoreAccents: false})}
+                                        options={titlelist}
+                                        onChange={(book) => this.setState({selectedBook: book.value})}/>
+                            </Col>
+                            <Col className="col-3">
+                                <Input name="dateread" type="date" defaultValue={today}
+                                       onChange={(e) => this.setState({selectedDate: e.target.value})}/>
+                            </Col>
+                            <Col className="col-3"><Button className="btn btn-success">Add</Button></Col>
+                        </Row>
+                    </form>
+                </Col>
+            </Row><Row id="readings-list">
+            <h3>Your reading history</h3>
+            {!list && <Row className="col-12">
+                <Col>No book read</Col>
+            </Row>}
+            {list && <>
+
+                <Row className="col-12">
+                    <Col id="list-header-summary" className="col-4">
+                        {list.totalElements} lines
+                        {list.totalPages > 1 && <span>
                             , showing page {list.number + 1} of {list.totalPages}
-                        </span>}
-                        </Col>
-                        <Col className="col-5">
-                            <Pagination path="/readings" page={list.number} nbPages={list.totalPages} updatePage={this.changePage}/>
-                        </Col>
-                        <Col className="col-3">
-                            <span>Show{' '}</span>
-                            <select value={this.state.size} onChange={this.changeSize}>
-                                <option value={10}>10</option>
-                                <option value={20}>20</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                                <option value={1000}>1000</option>
-                            </select>
-                            <span> books</span>
-                        </Col>
-                    </Row>
-                    <Table bordered striped size="sm">
-                        <thead>
-                        <tr className="row">
-                            <th className="col-5"><Link to='/readings' onClick={() => this.changeSort('Book.title')}>Title</Link></th>
-                            <th className="col-3"><Link to='/readings' onClick={() => this.changeSort('Book.author')}>Author</Link></th>
-                            <th className="col-1"><Link to='/readings' onClick={() => this.changeSort('Book.pages')}>Pages</Link></th>
-                            <th className="col-2"><Link to='/readings' onClick={() => this.changeSort('Date')}>Date read</Link></th>
-                            <th className="col-1"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {list.content && list.content.map(it => this.renderReading(it))}
-                        </tbody>
-                    </Table>
-                </>}
-            </Row>
+                            </span>}
+                    </Col>
+                    <Col className="col-5">
+                        <Pagination path="/readings" page={list.number} nbPages={list.totalPages}
+                                    updatePage={this.changePage}/>
+                    </Col>
+                    <Col className="col-3">
+                        <span>Show{' '}</span>
+                        <select value={this.state.size} onChange={this.changeSize}>
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                            <option value={1000}>1000</option>
+                        </select>
+                        <span> lines</span>
+                    </Col>
+                </Row>
+                <Table bordered striped size="sm">
+                    <thead>
+                    <tr className="row">
+                        <th className="col-5"><Link to='/readings'
+                                                    onClick={() => this.changeSort('Book.title')}>Title</Link></th>
+                        <th className="col-3"><Link to='/readings'
+                                                    onClick={() => this.changeSort('Book.author')}>Author</Link></th>
+                        <th className="col-1"><Link to='/readings'
+                                                    onClick={() => this.changeSort('Book.pages')}>Pages</Link></th>
+                        <th className="col-2"><Link to='/readings' onClick={() => this.changeSort('Date')}>Date
+                            read</Link></th>
+                        <th className="col-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {list.content && list.content.map(it => this.renderReading(it))}
+                    </tbody>
+                </Table>
+            </>}
+        </Row>
         </Container>);
     }
 
@@ -119,11 +160,11 @@ class ReadingList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchReadings, deleteReading}, dispatch);
+    return bindActionCreators({fetchReadings, deleteReading, fetchBookTitles, addReading}, dispatch);
 }
 
-function mapStateToProps({reading}) {
-    return {reading};
+function mapStateToProps({booktitles, reading}) {
+    return {booktitles, reading};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReadingList);
