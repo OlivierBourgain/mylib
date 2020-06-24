@@ -13,9 +13,21 @@ import {Field, Form, Formik} from 'formik';
 
 import CreatableSelect from 'react-select/creatable';
 
+/**
+ * This page is the book detail. It is a form, with two actions: update and delete.
+ * Both actions lead back to the book list.
+ *
+ * Props
+ * - id: the book id
+ * // Mapped from global state
+ * - book.detail: The book object
+ * - book.redirectTo: This property is set after an action, indicates the page we should redirect to (typically /books)
+ * - tag.list: List of tags for the tag selector
+ */
 class BookDetail extends Component {
     state = {
         selectedTags: null,
+        tagUpdate: false   // Indicate if the tags have changed.
     }
 
     constructor(props) {
@@ -25,14 +37,15 @@ class BookDetail extends Component {
     }
 
     handleSubmit = values => {
-        values.tagString = this.state.selectedTags ?
-            this.state.selectedTags.map(tag => tag.value).join(",") :
-            this.props.book.detail.tags.map(tag => tag.text).join(",");
+        if (this.state.tagUpdate)
+            values.tagString = this.state.selectedTags ? this.state.selectedTags.map(tag => tag.value).join(",") : '';
+        else
+            values.tagString = this.props.book.detail.tags.map(tag => tag.text).join(",");
         this.props.updateBook(values);
     }
 
     tagChange = values => {
-        this.setState({selectedTags: values});
+        this.setState({selectedTags: values, tagUpdate: true});
     }
 
     deleteBook = (id) => {
