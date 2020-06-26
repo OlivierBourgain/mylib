@@ -12,6 +12,7 @@ import * as serviceWorker from './serviceWorker';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import './app.scss';
 
 const createStoreWithMiddleware = applyMiddleware(promise, thunk)(createStore);
 export const store = createStoreWithMiddleware(reducers);

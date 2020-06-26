@@ -4,6 +4,7 @@ import BookReducer from './book.reducer';
 import ReadingReducer from './reading.reducer';
 import AccountReducer from './account.reducer';
 import TagReducer from './tag.reducer';
+import StatReducer from './stat.reducer';
 
 /**
  * For Redux promise, generate action types for PENDING, SUCCESS and FAILURE
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
     booktitles: BookReducer,
     reading: ReadingReducer,
     account: AccountReducer,
-    tag: TagReducer
+    tag: TagReducer,
+    stat: StatReducer
 
 });
 

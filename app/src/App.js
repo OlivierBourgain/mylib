@@ -3,7 +3,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from "react-redux";
 import {GoogleLogin} from 'react-google-login';
 
-import './app.scss';
 import Header from './views/header';
 import BookList from './views/booklist';
 import BookDetail from './views/bookdetail';
