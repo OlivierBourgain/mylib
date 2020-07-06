@@ -5,11 +5,15 @@ import {Col, Container, Row} from 'reactstrap';
 
 import BarChart from "./tools/barchart";
 
-import {fetchStats} from '../actions/stat.action'
+import {fetchStats, fetchStatsDetail} from '../actions/stat.action'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faExpandAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 class Stats extends Component {
     state = {
-        year: 2020
+        year: 2020,
+        showDetail: false,
+        titleDetail: ''
     }
 
     constructor(props) {
@@ -20,12 +24,35 @@ class Stats extends Component {
     update = () => { this.props.fetchStats(this.state.year); }
 
     changeYear = (event) => {
-        this.setState({year: event.target.value}, this.update)
-
+        this.setState({year: event.target.value, showDetail:false}, this.update)
     }
 
+    showDetail = (statName) => {
+        this.props.fetchStatsDetail(statName, this.state.year);
+        switch(statName) {
+            case 'booksbytag':
+                this.setState({titleDetail:'Top tags (books)', cssDetail: statName});
+                break;
+            case 'pagesbytag':
+                this.setState({titleDetail:'Top tags (pages)', cssDetail: statName});
+                break;
+            case 'booksbyauthor':
+                this.setState({titleDetail:'Top authors (books)', cssDetail: statName});
+                break;
+            case 'pagesbyauthor':
+                this.setState({titleDetail:'Top authors (pages)', cssDetail: statName});
+                break;
+            default: break;
+        }
+        this.setState({showDetail: true})
+    };
+
+    closeDetail = () => {
+        this.setState({showDetail: false})
+    };
+
     render() {
-        if (!this.props.stats) return null;
+        if (!this.props.list) return null;
         return (
             <Container>
                 <Row>
@@ -41,61 +68,72 @@ class Stats extends Component {
                         </label>
                     </Col>
                 </Row>
-                <Row>
+                {this.state.showDetail && !this.props.detailpending && <Row>
+                    <Col className="stat-box col-12">
+                        <div id="statdetail" className={"inner-stat-box " + this.state.cssDetail}>
+                            <FontAwesomeIcon icon={faTimes} onClick={() => this.closeDetail()}/>
+                            <h4>{this.state.titleDetail}</h4>
+                            <BarChart width={1000} height={231} type='bar' data={this.props.detail}/>
+                        </div>
+                    </Col>
+                </Row>
+                }
+                {(!this.state.showDetail || this.props.detailpending) && <Row>
                     <Col className="stat-box col-3">
-                        <div id="booksbytag" className="inner-stat-box">
-                            <i className="fa fa-expand" aria-hidden="true"></i>
+                        <div className="inner-stat-box booksbytag">
+                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('booksbytag')}/>
                             <h4>Top tags (books)</h4>
-                            <BarChart type='horizontalBar' data={this.props.stats.booksByTag}/>
+                            <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.booksByTag}/>
                         </div>
                     </Col>
                     <Col className="col-3 stat-box">
-                        <div id="pagesbytag" className="inner-stat-box">
-                            <i className="fa fa-expand" aria-hidden="true"></i>
+                        <div id="pagesbytag" className="inner-stat-box pagesbytag">
+                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('pagesbytag')}/>
                             <h4>Top tags (pages)</h4>
-                            <BarChart type='horizontalBar' data={this.props.stats.pagesByTag}/>
+                            <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.pagesByTag}/>
                         </div>
                     </Col>
                     <Col className="col-3 stat-box">
-                        <div id="booksbyauthor" className="inner-stat-box">
-                            <i className="fa fa-expand" aria-hidden="true"></i>
+                        <div className="inner-stat-box booksbyauthor">
+                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('booksbyauthor')}/>
                             <h4>Top authors (books)</h4>
-                            <BarChart type='horizontalBar' data={this.props.stats.booksByAuthor}/>
+                            <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.booksByAuthor}/>
                         </div>
                     </Col>
                     <Col className="col-3 stat-box">
-                        <div id="pagesbyauthor" className="inner-stat-box">
-                            <i className="fa fa-expand" aria-hidden="true"></i>
+                        <div className="inner-stat-box pagesbyauthor">
+                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('pagesbyauthor')}/>
                             <h4>Top authors (pages)</h4>
-                            <BarChart type='horizontalBar' data={this.props.stats.pagesByAuthor}/>
+                            <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.pagesByAuthor}/>
                         </div>
                     </Col>
                 </Row>
+                }
                 <Row>
                     <Col className="col-6 stat-box">
-                        <div id="booksbymonth" className="inner-stat-box">
+                        <div className="inner-stat-box booksbymonth">
                             <h4>Books per month</h4>
-                            <BarChart type='bar' data={this.props.stats.booksByMonth}/>
+                            <BarChart type='bar' width={100} height={30} data={this.props.list.booksByMonth}/>
                         </div>
                     </Col>
                     <Col className="col-6 stat-box">
-                        <div id="pagesbymonth" className="inner-stat-box">
+                        <div className="inner-stat-box pagesbymonth">
                             <h4>Pages per month</h4>
-                            <BarChart type='bar' data={this.props.stats.pagesByMonth}/>
+                            <BarChart type='bar' width={100} height={30} data={this.props.list.pagesByMonth}/>
                         </div>
                     </Col>
                 </Row>
                 <Row>
                     <Col className="col-6 stat-box">
-                        <div id="booksbyyear" className="inner-stat-box">
+                        <div className="inner-stat-box booksbyyear">
                             <h4>Books per year</h4>
-                            <BarChart type='bar' data={this.props.stats.booksByYear}/>
+                            <BarChart type='bar' width={100} height={30} data={this.props.list.booksByYear}/>
                         </div>
                     </Col>
                     <Col className="col-6 stat-box">
-                        <div id="pagesbyyear" className="inner-stat-box">
+                        <div className="inner-stat-box pagesbyyear">
                             <h4>Pages per year</h4>
-                            <BarChart type='bar' data={this.props.stats.pagesByYear}/>
+                            <BarChart type='bar' width={100} height={30} data={this.props.list.pagesByYear}/>
                         </div>
                     </Col>
                 </Row>
@@ -104,11 +142,11 @@ class Stats extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchStats}, dispatch);
+    return bindActionCreators({fetchStats, fetchStatsDetail}, dispatch);
 }
 
 function mapStateToProps(state) {
-    return {stats: state.stat.list};
+    return state.stat;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stats);

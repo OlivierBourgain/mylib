@@ -29,14 +29,16 @@ ul.pagination li span{min-width:35px;text-align:center}
 .stat-box { padding: 0 }
 .container { box-sizing: content-box }
 .inner-stat-box {color: white;text-align: center;padding: 10px;margin: 5px 5px;}
-#booksbytag { background: linear-gradient(to left bottom, #9BC500, #69A700) }
-#pagesbytag { background: linear-gradient(to left bottom, #F8C600, #F5AB00) }
-#booksbyauthor { background: linear-gradient(to left bottom, #DC504C, #CD3632) }
-#pagesbyauthor { background: linear-gradient(to left bottom, #A14EA0, #713470) }
-#booksbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE)}
-#pagesbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
-#booksbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
-#pagesbymonth {background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF)}
+.fa-expand-alt, .fa-times {float: right;cursor: pointer}
+.stat-extended{ position:absolute; z-index: 50;}
+.booksbytag { background: linear-gradient(to left bottom, #9BC500, #69A700) }
+.pagesbytag { background: linear-gradient(to left bottom, #F8C600, #F5AB00) }
+.booksbyauthor { background: linear-gradient(to left bottom, #DC504C, #CD3632) }
+.pagesbyauthor { background: linear-gradient(to left bottom, #A14EA0, #713470) }
+.booksbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE)}
+.pagesbyyear { background: linear-gradient(to left bottom, #A7D1F2, #7FBDEE) }
+.booksbymonth { background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF) }
+.pagesbymonth {background: linear-gradient(to left bottom, #EDC7DF, #E5ABCF)}
 
 // CSS to make button looks like a link. From https://github.com/evcohen/eslint-plugin-jsx-a11y/blob/master/docs/rules/anchor-is-valid.md
 .link-button {background-color: transparent;border: none;cursor: pointer;text-decoration: underline;display: inline;margin: 0;padding: 0;}

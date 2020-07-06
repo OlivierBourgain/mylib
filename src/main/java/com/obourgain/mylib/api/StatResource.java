@@ -59,5 +59,26 @@ public class StatResource extends AbstractResource {
         var res = statService.getAllStat(userId, false, null);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    /**
+     * @return the detailed stat for a year and a type.
+     */
+    @GetMapping(value = "/stat/{statName}/{year}")
+    public ResponseEntity<List<StatService.StatData>> getStats(HttpServletRequest request, @PathVariable String statName, @PathVariable Integer year) throws Exception {
+        log.info("REST - stats");
+        var userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        var res = statService.getStatDetail(userId, false, year, statName);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+    /**
+     * @return the detailed stat for a type.
+     */
+    @GetMapping(value = "/stat/{statName}")
+    public ResponseEntity<List<StatService.StatData>> getStats(HttpServletRequest request, @PathVariable String statName) throws Exception {
+        log.info("REST - stats");
+        var userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        var res = statService.getStatDetail(userId, false, null, statName);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }
 

@@ -11,7 +11,12 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,13 +77,13 @@ public class StatService {
      * Return the data for one given stat.
      */
     private List<StatData> innerStatDetail(String userId, Boolean showDiscarded, Integer year, String statName) {
-        log.info("Getting stat for year " + year);
+        log.info("Getting stat " + statName + "for year " + year);
         var discardedFlag = showDiscarded ? 1 : 0;
         return switch (statName.toLowerCase()) {
             case "booksbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag, year, year);
             case "pagesbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag, year, year);
             case "booksbyauthor" -> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag, year, year);
-            case "pagesbyauthor"-> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag, year, year);
+            case "pagesbyauthor" -> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag, year, year);
             default -> throw new IllegalArgumentException("Stat doesn't exist " + statName);
         };
     }

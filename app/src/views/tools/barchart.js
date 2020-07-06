@@ -45,9 +45,8 @@ class BarChart extends React.Component {
             this.myChart.update();
         }
         if (!this.props.data) return null;
-        const height = this.props.type === 'bar'? 100:300;
         return (
-            <canvas height={height} ref={this.chartRef}/>
+            <canvas height={this.props.height} width={this.props.width} ref={this.chartRef}/>
         );
     }
 }
