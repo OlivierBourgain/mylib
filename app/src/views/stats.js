@@ -79,30 +79,30 @@ class Stats extends Component {
                 </Row>
                 }
                 {(!this.state.showDetail || this.props.detailpending) && <Row>
-                    <Col className="stat-box col-3">
+                    <Col className="col-6 col-md-3 stat-box">
                         <div className="inner-stat-box booksbytag">
-                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('booksbytag')}/>
+                            <FontAwesomeIcon className="d-none d-md-block" icon={faExpandAlt} onClick={() => this.showDetail('booksbytag')}/>
                             <h4>Top tags (books)</h4>
                             <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.booksByTag}/>
                         </div>
                     </Col>
-                    <Col className="col-3 stat-box">
+                    <Col className="col-6 col-md-3 stat-box">
                         <div id="pagesbytag" className="inner-stat-box pagesbytag">
-                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('pagesbytag')}/>
+                            <FontAwesomeIcon className="d-none d-md-block" icon={faExpandAlt} onClick={() => this.showDetail('pagesbytag')}/>
                             <h4>Top tags (pages)</h4>
                             <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.pagesByTag}/>
                         </div>
                     </Col>
-                    <Col className="col-3 stat-box">
+                    <Col className="col-6 col-md-3 stat-box">
                         <div className="inner-stat-box booksbyauthor">
-                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('booksbyauthor')}/>
+                            <FontAwesomeIcon className="d-none d-md-block" icon={faExpandAlt} onClick={() => this.showDetail('booksbyauthor')}/>
                             <h4>Top authors (books)</h4>
                             <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.booksByAuthor}/>
                         </div>
                     </Col>
-                    <Col className="col-3 stat-box">
+                    <Col className="col-6 col-md-3 stat-box">
                         <div className="inner-stat-box pagesbyauthor">
-                            <FontAwesomeIcon icon={faExpandAlt} onClick={() => this.showDetail('pagesbyauthor')}/>
+                            <FontAwesomeIcon className="d-none d-md-block" icon={faExpandAlt} onClick={() => this.showDetail('pagesbyauthor')}/>
                             <h4>Top authors (pages)</h4>
                             <BarChart type='horizontalBar' width={100} height={100} data={this.props.list.pagesByAuthor}/>
                         </div>
@@ -110,13 +110,13 @@ class Stats extends Component {
                 </Row>
                 }
                 <Row>
-                    <Col className="col-6 stat-box">
+                    <Col className="col-12 col-md-6 stat-box">
                         <div className="inner-stat-box booksbymonth">
                             <h4>Books per month</h4>
                             <BarChart type='bar' width={100} height={30} data={this.props.list.booksByMonth}/>
                         </div>
                     </Col>
-                    <Col className="col-6 stat-box">
+                    <Col className="col-12 col-md-6 stat-box">
                         <div className="inner-stat-box pagesbymonth">
                             <h4>Pages per month</h4>
                             <BarChart type='bar' width={100} height={30} data={this.props.list.pagesByMonth}/>
@@ -124,13 +124,13 @@ class Stats extends Component {
                     </Col>
                 </Row>
                 <Row>
-                    <Col className="col-6 stat-box">
+                    <Col className="col-12 col-md-6 stat-box">
                         <div className="inner-stat-box booksbyyear">
                             <h4>Books per year</h4>
                             <BarChart type='bar' width={100} height={30} data={this.props.list.booksByYear}/>
                         </div>
                     </Col>
-                    <Col className="col-6 stat-box">
+                    <Col className="col-12 col-md-6 stat-box">
                         <div className="inner-stat-box pagesbyyear">
                             <h4>Pages per year</h4>
                             <BarChart type='bar' width={100} height={30} data={this.props.list.pagesByYear}/>

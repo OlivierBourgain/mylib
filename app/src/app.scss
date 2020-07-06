@@ -27,10 +27,8 @@ ul.pagination li span{min-width:35px;text-align:center}
 
 // Stats
 .stat-box { padding: 0 }
-.container { box-sizing: content-box }
 .inner-stat-box {color: white;text-align: center;padding: 10px;margin: 5px 5px;}
 .fa-expand-alt, .fa-times {float: right;cursor: pointer}
-.stat-extended{ position:absolute; z-index: 50;}
 .booksbytag { background: linear-gradient(to left bottom, #9BC500, #69A700) }
 .pagesbytag { background: linear-gradient(to left bottom, #F8C600, #F5AB00) }
 .booksbyauthor { background: linear-gradient(to left bottom, #DC504C, #CD3632) }
