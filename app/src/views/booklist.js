@@ -96,7 +96,7 @@ class BookList extends Component {
         const list = this.props.book.list;
         return (<Container>
             <Row className="filter-bar">
-                <Col className="col-8">
+                <Col className="col-12 col-md-8">
                     <Row>
                         <Col className="col-8"><Input type="text" value={this.state.term}
                                                       onChange={this.changeTerm}/></Col>
@@ -104,19 +104,16 @@ class BookList extends Component {
                                 onClick={this.updateList}>Submit</Button>
                     </Row>
                 </Col>
-                <Col className="col-4">
-                    <div className="row">
+                <Col className="col-12 col-md-4">
                         <label htmlFor="showDisc">
                             <input type="checkbox" id="showDisc" checked={this.state.discarded}
                                    onChange={this.changeDiscarded}/> Show discarded
                         </label>
-                    </div>
                 </Col>
             </Row>
-            <Row><h3>Your library</h3></Row>
             {list && <>
                 <Row>
-                    <Col className="col-4" id="list-header-summary">
+                    <Col className="col-12 col-md-4" >
                         {list.totalElements} results
                         {list.totalPages > 1 && <span>
                             , showing page {list.number + 1} of {list.totalPages}
@@ -127,11 +124,11 @@ class BookList extends Component {
                                      className="link-button">remove</button>)
                         </span>}
                     </Col>
-                    <Col className="col-5">
+                    <Col className="col-12 col-md-5">
                         <Pagination path="/books" page={list.number} nbPages={list.totalPages}
                                     updatePage={this.changePage}/>
                     </Col>
-                    <Col className="col-3">
+                    <Col className="col-12 col-md-3">
                         <span>Show{' '}</span>
                         <select value={this.state.size} onChange={this.changeSize}>
                             <option value={10}>10</option>
@@ -146,17 +143,17 @@ class BookList extends Component {
                 {list.numberOfElements === 0 && <Row>
                     <Col>No book found</Col>
                 </Row>}
-                {list.numberOfElements > 0 && <Row>
+                {list.numberOfElements > 0 && <Row className="mt-2">
                     <Table bordered striped size="sm">
                         <thead>
                         <tr className="row">
-                            <th className="col-5"><Link to='/books'
+                            <th className="col-6 col-md-5"><Link to='/books'
                                                         onClick={() => this.changeSort('Title')}>Title</Link></th>
-                            <th className="col-3"><Link to='/books'
+                            <th className="col-4 col-md-3"><Link to='/books'
                                                         onClick={() => this.changeSort('Author')}>Author</Link></th>
-                            <th className="col-1"><Link to='/books'
+                            <th className="col-2 col-md-1"><Link to='/books'
                                                         onClick={() => this.changeSort('Pages')}>Pages</Link></th>
-                            <th className="col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link>
+                            <th className="d-none d-md-block col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link>
                             </th>
                         </tr>
                         </thead>
@@ -172,13 +169,13 @@ class BookList extends Component {
     renderBook(book) {
         return (
             <tr className="row" key={`book-${book.id}`}>
-                <td className="col-5">
+                <td className="col-6 col-md-5">
                     <Link to={`/book/${book.id}`}>{book.title}</Link>
                     {book.status === 'DISCARDED' && <span>{' '}(discarded)</span>}
                 </td>
-                <td className="col-3">{book.author}</td>
-                <td className="col-1">{book.pages}</td>
-                <td className="col-3">
+                <td className="col-4 col-md-3">{book.author}</td>
+                <td className="col-2 col-md-1">{book.pages}</td>
+                <td className="col-12 col-md-3">
                     {book.tags.map(tag => <Tag key={`tag-${tag.id}`} tag={tag}/>)}
                 </td>
             </tr>);

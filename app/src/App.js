@@ -40,7 +40,6 @@ class App extends Component {
                     <Route exact path="/tags" render={() => <TagList/>} />
                 </Router>}
                 {!logged && <>
-                    <h1>Welcome to your library manager</h1>
                     <GoogleLogin
                         clientId="274726541955-21jeen018spaeumspmifv18hgomju0r9.apps.googleusercontent.com"
                         buttonText="Login"

@@ -131,10 +131,10 @@ class BookDetail extends Component {
                 <h3>{book.detail.title}</h3>
             </Row>
             <Row id="book-detail">
-                <Col className="col-4">
+                <Col className="col-12 col-md-4 order-2 order-md-1">
                     <img src={imgUrl} alt="Book cover"/>
                 </Col>
-                <Col className="col-8">
+                <Col className="col-12 col-md-8 order-1 order-md-2">
                     <Formik
                         initialValues={book.detail}
                         onSubmit={(values, {setSubmitting}) => {
@@ -222,23 +222,16 @@ class BookDetail extends Component {
                                         <Field type="text" name="lang" className="form-control"/>
                                     </Col>
                                 </FormGroup>
-                                <FormGroup row>
-                                    <Label for="lang" sm={3}>Creation date</Label>
-                                    <Col sm={9} className="col-form-label">
-                                        {moment(book.detail.created).format('DD/MM/YYYY h:mm:ss')}
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for="lang" sm={3}>Update date</Label>
-                                    <Col sm={9} className="col-form-label">
-                                        {moment(book.detail.updated).format('DD/MM/YYYY h:mm:ss')}
-                                    </Col>
-                                </FormGroup>
-
                             </Form>
                         )}
                     </Formik>
                 </Col>
+            </Row>
+            <Row>
+                Created {moment(book.detail.created).format('DD/MM/YYYY h:mm:ss')}
+            </Row>
+            <Row>
+                Updated {moment(book.detail.updated).format('DD/MM/YYYY h:mm:ss')}
             </Row>
         </Container>
     }

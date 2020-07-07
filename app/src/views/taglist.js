@@ -53,11 +53,6 @@ class TagList extends Component {
         return (
             <Container>
                 <Row>
-                    <Col>
-                        <h3>Tag list</h3>
-                    </Col>
-                </Row>
-                <Row>
                     <table className="table table-sm">
                         <thead>
                         <tr>

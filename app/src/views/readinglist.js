@@ -78,38 +78,37 @@ class ReadingList extends Component {
                 <Col className="col-12">
                     <form onSubmit={this.addReading}>
                         <Row>
-                            <Col className="col-5">
+                            <Col className="col-12 col-md-5 pb-2 pb-md-0">
                                 <Select name="title" filterOption={createFilter({ignoreAccents: false})}
                                         options={titlelist}
                                         onChange={(book) => this.setState({selectedBook: book.value})}/>
                             </Col>
-                            <Col className="col-3">
+                            <Col className="col-6 col-md-3">
                                 <Input name="dateread" type="date" defaultValue={today}
                                        onChange={(e) => this.setState({selectedDate: e.target.value})}/>
                             </Col>
-                            <Col className="col-3"><Button className="btn btn-success">Add</Button></Col>
+                            <Col className="col-6 col-md-3"><Button className="btn btn-success">Add</Button></Col>
                         </Row>
                     </form>
                 </Col>
-            </Row><Row id="readings-list">
-            <h3>Your reading history</h3>
+            </Row>
+
             {!list && <Row className="col-12">
                 <Col>No book read</Col>
             </Row>}
             {list && <>
-
-                <Row className="col-12">
-                    <Col id="list-header-summary" className="col-4">
+                <Row>
+                    <Col className="col-12 col-md-4">
                         {list.totalElements} lines
                         {list.totalPages > 1 && <span>
                             , showing page {list.number + 1} of {list.totalPages}
                             </span>}
                     </Col>
-                    <Col className="col-5">
+                    <Col className="col-12 col-md-5">
                         <Pagination path="/readings" page={list.number} nbPages={list.totalPages}
                                     updatePage={this.changePage}/>
                     </Col>
-                    <Col className="col-3">
+                    <Col className="col-12 col-md-3">
                         <span>Show{' '}</span>
                         <select value={this.state.size} onChange={this.changeSize}>
                             <option value={10}>10</option>
@@ -121,39 +120,41 @@ class ReadingList extends Component {
                         <span> lines</span>
                     </Col>
                 </Row>
-                <Table bordered striped size="sm">
-                    <thead>
-                    <tr className="row">
-                        <th className="col-5"><Link to='/readings'
-                                                    onClick={() => this.changeSort('Book.title')}>Title</Link></th>
-                        <th className="col-3"><Link to='/readings'
-                                                    onClick={() => this.changeSort('Book.author')}>Author</Link></th>
-                        <th className="col-1"><Link to='/readings'
-                                                    onClick={() => this.changeSort('Book.pages')}>Pages</Link></th>
-                        <th className="col-2"><Link to='/readings' onClick={() => this.changeSort('Date')}>Date
-                            read</Link></th>
-                        <th className="col-1"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {list.content && list.content.map(it => this.renderReading(it))}
-                    </tbody>
-                </Table>
+                <Row className="mt-2">
+                    <Table bordered striped size="sm">
+                        <thead>
+                        <tr className="row">
+                            <th className="col-6 col-md-5"><Link to='/readings'
+                                                        onClick={() => this.changeSort('Book.title')}>Title</Link></th>
+                            <th className="col-6 col-md-3"><Link to='/readings'
+                                                        onClick={() => this.changeSort('Book.author')}>Author</Link></th>
+                            <th className="col-4 col-md-1"><Link to='/readings'
+                                                        onClick={() => this.changeSort('Book.pages')}>Pages</Link></th>
+                            <th className="col-4 col-md-2"><Link to='/readings' onClick={() => this.changeSort('Date')}>Date
+                                read</Link></th>
+                            <th className="col-4 col-md-1"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {list.content && list.content.map(it => this.renderReading(it))}
+                        </tbody>
+                    </Table>
+                </Row>
             </>}
-        </Row>
+
         </Container>);
     }
 
     renderReading = (reading) => {
         return (
             <tr className="row" key={`reading-${reading.id}`}>
-                <td className="col-5">
+                <td className="col-6 col-md-5">
                     <Link to={`/book/${reading.book.id}`}>{reading.book.title}</Link>
                 </td>
-                <td className="col-3">{reading.book.author}</td>
-                <td className="col-1">{reading.book.pages}</td>
-                <td className="col-2">{reading.date}</td>
-                <td className="col-1"><Link to='#' onClick={() => this.delete(reading)}>Delete</Link></td>
+                <td className="col-6 col-md-3">{reading.book.author}</td>
+                <td className="col-4 col-md-1">{reading.book.pages}</td>
+                <td className="col-4 col-md-2">{reading.date}</td>
+                <td className="col-4 col-md-1"><Link to='#' onClick={() => this.delete(reading)}>Delete</Link></td>
             </tr>
         )
     }
