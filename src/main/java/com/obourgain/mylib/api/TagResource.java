@@ -5,9 +5,12 @@ import com.obourgain.mylib.vobj.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,9 @@ public class TagResource extends AbstractResource {
     @Autowired
     private TagService tagService;
 
+    /**
+     * Update a tag
+     */
     @PostMapping(value = "/tag")
     public ResponseEntity<List<Tag>> update(HttpServletRequest request, @RequestBody Tag tag) throws Exception {
         log.info("REST - tag update " + tag);
@@ -34,7 +40,19 @@ public class TagResource extends AbstractResource {
     }
 
     /**
-     * @return the list of books for a user.
+     * Delete a tag
+     */
+    @DeleteMapping(value = "/tag/{id}")
+    public ResponseEntity<List<Tag>> delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
+        log.info("REST - tag delete " + id);
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        tagService.deleteTag(id, userId);
+        List<Tag> tags = tagService.findByUserId(userId);
+        return new ResponseEntity<>(tags, HttpStatus.OK);
+    }
+
+    /**
+     * @return the list of tags.
      */
     @GetMapping(value = "/tags")
     public ResponseEntity<List<Tag>> getTags(HttpServletRequest request) throws Exception {

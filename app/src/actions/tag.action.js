@@ -5,6 +5,7 @@ const ROOT_URL = 'http://127.0.0.1:2017/api';
 
 export const FETCH_TAGS = 'FETCH_TAGS';
 export const UPDATE_TAG = 'UPDATE_TAG';
+export const DELETE_TAG = 'DELETE_TAG';
 
 export function fetchTags() {
     const url = `${ROOT_URL}/tags`;
@@ -24,6 +25,17 @@ export function updateTag(tag) {
 
     return {
         type: UPDATE_TAG,
+        payload: request
+    }
+}
+
+export function deleteTag(id) {
+    const url = `${ROOT_URL}/tag/${id}`;
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.delete(url, {headers: {"Authorization": `Bearer ${idToken}`}})
+
+    return {
+        type: DELETE_TAG,
         payload: request
     }
 }

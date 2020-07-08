@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Col, Container, Row} from 'reactstrap';
-import {fetchTags, updateTag} from "../actions/tag.action";
+import {Container, Row} from 'reactstrap';
+import {fetchTags, updateTag, deleteTag} from "../actions/tag.action";
 import Tag from "./tag";
-
 
 const colors = [
     {id:'color-A', backgroundColor:"#E7E7E7", color:"#464646", borderColor:"#464646"}, /* Mercury */
@@ -38,7 +37,22 @@ class TagList extends Component {
 
     constructor(props) {
         super(props);
-        if (!this.props.tag.list) this.props.fetchTags();
+        this.props.fetchTags();
+    }
+
+    deleteTag = (tag) => {
+        this.props.deleteTag(tag.id);
+    }
+
+    saveTag = (tag) => {
+        this.props.updateTag(tag)
+    }
+
+    changeColor = (tag, c) => {
+        tag.backgroundColor = c.backgroundColor;
+        tag.color = c.color;
+        tag.borderColor = c.borderColor;
+        this.props.updateTag(tag)
     }
 
     render() {
@@ -60,7 +74,6 @@ class TagList extends Component {
                             <th></th>
                             <th>Priority</th>
                             <th></th>
-                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -77,8 +90,12 @@ class TagList extends Component {
             <td>
                 {colors.map(c => this.colorChanger(c, tag))}
             </td>
-            <td>{tag.priority}</td>
-            <td>{/* Delete link */}</td>
+            <td>
+                <input className="priority-input" type="text" defaultValue={tag.priority? tag.priority:''}
+                       onChange={(event ) => tag.priority = event.target.value} />
+                <button className="link-button pl-1" onClick={() => this.saveTag(tag)}>update</button>
+            </td>
+            <td className="align-middle"><button className="link-button" onClick={() => this.deleteTag(tag)}>delete</button></td>
         </tr>
     }
 
@@ -95,18 +112,12 @@ class TagList extends Component {
         </React.Fragment>
     )
 
-    changeColor = (tag, c) => {
-        tag.backgroundColor = c.backgroundColor;
-        tag.color = c.color;
-        tag.borderColor = c.borderColor;
-        this.props.updateTag(tag)
-    }
 
 
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchTags, updateTag}, dispatch);
+    return bindActionCreators({fetchTags, updateTag, deleteTag}, dispatch);
 }
 
 function mapStateToProps({tag}) {
