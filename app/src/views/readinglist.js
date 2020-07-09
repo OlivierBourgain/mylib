@@ -61,7 +61,7 @@ class ReadingList extends Component {
 
     render() {
         const reading = this.props.reading;
-        const titlelist = this.props.booktitles.list;
+        const titlelist = this.props.book.titlelist;
         // Get today's date formatted yyyy-mm-dd
         const today = new Date().toISOString().split('T')[0];
 
@@ -164,8 +164,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({fetchReadings, deleteReading, fetchBookTitles, addReading}, dispatch);
 }
 
-function mapStateToProps({booktitles, reading}) {
-    return {booktitles, reading};
+function mapStateToProps({book, reading}) {
+    return {book, reading};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReadingList);

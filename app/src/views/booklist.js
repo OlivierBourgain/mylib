@@ -6,7 +6,7 @@ import {Redirect} from 'react-router';
 import {Button, Col, Container, Input, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
-import {fetchBooks, lookup} from '../actions/book.action'
+import {fetchBooks, lookup, exportcsv} from '../actions/book.action'
 import Pagination from "./tools/pagination";
 
 class BookList extends Component {
@@ -41,9 +41,13 @@ class BookList extends Component {
             this.state.descending);
     }
 
+    export = () => {
+        // Call the export API to receive data
+        this.props.exportcsv();
+    }
+
     changeTerm = event => {
         this.setState({term: event.target.value});
-        // This doesn't trigger automatic reload for now... Not sure I should do it...
     }
 
     changeSize = event => {
@@ -98,17 +102,20 @@ class BookList extends Component {
             <Row className="filter-bar">
                 <Col className="col-12 col-md-8">
                     <Row>
-                        <Col className="col-8"><Input type="text" value={this.state.term}
-                                                      onChange={this.changeTerm}/></Col>
-                        <Button type="button" color="success" className="col-2"
-                                onClick={this.updateList}>Submit</Button>
+                        <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
+                        <Button type="button" color="success" className="col-2" onClick={this.updateList}>Submit</Button>
                     </Row>
                 </Col>
                 <Col className="col-12 col-md-4">
-                        <label htmlFor="showDisc">
+                    <Row>
+                        <button className="link-button col-12" onClick={() => this.export()}>Export CSV</button>
+                    </Row>
+                    <Row>
+                        <label className="col-12" htmlFor="showDisc">
                             <input type="checkbox" id="showDisc" checked={this.state.discarded}
                                    onChange={this.changeDiscarded}/> Show discarded
                         </label>
+                    </Row>
                 </Col>
             </Row>
             {list && <>
@@ -185,7 +192,7 @@ class BookList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBooks, lookup}, dispatch);
+    return bindActionCreators({fetchBooks, lookup, exportcsv}, dispatch);
 }
 
 function mapStateToProps({book}) {

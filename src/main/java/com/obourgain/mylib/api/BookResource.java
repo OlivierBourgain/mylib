@@ -22,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -107,5 +111,67 @@ public class BookResource extends AbstractResource {
         bookService.deleteBook(userId, id);
         return;
     }
+
+    /**
+     * Export book list to CSV
+     */
+    @GetMapping(value = "/exportbooks")
+    public void exportcsv(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("REST - export csv");
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+
+        response.setContentType("text/csv");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=\"Library.csv\"";
+        response.setHeader(headerKey, headerValue);
+
+        List<Book> books = bookService.findByUserId(userId);
+        StringBuilder sb = booksToCsv(books);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+        response.getWriter().print(sb.toString());
+        return;
+    }
+
+    private StringBuilder booksToCsv(List<Book> books) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+                "Id;Status;Title;Subtitle;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description;Comment\n");
+        for (Book book : books) {
+            sb.append(book.getId()).append(";");
+            sb.append(book.getStatus() == null ? "" : book.getStatus()).append(";");
+            sb.append(book.getTitle()).append(";");
+            sb.append(string(book.getSubtitle())).append(";");
+            sb.append(book.getAuthor()).append(";");
+            sb.append(book.getIsbn()).append(";");
+            sb.append(book.getPublisher()).append(";");
+            sb.append(book.getPublicationDate()).append(";");
+            sb.append(book.getPages()).append(";");
+            for (Tag tag : book.getTags())
+                sb.append(tag.getText()).append(",");
+            sb.append(";");
+            sb.append(string(book.getLang())).append(";");
+            sb.append(date(book.getCreated())).append(";");
+            sb.append(date(book.getUpdated())).append(";");
+            sb.append(string(book.getSmallImage())).append(";");
+            sb.append(string(book.getMediumImage())).append(";");
+            sb.append(string(book.getLargeImage())).append(";");
+            sb.append(string(book.getComment())).append(";");
+
+            sb.append("\n");
+        }
+        return sb;
+    }
+
+    private String date(LocalDateTime date) {
+        if (date == null) return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+        return date.format(formatter);
+    }
+
+    private String string(String text) {
+        return text == null ? "" : text;
+    }
+
+
 }
 

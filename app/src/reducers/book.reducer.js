@@ -1,5 +1,5 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
-import {FETCH_BOOKS, FETCH_BOOK_TITLES, FETCH_BOOK, LOOKUP_BOOK, DELETE_BOOK, UPDATE_BOOK} from '../actions/book.action';
+import {FETCH_BOOKS, FETCH_BOOK_TITLES, FETCH_BOOK, LOOKUP_BOOK, DELETE_BOOK, UPDATE_BOOK, EXPORT_BOOKS} from '../actions/book.action';
 
 export default function (state = {}, action) {
     switch (action.type) {
@@ -32,7 +32,7 @@ export default function (state = {}, action) {
                 titleList.push({ value: item, label: action.payload.data[item]})
             }
             titleList.sort((a, b) => a.label.localeCompare(b.label));
-            return {...state, list: titleList };
+            return {...state, titlelist: titleList };
         }
         case SUCCESS(UPDATE_BOOK): {
             return {...state, pending: false, error: false, redirectTo: "/books"};
@@ -42,6 +42,18 @@ export default function (state = {}, action) {
         }
         case SUCCESS(DELETE_BOOK): {
             return {...state, pending: false, error: false, detail: action.payload.data, redirectTo: "/books"};
+        }
+        case SUCCESS(EXPORT_BOOKS): {
+            const a =  document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            const blob = new Blob([action.payload.data], {type: "octet/stream"});
+            const url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = "export.csv";
+            a.click();
+            window.URL.revokeObjectURL(url);
+            return state;
         }
         default:
             return state;

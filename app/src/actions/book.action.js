@@ -9,6 +9,7 @@ export const FETCH_BOOK = 'FETCH_BOOK';
 export const UPDATE_BOOK = 'UPDATE_BOOK';
 export const LOOKUP_BOOK = 'LOOKUP_BOOK';
 export const DELETE_BOOK = 'DELETE_BOOK';
+export const EXPORT_BOOKS = 'EXPORT BOOKS';
 
 export const lookup = (term) => {
     const url = `${ROOT_URL}/lookup?term=${term}`
@@ -73,6 +74,17 @@ export function deleteBook(bookId) {
 
     return {
         type: DELETE_BOOK,
+        payload: request
+    }
+}
+
+export const exportcsv = () => {
+    const url = `${ROOT_URL}/exportbooks`
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
+
+    return {
+        type: EXPORT_BOOKS,
         payload: request
     }
 }
