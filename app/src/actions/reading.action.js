@@ -1,7 +1,6 @@
 import axios from "axios";
 import {store} from "../index";
-
-const ROOT_URL = 'http://127.0.0.1:2017/api';
+import {ROOT_URL} from "./index";
 
 export const FETCH_READINGS = 'FETCH_READINGS';
 export const DELETE_READING = 'DELETE_READING';
