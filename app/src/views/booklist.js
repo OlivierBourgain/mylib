@@ -6,7 +6,7 @@ import {Redirect} from 'react-router';
 import {Button, Col, Container, Input, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
-import {fetchBooks, lookup, exportcsv} from '../actions/book.action'
+import {fetchBooks, lookup, exportcsv, rebuildindex} from '../actions/book.action'
 import Pagination from "./tools/pagination";
 
 class BookList extends Component {
@@ -44,6 +44,10 @@ class BookList extends Component {
     export = () => {
         // Call the export API to receive data
         this.props.exportcsv();
+    }
+
+    rebuildindex = () => {
+        this.props.rebuildindex();
     }
 
     changeTerm = event => {
@@ -109,6 +113,9 @@ class BookList extends Component {
                 <Col className="col-12 col-md-4">
                     <Row>
                         <button className="link-button col-12" onClick={() => this.export()}>Export CSV</button>
+                    </Row>
+                    <Row>
+                        <button className="link-button col-12" onClick={() => this.rebuildindex()}>Rebuild index</button>
                     </Row>
                     <Row>
                         <label className="col-12" htmlFor="showDisc">
@@ -192,7 +199,7 @@ class BookList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBooks, lookup, exportcsv}, dispatch);
+    return bindActionCreators({fetchBooks, lookup, exportcsv, rebuildindex}, dispatch);
 }
 
 function mapStateToProps({book}) {

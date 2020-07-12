@@ -10,6 +10,7 @@ export const UPDATE_BOOK = 'UPDATE_BOOK';
 export const LOOKUP_BOOK = 'LOOKUP_BOOK';
 export const DELETE_BOOK = 'DELETE_BOOK';
 export const EXPORT_BOOKS = 'EXPORT BOOKS';
+export const REBUILD_INDEX = 'REBUILD INDEX';
 
 export const lookup = (term) => {
     const url = `${ROOT_URL}/lookup?term=${term}`
@@ -88,3 +89,22 @@ export const exportcsv = () => {
         payload: request
     }
 }
+
+export const rebuildindex =  (bookId, date) => {
+    return (dispatch, getState) => {
+        const url = `${ROOT_URL}/rebuildindex`
+        const idToken = store.getState().account.tokenObj.id_token;
+
+        const res = dispatch({
+            type: REBUILD_INDEX,
+            payload: axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}})
+        });
+
+        res.then((data) => {
+            // Return the reading list, on the first page, ordered by date desc
+            const pageable = getState().book.list.pageable;
+            dispatch(fetchBooks( pageable.pageNumber, pageable.pageSize, '', false,'Updated', true));
+        });
+    }
+}
+

@@ -120,8 +120,7 @@ public class LuceneSearch {
             if (!DirectoryReader.indexExists(index)) {
                 log.info("Lucene index doesn't exists, Creating it");
                 // Pour créer l'index, on ouvre juste un writer, et on le ferme
-                // tout
-                // de suite.
+                // tout de suite.
                 IndexWriterConfig config = new IndexWriterConfig(ANALYSER);
                 try (IndexWriter writer = new IndexWriter(index, config)) {
                 }
@@ -151,11 +150,11 @@ public class LuceneSearch {
      * Add a list of books to index.
      */
     public void addAll(List<Book> books) {
-        log.info("Ecriture dans l'index. Nombre de livres " + books.size());
+        log.info("Ecriture dans l'index. {} livres", books.size());
         IndexWriterConfig config = new IndexWriterConfig(ANALYSER);
         try (IndexWriter writer = new IndexWriter(index, config)) {
             for (Book book : books) {
-                log.info("Adding " + book);
+                log.debug("Adding " + book);
                 addOneDocToIndex(writer, book);
             }
         } catch (IOException e) {
@@ -214,8 +213,7 @@ public class LuceneSearch {
             rawTag.append(tag.getId()).append(',');
         }
         // We store the list of tags (no indexing), to be able to display the
-        // book list directly from
-        // the search results
+        // book list directly from the search results
         doc.add(new StoredField(FIELD_RAW_TAG, rawTag.toString()));
         doc.add(new StoredField(FIELD_PAGES, book.getPages()));
         if (book.getUpdated() != null)
@@ -282,10 +280,11 @@ public class LuceneSearch {
 
         DirectoryReader newReader = DirectoryReader.openIfChanged(reader);
         if (newReader != null) {
-            log.debug("Reopening the reader");
+            log.info("Reopening the reader");
             reader.close();
             reader = newReader;
         }
+
         IndexSearcher searcher = new IndexSearcher(reader);
 
         TopDocs results = searcher.search(query, nbHits);
@@ -315,6 +314,4 @@ public class LuceneSearch {
         if (status != null) book.setStatus(BookStatus.valueOf(status));
         return book;
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.obourgain.mylib.api;
 
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.TagService;
+import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
 import org.slf4j.Logger;
@@ -44,6 +45,9 @@ public class BookResource extends AbstractResource {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private LuceneSearch luceneSearch;
+
 
     /**
      * Lookup for a new book (on Amazon, based on the ASIN or the ISBN).
@@ -65,6 +69,7 @@ public class BookResource extends AbstractResource {
         log.info("REST - books, " + Objects.toString(page));
         String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
         Page<Book> books = bookService.getBooks(criteria, discarded, page, userId);
+        log.info("REST - books, returned {} books ", books.getTotalElements());
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
@@ -109,6 +114,23 @@ public class BookResource extends AbstractResource {
     public void delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
         String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
         bookService.deleteBook(userId, id);
+        return;
+    }
+
+    /**
+     * Recrée l'index de recherche.
+     */
+    @GetMapping(value = "/rebuildindex")
+    public void rebuildindex(HttpServletRequest request) throws Exception {
+        log.info("REST - rebuildindex");
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+
+        List<Book> books = bookService.findAll();
+        luceneSearch.clearIndex();
+        luceneSearch.addAll(books);
+        List<Book> check = bookService.findByUserId(userId);
+        log.info("After rebuild, {} books", check.size());
+        log.info("REST - rebuildindex done");
         return;
     }
 

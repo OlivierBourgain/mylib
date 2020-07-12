@@ -1,15 +1,11 @@
 import React from 'react';
 import {
     Collapse,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
     Nav,
     Navbar,
     NavbarToggler,
     NavItem,
-    NavLink,
-    UncontrolledDropdown
+    NavLink
 } from 'reactstrap';
 import { Link } from "react-router-dom";
 
@@ -48,16 +44,6 @@ class Header extends React.Component {
                             <NavItem>
                                 <Link className="nav-link" to="/tags">Tags</Link>
                             </NavItem>
-                            <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle nav caret>
-                                    More...
-                                </DropdownToggle>
-                                <DropdownMenu right>
-                                    <DropdownItem>
-                                        Rebuild search index
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
                             <NavItem>
                                 <NavLink href="">Logout</NavLink>
                             </NavItem>
