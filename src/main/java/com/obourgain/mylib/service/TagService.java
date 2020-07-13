@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -93,36 +92,6 @@ public class TagService {
             log.error("Bad user id " + existing.getUserId() + " vs " + userId);
             throw new IllegalArgumentException("Not your stuff");
         }
-        tagRepository.save(tag);
-        return tag;
-    }
-
-    /**
-     * Update a tag.
-     */
-    @Transactional
-    public Tag updateTag(Long tagId, String backgroundColor, String color, String borderColor, String userId) {
-        Tag tag = tagRepository.getOne(tagId);
-        if (!tag.getUserId().equals(userId)) {
-            log.error("Bad user id " + tag.getUserId() + " vs " + userId);
-            throw new IllegalArgumentException("Not your stuff");
-        }
-        tag.setBackgroundColor(backgroundColor);
-        tag.setColor(color);
-        tag.setBorderColor(borderColor);
-        tag.setUpdated(LocalDateTime.now());
-        tagRepository.save(tag);
-        return tag;
-    }
-
-    public Tag updateTag(Long tagId, Integer priority, String userId) {
-        Tag tag = tagRepository.getOne(tagId);
-        if (!tag.getUserId().equals(userId)) {
-            log.error("Bad user id " + tag.getUserId() + " vs " + userId);
-            throw new IllegalArgumentException("Not your stuff");
-        }
-        tag.setPriority(priority);
-        tag.setUpdated(LocalDateTime.now());
         tagRepository.save(tag);
         return tag;
     }
