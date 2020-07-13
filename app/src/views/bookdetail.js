@@ -48,12 +48,9 @@ class BookDetail extends Component {
         this.setState({selectedTags: values, tagUpdate: true});
     }
 
-    deleteBook = (id) => {
-        this.props.deleteBook(id);
-    }
-
-    discardBook = () => { this.props.updateDiscard(this.props.id, true); }
-    undiscardBook = () => { this.props.updateDiscard(this.props.id, false); }
+    deleteBook = (id) => { if (window.confirm('Are you sure?')) this.props.deleteBook(id); }
+    discardBook = (id) => { this.props.updateDiscard(id, true); }
+    undiscardBook = (id) => { this.props.updateDiscard(id, false); }
 
     render() {
         const book = this.props.book;
@@ -71,7 +68,7 @@ class BookDetail extends Component {
             label: tag.text
         }));
         const bookTags = book.detail.tags ? book.detail.tags.map(tag => ({value: tag.text, label: tag.text})) : [];
-        const imgUrl = `/store/${book.detail.largeImage}`;
+        const imgUrl = process.env.NODE_ENV === 'development' ? `http://localhost:2017/store/${book.detail.largeImage}`:`/store/${book.detail.largeImage}`;
 
         // Styling the tag list
         const customStyles = {
@@ -128,13 +125,13 @@ class BookDetail extends Component {
 
         return <Container>
             <Row>
-                <Link to="/books">&lt; back to list</Link>
+                <Link className="col-12" to="/books">&lt; back to list</Link>
             </Row>
             <Row>
-                <h3>{book.detail.title}</h3>
+                <h3 className="col-12">{book.detail.title} {book.detail.status === 'DISCARDED' && <span>(Discarded)</span>}</h3>
             </Row>
             <Row id="book-detail">
-                <Col className="col-12 col-md-4 order-2 order-md-1">
+                <Col className="col-12 col-md-4 order-2 order-md-1 mt-4">
                     <img src={imgUrl} alt="Book cover"/>
                 </Col>
                 <Col className="col-12 col-md-8 order-1 order-md-2">
@@ -152,14 +149,14 @@ class BookDetail extends Component {
                                     <div className="text-right col-12">
                                         {book.detail.status === 'DISCARDED' &&
                                             <Button className="btn btn-info mr-3"
-                                                    onClick={() => this.undiscardBook()}>Undiscard</Button>
+                                                    onClick={() => this.undiscardBook(book.detail.id)}>Undiscard</Button>
                                         }
                                         {book.detail.status !== 'DISCARDED' &&
                                             <Button className="btn btn-info mr-3"
-                                                    onClick={() => this.discardBook() }>Discard</Button>
+                                                    onClick={() => this.discardBook(book.detail.id) }>Discard</Button>
                                         }
                                         <Button className="btn btn-danger mr-1"
-                                                onClick={() => { if (window.confirm('Are you sure?')) this.deleteBook(book.detail.id) }}>Delete
+                                                onClick={() => this.deleteBook(book.detail.id) }>Delete
                                         </Button>
                                         <Button type="submit" disabled={isSubmitting}
                                                 color="success">Submit</Button>
@@ -238,10 +235,10 @@ class BookDetail extends Component {
                     </Formik>
                 </Col>
             </Row>
-            <Row>
+            <Row className="col-12">
                 Created {moment(book.detail.created).format('DD/MM/YYYY h:mm:ss')}
             </Row>
-            <Row>
+            <Row className="col-12">
                 Updated {moment(book.detail.updated).format('DD/MM/YYYY h:mm:ss')}
             </Row>
         </Container>

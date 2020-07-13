@@ -41,7 +41,7 @@ class TagList extends Component {
     }
 
     deleteTag = (tag) => {
-        this.props.deleteTag(tag.id);
+        if (window.confirm('Are you sure?')) this.props.deleteTag(tag.id);
     }
 
     saveTag = (tag) => {
@@ -73,7 +73,6 @@ class TagList extends Component {
                             <th></th>
                             <th></th>
                             <th>Priority</th>
-                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -94,8 +93,8 @@ class TagList extends Component {
                 <input className="priority-input" type="text" defaultValue={tag.priority? tag.priority:''}
                        onChange={(event ) => tag.priority = event.target.value} />
                 <button className="link-button pl-1" onClick={() => this.saveTag(tag)}>update</button>
+                <button className="link-button" onClick={() => this.deleteTag(tag)}>delete</button>
             </td>
-            <td className="align-middle"><button className="link-button" onClick={() => this.deleteTag(tag)}>delete</button></td>
         </tr>
     }
 
