@@ -117,6 +117,16 @@ public class BookResource extends AbstractResource {
         return;
     }
 
+    @PostMapping(value = "/bookdiscard")
+    public ResponseEntity<Book> updateDiscard(HttpServletRequest request, @RequestParam("book") Long id, @RequestParam("discard") boolean discard) throws Exception {
+        log.info("(un)Discard book {} to {}", id, discard);
+        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        Book book = bookService.findBook(userId, id);
+        book.setStatus(discard? Book.BookStatus.DISCARDED:null);
+        bookService.createOrUpdateBook(book, userId, book.getTags());
+        return new ResponseEntity<>(book, HttpStatus.OK);
+    }
+
     /**
      * Recrée l'index de recherche.
      */

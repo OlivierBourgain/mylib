@@ -67,6 +67,17 @@ export function updateBook(book) {
     }
 }
 
+export function updateDiscard(id, discard) {
+    const url = `${ROOT_URL}/bookdiscard`;
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.post(url, `book=${id}&discard=${discard}`,{headers: {"Authorization" : `Bearer ${idToken}`}});
+
+    return {
+        type: UPDATE_BOOK,
+        payload: request
+    }
+}
+
 export function deleteBook(bookId) {
     const url = `${ROOT_URL}/book/${bookId}`;
     const idToken = store.getState().account.tokenObj.id_token;

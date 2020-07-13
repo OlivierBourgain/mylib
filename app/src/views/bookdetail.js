@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import moment from 'moment'
 
 import {fetchTags} from '../actions/tag.action'
-import {fetchBook, updateBook, deleteBook} from '../actions/book.action'
+import {fetchBook, updateBook, deleteBook, updateDiscard} from '../actions/book.action'
 
 import {Button, Col, Container, FormGroup, Label, Row} from 'reactstrap'
 import {Field, Form, Formik} from 'formik';
@@ -51,6 +51,9 @@ class BookDetail extends Component {
     deleteBook = (id) => {
         this.props.deleteBook(id);
     }
+
+    discardBook = () => { this.props.updateDiscard(this.props.id, true); }
+    undiscardBook = () => { this.props.updateDiscard(this.props.id, false); }
 
     render() {
         const book = this.props.book;
@@ -147,11 +150,19 @@ class BookDetail extends Component {
                             <Form>
                                 <FormGroup row>
                                     <div className="text-right col-12">
-                                        <Button className="btn btn-danger"
+                                        {book.detail.status === 'DISCARDED' &&
+                                            <Button className="btn btn-info mr-3"
+                                                    onClick={() => this.undiscardBook()}>Undiscard</Button>
+                                        }
+                                        {book.detail.status !== 'DISCARDED' &&
+                                            <Button className="btn btn-info mr-3"
+                                                    onClick={() => this.discardBook() }>Discard</Button>
+                                        }
+                                        <Button className="btn btn-danger mr-1"
                                                 onClick={() => { if (window.confirm('Are you sure?')) this.deleteBook(book.detail.id) }}>Delete
-                                        </Button>{' '}
+                                        </Button>
                                         <Button type="submit" disabled={isSubmitting}
-                                                color="success">Submit</Button>{' '}
+                                                color="success">Submit</Button>
                                     </div>
                                 </FormGroup>
                                 <FormGroup row>
@@ -238,7 +249,7 @@ class BookDetail extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBook, updateBook, fetchTags, deleteBook}, dispatch);
+    return bindActionCreators({fetchBook, updateBook, fetchTags, deleteBook, updateDiscard}, dispatch);
 }
 
 function mapStateToProps(state) {
