@@ -108,6 +108,11 @@ class BookList extends Component {
                     <Row>
                         <Col className="col-8"><Input type="text" value={this.state.term} onChange={this.changeTerm}/></Col>
                         <Button type="button" color="success" className="col-2" onClick={this.updateList}>Submit</Button>
+                        <p className="filter-tooltip">
+                            Type a keyword to filter the list<br/>
+                            Add a book by typing its ISBN number, or{' '}
+                            <code>ASIN:Amazon ASIN number</code>.
+                        </p>
                     </Row>
                 </Col>
                 <Col className="col-12 col-md-4">
