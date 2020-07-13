@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://book.obourgain.com"})
 @RestController
 @RequestMapping("/api")
 public class ReadingResource extends AbstractResource {

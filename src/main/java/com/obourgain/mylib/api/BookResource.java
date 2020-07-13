@@ -33,7 +33,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://book.obourgain.com"})
 @RestController
 @RequestMapping("/api")
 public class BookResource extends AbstractResource {

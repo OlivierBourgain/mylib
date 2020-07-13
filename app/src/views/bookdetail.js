@@ -71,7 +71,7 @@ class BookDetail extends Component {
             label: tag.text
         }));
         const bookTags = book.detail.tags ? book.detail.tags.map(tag => ({value: tag.text, label: tag.text})) : [];
-        const imgUrl = `http://localhost:2017/store/${book.detail.largeImage}`;
+        const imgUrl = `/store/${book.detail.largeImage}`;
 
         // Styling the tag list
         const customStyles = {
