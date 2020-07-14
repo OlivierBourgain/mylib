@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class ReadingResource extends AbstractResource {
     @GetMapping(value = "/readings")
     public ResponseEntity<Page<Reading>> getBooks(HttpServletRequest request, Pageable page) throws Exception {
         log.info("REST - readings");
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Page<Reading> readings = readingService.findByUserId(userId, page);
         return new ResponseEntity<>(readings, HttpStatus.OK);
     }
@@ -52,7 +53,7 @@ public class ReadingResource extends AbstractResource {
      */
     @DeleteMapping(value = "/reading/{id}")
     public void deleteReading(HttpServletRequest request, @PathVariable Long id) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         log.info("Deleting reading " + id + " from " + userId);
         readingService.delete(id);
     }
@@ -62,7 +63,7 @@ public class ReadingResource extends AbstractResource {
      */
     @PostMapping(value = "/reading")
     public void postReading(HttpServletRequest request, @RequestBody ReadingParam reading) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Book book = bookService.findBook(userId, Long.parseLong(reading.book));
         LocalDate localDate = LocalDate.parse(reading.date);
 

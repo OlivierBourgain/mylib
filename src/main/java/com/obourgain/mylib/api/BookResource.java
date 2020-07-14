@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +57,7 @@ public class BookResource extends AbstractResource {
      */
     @GetMapping(value = "/lookup")
     public ResponseEntity<Book> lookup(HttpServletRequest request, @RequestParam String term) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Book book = bookService.lookup(userId, term);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
@@ -67,7 +68,7 @@ public class BookResource extends AbstractResource {
     @GetMapping(value = "/books")
     public ResponseEntity<Page<Book>> getBooks(HttpServletRequest request, Pageable page, String criteria, boolean discarded) throws Exception {
         log.info("REST - books, " + Objects.toString(page));
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Page<Book> books = bookService.getBooks(criteria, discarded, page, userId);
         log.info("REST - books, returned {} books ", books.getTotalElements());
         return new ResponseEntity<>(books, HttpStatus.OK);
@@ -79,7 +80,7 @@ public class BookResource extends AbstractResource {
     @GetMapping(value = "/booktitles")
     public ResponseEntity<Map<Long, String>> getBooks(HttpServletRequest request) throws Exception {
         log.info("REST - booktitles");
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Map<Long, String> res = bookService.findByUserId(userId).stream().collect(Collectors.toMap(Book::getId, Book::getTitle));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -90,7 +91,7 @@ public class BookResource extends AbstractResource {
     @GetMapping(value = "/book/{id}")
     public ResponseEntity<Book> getBook(HttpServletRequest request, @PathVariable Long id) throws Exception {
         log.info("REST - book " + id);
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Book book = bookService.findBook(userId, id);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
@@ -101,7 +102,7 @@ public class BookResource extends AbstractResource {
      */
     @PostMapping(value = "/book")
     public ResponseEntity<Book> update(HttpServletRequest request, @RequestBody Book book) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Set<Tag> tags = tagService.getTags(book.getTagString(), userId);
         bookService.createOrUpdateBook(book, userId, tags);
         return new ResponseEntity<>(book, HttpStatus.OK);
@@ -112,7 +113,7 @@ public class BookResource extends AbstractResource {
      */
     @DeleteMapping(value = "/book/{id}")
     public void delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         bookService.deleteBook(userId, id);
         return;
     }
@@ -120,7 +121,7 @@ public class BookResource extends AbstractResource {
     @PostMapping(value = "/bookdiscard")
     public ResponseEntity<Book> updateDiscard(HttpServletRequest request, @RequestParam("book") Long id, @RequestParam("discard") boolean discard) throws Exception {
         log.info("(un)Discard book {} to {}", id, discard);
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Book book = bookService.findBook(userId, id);
         book.setStatus(discard? Book.BookStatus.DISCARDED:null);
         bookService.createOrUpdateBook(book, userId, book.getTags());
@@ -133,7 +134,7 @@ public class BookResource extends AbstractResource {
     @GetMapping(value = "/rebuildindex")
     public void rebuildindex(HttpServletRequest request) throws Exception {
         log.info("REST - rebuildindex");
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
 
         List<Book> books = bookService.findAll();
         luceneSearch.clearIndex();
@@ -150,7 +151,7 @@ public class BookResource extends AbstractResource {
     @GetMapping(value = "/exportbooks")
     public void exportcsv(HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("REST - export csv");
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
 
         response.setContentType("text/csv");
         String headerKey = "Content-Disposition";

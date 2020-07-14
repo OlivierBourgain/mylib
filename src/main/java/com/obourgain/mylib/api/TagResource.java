@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,7 @@ public class TagResource extends AbstractResource {
     @PostMapping(value = "/tag")
     public ResponseEntity<List<Tag>> update(HttpServletRequest request, @RequestBody Tag tag) throws Exception {
         log.info("REST - tag update " + tag);
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         tagService.updateTag(tag, userId);
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
@@ -47,7 +48,7 @@ public class TagResource extends AbstractResource {
     @DeleteMapping(value = "/tag/{id}")
     public ResponseEntity<List<Tag>> delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
         log.info("REST - tag delete " + id);
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         tagService.deleteTag(id, userId);
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
@@ -59,7 +60,7 @@ public class TagResource extends AbstractResource {
     @GetMapping(value = "/tags")
     public ResponseEntity<List<Tag>> getTags(HttpServletRequest request) throws Exception {
         log.info("REST - tags");
-        String userId = getClientId(request).orElseThrow(() -> new SecurityException("User not authenticated"));
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }
