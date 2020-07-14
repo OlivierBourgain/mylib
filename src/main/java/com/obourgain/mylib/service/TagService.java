@@ -92,6 +92,7 @@ public class TagService {
             log.error("Bad user id " + existing.getUserId() + " vs " + userId);
             throw new IllegalArgumentException("Not your stuff");
         }
+        existing.setUpdated(LocalDateTime.now());
         tagRepository.save(tag);
         return tag;
     }
