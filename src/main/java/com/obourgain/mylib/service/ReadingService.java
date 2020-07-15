@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReadingService {
@@ -25,6 +26,13 @@ public class ReadingService {
      */
     public Page<Reading> findByUserId(String userId, Pageable page) {
         return readingRepository.findByUserId(userId, page);
+    }
+
+    /**
+     * Return the list of tags for a user.
+     */
+    public List<Reading> findByBook(String userId, Long bookId) {
+        return readingRepository.findByUserIdAndBookId(userId, bookId);
     }
 
     /**

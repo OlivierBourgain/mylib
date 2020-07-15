@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://book.obourgain.com"})
 @RestController
@@ -40,10 +41,21 @@ public class ReadingResource extends AbstractResource {
      * @return the list of books for a user.
      */
     @GetMapping(value = "/readings")
-    public ResponseEntity<Page<Reading>> getBooks(HttpServletRequest request, Pageable page) throws Exception {
+    public ResponseEntity<Page<Reading>> getReadings(HttpServletRequest request, Pageable page) throws Exception {
         log.info("REST - readings");
         String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
         Page<Reading> readings = readingService.findByUserId(userId, page);
+        return new ResponseEntity<>(readings, HttpStatus.OK);
+    }
+
+    /**
+     * @return the list of books for a book.
+     */
+    @GetMapping(value = "/bookreadings/{id}")
+    public ResponseEntity<List<Reading>> getBookReadings(HttpServletRequest request, @PathVariable Long id) throws Exception {
+        log.info("REST - readings for book {}", id);
+        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        List<Reading> readings = readingService.findByBook(userId, id);
         return new ResponseEntity<>(readings, HttpStatus.OK);
     }
 

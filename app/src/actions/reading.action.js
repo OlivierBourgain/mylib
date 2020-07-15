@@ -3,6 +3,7 @@ import {store} from "../index";
 import {ROOT_URL} from "./index";
 
 export const FETCH_READINGS = 'FETCH_READINGS';
+export const FETCH_BOOKREADINGS = 'FETCH_BOOKREADINGS';
 export const DELETE_READING = 'DELETE_READING';
 export const ADD_READING = 'ADD_READING';
 
@@ -14,6 +15,17 @@ export function fetchReadings(page, size, sort, descending) {
 
     return {
         type: FETCH_READINGS,
+        payload: request
+    }
+}
+
+export function fetchBookReadings(bookId) {
+    const url = `${ROOT_URL}/bookreadings/${bookId}`;
+    const idToken = store.getState().account.tokenObj.id_token;
+    const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
+
+    return {
+        type: FETCH_BOOKREADINGS,
         payload: request
     }
 }

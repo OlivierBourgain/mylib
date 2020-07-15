@@ -7,6 +7,7 @@ import moment from 'moment'
 
 import {fetchTags} from '../actions/tag.action'
 import {fetchBook, updateBook, deleteBook, updateDiscard} from '../actions/book.action'
+import {fetchBookReadings} from '../actions/reading.action'
 
 import {Button, Col, Container, FormGroup, Label, Row} from 'reactstrap'
 import {Field, Form, Formik} from 'formik';
@@ -34,6 +35,7 @@ class BookDetail extends Component {
         super(props);
         this.props.fetchBook(props.id);
         this.props.fetchTags();
+        this.props.fetchBookReadings(props.id);
     }
 
     handleSubmit = values => {
@@ -51,6 +53,8 @@ class BookDetail extends Component {
     deleteBook = (id) => { if (window.confirm('Are you sure?')) this.props.deleteBook(id); }
     discardBook = (id) => { this.props.updateDiscard(id, true); }
     undiscardBook = (id) => { this.props.updateDiscard(id, false); }
+
+    format = (dateStr) => { return moment(dateStr).format("MMMM YYYY"); }
 
     render() {
         const book = this.props.book;
@@ -71,57 +75,10 @@ class BookDetail extends Component {
         const imgUrl = process.env.NODE_ENV === 'development' ? `http://localhost:2017/store/${book.detail.largeImage}`:`/store/${book.detail.largeImage}`;
 
         // Styling the tag list
-        const customStyles = {
-            multiValue: (styles, {data}) => {
-                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
-                if (!tag || tag.length === 0) return {
-                    ...styles,
-                    border: '1px solid black',
-                    borderRadius: '4px'
-                }
-                else return {
-                    ...styles,
-                    backgroundColor: tag[0].backgroundColor,
-                    border: '1px solid ' + tag[0].borderColor,
-                    borderRadius: '4px'
-                };
-            },
-            multiValueLabel: (styles, {data}) => {
-                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
-                if (!tag || tag.length === 0) return {
-                    ...styles,
-                    fontSize: '1em',
-                    padding: '0px'
-                }
-                else return {
-                    ...styles,
-                    color: tag[0].color,
-                    fontSize: '1em',
-                    padding: '0px'
-                };
-            },
-            multiValueRemove: (styles, {data}) => {
-                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
-                if (!tag || tag.length === 0) return {
-                    ...styles,
-                    ':hover': {// Clear background color
-                        }
-                }
+        const customStyles = this.tagListStyle();
 
-                return {
-                    ...styles,
-                    color: tag[0].color,
-                    ':hover': {
-                        backgroundColor: tag[0].backgroungColor,
-                        color: tag[0].color,
-                        fontWeight: 'bolder',
-                        fontSize:'120%'
-                    },
-                }
-            },
-            dropdownIndicator: (style) => { return {display: 'none'} },
-            indicatorSeparator: (style) => { return { display: 'none'} }
-        }
+        const nbReading = this.props.readings && this.props.readings.length;
+        const lastReading = (!this.props.readings || nbReading === 0) ? "" : this.format(this.props.readings[this.props.readings.length - 1].date);
 
         return <Container>
             <Row>
@@ -130,6 +87,18 @@ class BookDetail extends Component {
             <Row>
                 <h3 className="col-12">{book.detail.title} {book.detail.status === 'DISCARDED' && <span>(Discarded)</span>}</h3>
             </Row>
+            {nbReading === 1 && <Row>
+                <div className="col-12 alert alert-success">
+                    You've read this book in {lastReading}.
+                </div>
+            </Row>
+            }
+            {nbReading > 1 && <Row>
+                <div className="col-12 alert alert-success">
+                    You've read this book {this.props.readings.length} times. Last time was in {lastReading}.
+                </div>
+            </Row>
+            }
             <Row id="book-detail">
                 <Col className="col-12 col-md-4 order-2 order-md-1 mt-4">
                     <img src={imgUrl} alt="Book cover"/>
@@ -243,16 +212,75 @@ class BookDetail extends Component {
             </Row>
         </Container>
     }
+
+    tagListStyle() {
+        return {
+            multiValue: (styles, {data}) => {
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    border: '1px solid black',
+                    borderRadius: '4px'
+                }
+                else return {
+                    ...styles,
+                    backgroundColor: tag[0].backgroundColor,
+                    border: '1px solid ' + tag[0].borderColor,
+                    borderRadius: '4px'
+                };
+            },
+            multiValueLabel: (styles, {data}) => {
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    fontSize: '1em',
+                    padding: '0px'
+                }
+                else return {
+                    ...styles,
+                    color: tag[0].color,
+                    fontSize: '1em',
+                    padding: '0px'
+                };
+            },
+            multiValueRemove: (styles, {data}) => {
+                const tag = this.props.tag.list ? this.props.tag.list.filter(tag => tag.text === data.label) : null;
+                if (!tag || tag.length === 0) return {
+                    ...styles,
+                    ':hover': {// Clear background color
+                    }
+                }
+
+                return {
+                    ...styles,
+                    color: tag[0].color,
+                    ':hover': {
+                        backgroundColor: tag[0].backgroungColor,
+                        color: tag[0].color,
+                        fontWeight: 'bolder',
+                        fontSize: '120%'
+                    },
+                }
+            },
+            dropdownIndicator: (style) => {
+                return {display: 'none'}
+            },
+            indicatorSeparator: (style) => {
+                return {display: 'none'}
+            }
+        };
+    }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({fetchBook, updateBook, fetchTags, deleteBook, updateDiscard}, dispatch);
+    return bindActionCreators({fetchBook, fetchBookReadings, updateBook, fetchTags, deleteBook, updateDiscard}, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         book: state.book,
-        tag: state.tag
+        tag: state.tag,
+        readings: state.reading.bookreadings
     };
 }
 
