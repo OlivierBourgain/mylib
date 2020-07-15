@@ -8,8 +8,9 @@ import BookList from './views/booklist';
 import BookDetail from './views/bookdetail';
 import ReadingList from './views/readinglist';
 import TagList from './views/taglist';
+import UserList from './views/userlist';
 import Stats from './views/stats';
-import {login, logout} from "./actions/account.action";
+import {login, logout} from "./actions/user.action";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 class App extends Component {
@@ -27,17 +28,18 @@ class App extends Component {
     }
 
     render() {
-        const {logged} = this.props;
+        const {logged, role} = this.props;
 
         return (
             <div className="App">
-                {logged && <Router>
-                    <Header/>
+                {logged && role && <Router>
+                    <Header role={role}/>
                     <Route exact path="/book/:id" render={props => <BookDetail id={props.match.params.id} />}/>
                     <Route exact path="/books" render={() => <BookList/>} />
                     <Route exact path="/readings" render={() => <ReadingList/>} />
                     <Route exact path="/stats" render={() => <Stats/>} />
                     <Route exact path="/tags" render={() => <TagList/>} />
+                    {role === 'ADMIN' && <Route exact path="/admin" render={() => <UserList/>}/>}
                 </Router>}
                 {!logged && <>
                     <GoogleLogin
@@ -59,7 +61,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        logged: state.account.logged
+        logged: state.user.logged,
+        role: state.user.role
     };
 }
 

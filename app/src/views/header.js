@@ -44,6 +44,9 @@ class Header extends React.Component {
                             <NavItem>
                                 <Link className="nav-link" to="/tags">Tags</Link>
                             </NavItem>
+                            {this.props.role === 'ADMIN' && <NavItem>
+                                <Link className="nav-link" to="/admin">Admin</Link>
+                            </NavItem>}
                             <NavItem>
                                 <NavLink href="">Logout</NavLink>
                             </NavItem>

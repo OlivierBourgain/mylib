@@ -8,7 +8,7 @@ export const DELETE_TAG = 'DELETE_TAG';
 
 export function fetchTags() {
     const url = `${ROOT_URL}/tags`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -19,7 +19,7 @@ export function fetchTags() {
 
 export function updateTag(tag) {
     const url = `${ROOT_URL}/tag`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.post(url, tag,{ headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -30,7 +30,7 @@ export function updateTag(tag) {
 
 export function deleteTag(id) {
     const url = `${ROOT_URL}/tag/${id}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.delete(url, {headers: {"Authorization": `Bearer ${idToken}`}})
 
     return {

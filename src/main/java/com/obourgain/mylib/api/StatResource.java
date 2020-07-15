@@ -31,7 +31,7 @@ public class StatResource extends AbstractResource {
     @GetMapping(value = "/stats/{year}")
     public ResponseEntity<Map<String, List<StatService.StatData>>> getStats(HttpServletRequest request, @PathVariable Integer year) throws Exception {
         log.info("REST - stats");
-        var userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         var res = statService.getAllStat(userId, false, year);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -42,7 +42,7 @@ public class StatResource extends AbstractResource {
     @GetMapping(value = "/stats")
     public ResponseEntity<Map<String, List<StatService.StatData>>> getStats(HttpServletRequest request) throws Exception {
         log.info("REST - stats");
-        var userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         var res = statService.getAllStat(userId, false, null);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -53,7 +53,7 @@ public class StatResource extends AbstractResource {
     @GetMapping(value = "/stat/{statName}/{year}")
     public ResponseEntity<List<StatService.StatData>> getStats(HttpServletRequest request, @PathVariable String statName, @PathVariable Integer year) throws Exception {
         log.info("REST - stats");
-        var userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         var res = statService.getStatDetail(userId, false, year, statName);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -63,7 +63,7 @@ public class StatResource extends AbstractResource {
     @GetMapping(value = "/stat/{statName}")
     public ResponseEntity<List<StatService.StatData>> getStats(HttpServletRequest request, @PathVariable String statName) throws Exception {
         log.info("REST - stats");
-        var userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         var res = statService.getStatDetail(userId, false, null, statName);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

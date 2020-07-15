@@ -43,7 +43,7 @@ public class ReadingResource extends AbstractResource {
     @GetMapping(value = "/readings")
     public ResponseEntity<Page<Reading>> getReadings(HttpServletRequest request, Pageable page) throws Exception {
         log.info("REST - readings");
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         Page<Reading> readings = readingService.findByUserId(userId, page);
         return new ResponseEntity<>(readings, HttpStatus.OK);
     }
@@ -54,7 +54,7 @@ public class ReadingResource extends AbstractResource {
     @GetMapping(value = "/bookreadings/{id}")
     public ResponseEntity<List<Reading>> getBookReadings(HttpServletRequest request, @PathVariable Long id) throws Exception {
         log.info("REST - readings for book {}", id);
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         List<Reading> readings = readingService.findByBook(userId, id);
         return new ResponseEntity<>(readings, HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ public class ReadingResource extends AbstractResource {
      */
     @DeleteMapping(value = "/reading/{id}")
     public void deleteReading(HttpServletRequest request, @PathVariable Long id) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         log.info("Deleting reading " + id + " from " + userId);
         readingService.delete(id);
     }
@@ -75,7 +75,7 @@ public class ReadingResource extends AbstractResource {
      */
     @PostMapping(value = "/reading")
     public void postReading(HttpServletRequest request, @RequestBody ReadingParam reading) throws Exception {
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         Book book = bookService.findBook(userId, Long.parseLong(reading.book));
         LocalDate localDate = LocalDate.parse(reading.date);
 

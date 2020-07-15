@@ -1,14 +1,12 @@
-
 spring:
-
-# H2 Database
+  # H2 Database
   datasource:
     url: jdbc:h2:file:~/mylib/db/database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     hibernate:
       ddl-auto: update
 
-# Thymeleaf
+  # Thymeleaf
   thymeleaf:
     cache: false
 
@@ -16,8 +14,10 @@ spring:
 
 # Web
 server:
+  error:
+    include-stacktrace: never
   port: 2017
-  
+
 # Authentication
 security:
   oauth2:
@@ -27,7 +27,7 @@ security:
       accessTokenUri: https://www.googleapis.com/oauth2/v4/token
       userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
       clientAuthenticationScheme: form
-      scope:  
+      scope:
         - openid
         - email
         - profile

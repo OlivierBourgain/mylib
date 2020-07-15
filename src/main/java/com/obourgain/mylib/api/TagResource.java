@@ -36,7 +36,7 @@ public class TagResource extends AbstractResource {
     @PostMapping(value = "/tag")
     public ResponseEntity<List<Tag>> update(HttpServletRequest request, @RequestBody Tag tag) throws Exception {
         log.info("REST - tag update " + tag);
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         tagService.updateTag(tag, userId);
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
@@ -48,7 +48,7 @@ public class TagResource extends AbstractResource {
     @DeleteMapping(value = "/tag/{id}")
     public ResponseEntity<List<Tag>> delete(HttpServletRequest request, @PathVariable Long id) throws Exception {
         log.info("REST - tag delete " + id);
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         tagService.deleteTag(id, userId);
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
@@ -60,7 +60,7 @@ public class TagResource extends AbstractResource {
     @GetMapping(value = "/tags")
     public ResponseEntity<List<Tag>> getTags(HttpServletRequest request) throws Exception {
         log.info("REST - tags");
-        String userId = getClientId(request).orElseThrow(() -> new AccessDeniedException("User not authenticated"));
+        String userId = checkAccess(request);
         List<Tag> tags = tagService.findByUserId(userId);
         return new ResponseEntity<>(tags, HttpStatus.OK);
     }

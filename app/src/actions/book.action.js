@@ -13,7 +13,7 @@ export const REBUILD_INDEX = 'REBUILD INDEX';
 
 export const lookup = (term) => {
     const url = `${ROOT_URL}/lookup?term=${term}`
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -25,7 +25,7 @@ export const lookup = (term) => {
 export function fetchBooks(page, size, term, discarded, sort, descending) {
     const url = `${ROOT_URL}/books?page=${page}&size=${size}&criteria=${term}&discarded=${discarded}`
                 + `&sort=${sort},${descending?'DESC':'ASC'}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -36,7 +36,7 @@ export function fetchBooks(page, size, term, discarded, sort, descending) {
 
 export function fetchBookTitles() {
     const url = `${ROOT_URL}/booktitles`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -47,7 +47,7 @@ export function fetchBookTitles() {
 
 export function fetchBook(id) {
     const url = `${ROOT_URL}/book/${id}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -58,7 +58,7 @@ export function fetchBook(id) {
 
 export function updateBook(book) {
     const url = `${ROOT_URL}/book`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.post(url, book,{headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -69,7 +69,7 @@ export function updateBook(book) {
 
 export function updateDiscard(id, discard) {
     const url = `${ROOT_URL}/bookdiscard`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.post(url, `book=${id}&discard=${discard}`,{headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -80,7 +80,7 @@ export function updateDiscard(id, discard) {
 
 export function deleteBook(bookId) {
     const url = `${ROOT_URL}/book/${bookId}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.delete(url, {headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -91,7 +91,7 @@ export function deleteBook(bookId) {
 
 export const exportcsv = () => {
     const url = `${ROOT_URL}/exportbooks`
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, { headers: {"Authorization" : `Bearer ${idToken}`}});
 
     return {
@@ -103,7 +103,7 @@ export const exportcsv = () => {
 export const rebuildindex =  (bookId, date) => {
     return (dispatch, getState) => {
         const url = `${ROOT_URL}/rebuildindex`
-        const idToken = store.getState().account.tokenObj.id_token;
+        const idToken = store.getState().user.tokenObj.id_token;
 
         const res = dispatch({
             type: REBUILD_INDEX,

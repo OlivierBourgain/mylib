@@ -7,7 +7,7 @@ export const FETCH_STATS_DETAIL = 'FETCH_STATS_DETAIL';
 
 export function fetchStats(year) {
     const url = `${ROOT_URL}/stats/${year}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, {headers: {"Authorization": `Bearer ${idToken}`}});
 
     return {
@@ -18,7 +18,7 @@ export function fetchStats(year) {
 
 export function fetchStatsDetail(type, year) {
     const url = `${ROOT_URL}/stat/${type}/${year}`;
-    const idToken = store.getState().account.tokenObj.id_token;
+    const idToken = store.getState().user.tokenObj.id_token;
     const request = axios.get(url, {headers: {"Authorization": `Bearer ${idToken}`}});
 
     return {
