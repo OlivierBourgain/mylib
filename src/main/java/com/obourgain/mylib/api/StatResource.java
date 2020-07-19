@@ -43,7 +43,8 @@ public class StatResource extends AbstractResource {
     public ResponseEntity<Map<String, List<StatService.StatData>>> getStats(HttpServletRequest request) throws Exception {
         log.info("REST - stats");
         String userId = checkAccess(request);
-        var res = statService.getAllStat(userId, false, null);
+        boolean discarded = Boolean.parseBoolean(request.getParameter("discarded"));
+        var res = statService.getAllStat(userId, discarded, null);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -64,7 +65,8 @@ public class StatResource extends AbstractResource {
     public ResponseEntity<List<StatService.StatData>> getStats(HttpServletRequest request, @PathVariable String statName) throws Exception {
         log.info("REST - stats");
         String userId = checkAccess(request);
-        var res = statService.getStatDetail(userId, false, null, statName);
+        boolean discarded = Boolean.parseBoolean(request.getParameter("discarded"));
+        var res = statService.getStatDetail(userId, discarded, null, statName);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

@@ -13,7 +13,8 @@ class Stats extends Component {
     state = {
         year: 2020,
         showDetail: false,
-        titleDetail: ''
+        titleDetail: '',
+        discarded: false
     }
 
     constructor(props) {
@@ -21,14 +22,18 @@ class Stats extends Component {
         this.update();
     }
 
-    update = () => { this.props.fetchStats(this.state.year); }
+    update = () => { this.props.fetchStats(this.state.year, this.state.discarded); }
 
     changeYear = (event) => {
         this.setState({year: event.target.value, showDetail:false}, this.update)
     }
 
+    changeDiscarded = (event) => {
+        this.setState({discarded: event.target.checked}, this.update)
+    }
+
     showDetail = (statName) => {
-        this.props.fetchStatsDetail(statName, this.state.year);
+        this.props.fetchStatsDetail(statName, this.state.year, this.state.discarded);
         switch(statName) {
             case 'booksbytag':
                 this.setState({titleDetail:'Top tags (books)', cssDetail: statName});
@@ -67,6 +72,11 @@ class Stats extends Component {
                         </select>
                         </label>
                     </Col>
+                    {!this.state.year && <Col className="col-6">
+                        <input type="checkbox" id="showDisc" checked={this.state.discarded}
+                               onChange={this.changeDiscarded}/> Show discarded
+                    </Col>
+                    }
                 </Row>
                 {this.state.showDetail && !this.props.detailpending && <Row>
                     <Col className="stat-box col-12">
