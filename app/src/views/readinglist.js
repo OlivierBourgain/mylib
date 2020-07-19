@@ -124,15 +124,19 @@ class ReadingList extends Component {
                     <Table bordered striped size="sm">
                         <thead>
                         <tr className="row">
-                            <th className="col-6 col-md-5"><Link to='/readings'
-                                                        onClick={() => this.changeSort('Book.title')}>Title</Link></th>
-                            <th className="col-6 col-md-3"><Link to='/readings'
-                                                        onClick={() => this.changeSort('Book.author')}>Author</Link></th>
-                            <th className="col-4 col-md-1"><Link to='/readings'
-                                                        onClick={() => this.changeSort('Book.pages')}>Pages</Link></th>
-                            <th className="col-4 col-md-2"><Link to='/readings' onClick={() => this.changeSort('Date')}>Date
-                                read</Link></th>
-                            <th className="col-4 col-md-1"></th>
+                            <th className="col-5 col-md-5">
+                                <Link to='/readings' onClick={() => this.changeSort('Book.title')}>Title</Link>
+                            </th>
+                            <th className="col-4 col-md-3">
+                                <Link to='/readings' onClick={() => this.changeSort('Book.author')}>Author</Link>
+                            </th>
+                            <th className="d-none d-md-block col-md-1">
+                                <Link to='/readings' onClick={() => this.changeSort('Book.pages')}>Pages</Link>
+                            </th>
+                            <th className="col-3 col-md-2">
+                                <Link to='/readings' onClick={() => this.changeSort('Date')}>Date read</Link>
+                            </th>
+                            <th className="d-none d-md-block col-md-1"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -148,13 +152,11 @@ class ReadingList extends Component {
     renderReading = (reading) => {
         return (
             <tr className="row" key={`reading-${reading.id}`}>
-                <td className="col-6 col-md-5">
-                    <Link to={`/book/${reading.book.id}`}>{reading.book.title}</Link>
-                </td>
-                <td className="col-6 col-md-3">{reading.book.author}</td>
-                <td className="col-4 col-md-1">{reading.book.pages}</td>
-                <td className="col-4 col-md-2">{reading.date}</td>
-                <td className="col-4 col-md-1"><Link to='#' onClick={() => this.delete(reading)}>Delete</Link></td>
+                <td className="col-5 col-md-5"><Link to={`/book/${reading.book.id}`}>{reading.book.title}</Link></td>
+                <td className="col-4 col-md-3">{reading.book.author}</td>
+                <td className="d-none d-md-block col-md-1">{reading.book.pages}</td>
+                <td className="col-3 col-md-2">{reading.date}</td>
+                <td className="d-none d-md-block col-md-1"><Link to='#' onClick={() => this.delete(reading)}>Delete</Link></td>
             </tr>
         )
     }
