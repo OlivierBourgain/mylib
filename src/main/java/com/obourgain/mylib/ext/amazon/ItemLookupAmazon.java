@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,11 +25,13 @@ import java.util.regex.Pattern;
  * <p>
  * L'appel des API nécessite d'être partenaire, on se rabat donc sur le scrapping de la page publique.
  * <p>
- * Pour les images, voir: http://aaugh.com/imageabuse.html. http://images.amazon.com/images/P/${isbn}.08.T.jpg --> height 110 px
- * http://images.amazon.com/images/P/${isbn}.08.Z.jpg --> height 160 px http://images.amazon.com/images/P/${isbn}.08.L.jpg --> height 490 ou 500 px
+ * Pour les images, voir: http://aaugh.com/imageabuse.html.
+ * http://images.amazon.com/images/P/${isbn}.08.T.jpg --> height 110 px
+ * http://images.amazon.com/images/P/${isbn}.08.Z.jpg --> height 160 px
+ * http://images.amazon.com/images/P/${isbn}.08.L.jpg --> height 490 ou 500 px
  */
 public class ItemLookupAmazon {
-    private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
+    private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
     private static final String AMAZON_URL = "https://www.amazon.fr/gp/product/";
     private static final String AMAZON_IMG = "http://images.amazon.com/images/P/";
     private static final Logger log = LoggerFactory.getLogger(ItemLookupAmazon.class);
@@ -36,7 +40,6 @@ public class ItemLookupAmazon {
         Book res = lookup("2290120332");
         System.out.println(res.deepToString());
     }
-
 
     /**
      * Lookup a book on Amazon, with its ISBN.
@@ -51,7 +54,7 @@ public class ItemLookupAmazon {
             if (isbn.length() >= 13) isbn10 = ISBNConvertor.isbn13to10(isbn);
 
             String url = getUrl(isbn10);
-            log.info("Calling amazon {} at {}", isbn10, url);
+            log.info("Calling amazon {} at {}", isbn10, url);
             Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
             return parseHtmlPage(isbn10, doc);
         } catch (Exception e) {
@@ -65,9 +68,8 @@ public class ItemLookupAmazon {
      */
     public static Book asinLookup(String asin) {
         try {
-
             String url = "https://www.amazon.fr/exec/obidos/ASIN/" + asin;
-            log.info("Calling amazon asin={} at {}", asin, url);
+            log.info("Calling amazon asin={} at {}", asin, url);
             Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
             return parseHtmlPage(asin, doc);
         } catch (Exception e) {
@@ -98,7 +100,7 @@ public class ItemLookupAmazon {
         String url = AMAZON_IMG + isbn + ".08." + size + ".jpg";
         System.out.println("Calling " + url);
         URLConnection connection = new URL(url).openConnection();
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
+        connection.setRequestProperty("User-Agent", USER_AGENT);
 
         InputStream response = connection.getInputStream();
         byte[] bytes = IOUtils.toByteArray(response);
@@ -142,7 +144,7 @@ public class ItemLookupAmazon {
         Pattern patternNbPages = Pattern.compile(".* (\\d*) pages");
         Pattern patternLang = Pattern.compile("Langue.*:\\s(.*)");
 
-        Elements elts = doc.select("#detail_bullets_id li");
+        Elements elts = doc.select("#detailBullets_feature_div li");
         for (Element elt : elts) {
             Matcher matcherPages = patternNbPages.matcher(elt.text());
             Matcher matcherLang = patternLang.matcher(elt.text());
@@ -161,7 +163,7 @@ public class ItemLookupAmazon {
                     default:
                         System.err.println("Langue non trouvée " + lang);
                 }
-            } else if (elt.text().startsWith("Editeur")) {
+            } else if (elt.text().startsWith("Editeur") || elt.text().startsWith("Éditeur")) {
                 if (elt.text().contains(";")) {
                     String[] t = elt.text().split(";");
                     String publisher = t[0].substring(t[0].indexOf(':') + 1).trim();
@@ -169,9 +171,12 @@ public class ItemLookupAmazon {
                     book.setPublisher(publisher);
                     book.setPublicationDate(publication);
                 } else {
-                    String publisher = elt.text().substring(elt.text().indexOf(':') + 1, elt.text().indexOf('('))
+                    // Should cover cases like
+                    // - ATALANTE (L') (24 octobre 2013)
+                    // - Biblio (12 septembre 2012)
+                    String publisher = elt.text().substring(elt.text().indexOf(':') + 1, elt.text().lastIndexOf('('))
                             .trim();
-                    String publication = elt.text().substring(elt.text().indexOf('(') + 1, elt.text().indexOf(')'))
+                    String publication = elt.text().substring(elt.text().lastIndexOf('(') + 1, elt.text().lastIndexOf(')'))
                             .trim();
                     book.setPublisher(publisher);
                     book.setPublicationDate(publication);
@@ -179,9 +184,7 @@ public class ItemLookupAmazon {
             } else if (elt.text().startsWith("ISBN-13")) {
                 book.setIsbn(elt.text().substring(elt.text().indexOf(':') + 1).trim());
             }
-
         }
-
     }
 
     /**
@@ -191,22 +194,18 @@ public class ItemLookupAmazon {
      */
     private static String getAuthor(Document doc) {
         Elements elts = doc.select(".contributorNameID");
-        if (elts.size() > 0) {
-            String res = "";
-            for (Element elt : elts)
-                res += ", " + elt.text();
-            return res.substring(2);
-        }
+        List<String> res = new ArrayList<>();
 
+        if (elts.size() > 0) {
+            for (Element elt : elts)
+                res.add(elt.text());
+        }
         elts = doc.select("span.author>a");
         if (elts.size() > 0) {
-            String res = "";
             for (Element elt : elts)
-                res += ", " + elt.text();
-            return res.substring(2);
+                res.add(elt.text());
         }
-
-        return null;
+        return String.join(", ", res);
     }
 
     /**
@@ -228,5 +227,4 @@ public class ItemLookupAmazon {
     private static String getUrl(String isbn) {
         return AMAZON_URL + isbn;
     }
-
 }
