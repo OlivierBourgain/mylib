@@ -90,7 +90,9 @@ public class BookService {
             existing.setIsbn(book.getIsbn());
             existing.setPages(book.getPages());
             existing.setPublisher(book.getPublisher());
+            existing.setPublicationDate(book.getPublicationDate());
             existing.setTags(tags);
+            existing.setLang(book.getLang());
             existing.setComment(book.getComment());
             existing.setUpdated(LocalDateTime.now());
             log.info("Updating book " + existing.deepToString());
