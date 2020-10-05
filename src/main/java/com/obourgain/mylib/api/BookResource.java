@@ -79,7 +79,9 @@ public class BookResource extends AbstractResource {
     public ResponseEntity<Map<Long, String>> getBooks(HttpServletRequest request) throws Exception {
         log.info("REST - booktitles");
         String userId = checkAccess(request);
-        Map<Long, String> res = bookService.findByUserId(userId).stream().collect(Collectors.toMap(Book::getId, Book::getTitle));
+        Map<Long, String> res = bookService.findByUserId(userId).stream()
+                .filter(b -> b.getTitle() != null)
+                .collect(Collectors.toMap(Book::getId, Book::getTitle));
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
