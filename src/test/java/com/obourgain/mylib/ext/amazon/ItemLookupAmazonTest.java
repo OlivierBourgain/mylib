@@ -96,4 +96,13 @@ public class ItemLookupAmazonTest {
         assertEquals("La Méprise : L'Affaire d'Outreau", book.getTitle());
         assertEquals("Florence Aubenas", book.getAuthor());
     }
+
+
+    @Test
+    public void testORing() throws IOException {
+        Book book = ItemLookupAmazon.lookup("0813066034");
+        assertEquals("Truth, Lies, and O-Rings: Inside the Space Shuttle Challenger Disaster", book.getTitle());
+        assertEquals("Allan J. McDonald, James R. Hansen", book.getAuthor());
+
+    }
 }

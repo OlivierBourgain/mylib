@@ -13,8 +13,15 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ProxySelector;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,7 +38,7 @@ import java.util.regex.Pattern;
  * http://images.amazon.com/images/P/${isbn}.08.L.jpg --> height 490 ou 500 px
  */
 public class ItemLookupAmazon {
-    private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36";
+    private static final String USER_AGENT = "Mozilla/5.0";
     private static final String AMAZON_URL = "https://www.amazon.fr/gp/product/";
     private static final String AMAZON_IMG = "http://images.amazon.com/images/P/";
     private static final Logger log = LoggerFactory.getLogger(ItemLookupAmazon.class);
@@ -52,15 +59,52 @@ public class ItemLookupAmazon {
         try {
             String isbn10 = isbn;
             if (isbn.length() >= 13) isbn10 = ISBNConvertor.isbn13to10(isbn);
+            String url = buildUrl(isbn10);
 
-            String url = getUrl(isbn10);
             log.info("Calling amazon {} at {}", isbn10, url);
-            Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
+            String html = tempFetchDocument(url);
+            Document doc = Jsoup.parse(html);
             return parseHtmlPage(isbn10, doc);
         } catch (Exception e) {
             log.error("Book not found", e);
-            return null;
+            throw new RuntimeException("Error getting info from Amazon");
         }
+    }
+
+    /**
+     * Temporary solution.
+     * The HTTP get to amazon returns an HTTP 503. I wasn't able to find the exact cause of this
+     * problem for now. 'wget' the same url works fine.
+     */
+    private static String tempFetchDocument(String url) throws Exception {
+        String cmd = "wget -O /tmp/page.html " + url;
+        log.info("Using " + cmd);
+        Runtime.getRuntime().exec(cmd);
+        Thread.sleep(5000);
+        String res = Files.readString(Path.of("/tmp/page.html"));
+        return res;
+    }
+
+    private static String fetchDocument(String urlstr) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(urlstr))
+                .header("user-agent", USER_AGENT)
+                .header("accept", "*/*")
+                .header("accept-encoding", "identity")
+                .GET()
+                .build();
+
+        log.info("Request {}", request.toString());
+        log.info("User agent {}", request.headers());
+        HttpResponse<String> response = HttpClient
+                .newBuilder()
+                .proxy(ProxySelector.getDefault())
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        log.info("Response {}", response.toString());
+        if (response.statusCode() != 200)
+            throw new RuntimeException("HTTP error fetching URL " + response.statusCode());
+        return response.body();
     }
 
     /**
@@ -224,7 +268,7 @@ public class ItemLookupAmazon {
      * 10 chiffres (en omettant les traits d'union) ou ASIN (présent sur la page d'informations détaillées du produit commençant par un B) pour le titre
      * correspondant. "
      */
-    private static String getUrl(String isbn) {
+    private static String buildUrl(String isbn) {
         return AMAZON_URL + isbn;
     }
 }
