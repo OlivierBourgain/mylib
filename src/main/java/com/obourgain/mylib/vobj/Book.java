@@ -14,7 +14,10 @@ import java.util.Set;
 @Table(name = "Book")
 public class Book {
 
-
+    /**
+     * Enum for book status
+     * Not used anymore, should be replaced with a signe "Discarded" flag.
+     */
     public enum BookStatus {
         TO_READ, // à lire
         DISCARDED, // jeté

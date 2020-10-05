@@ -5,7 +5,7 @@
 
     <groupId>com.obourgain</groupId>
     <artifactId>mylib</artifactId>
-    <version>14-preview-react</version>
+    <version>15</version>
     <packaging>jar</packaging>
 
 
@@ -22,7 +22,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>14</java.version>
+        <java.version>15</java.version>
         <lucene.version>8.4.1</lucene.version>
 
         <!-- https://medium.com/@itzgeoff/including-react-in-your-spring-boot-maven-build-ae3b8f8826e -->
@@ -150,8 +150,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>14</source>
-                    <target>14</target>
+                    <source>15</source>
+                    <target>15</target>
                     <compilerArgs>
                         --enable-preview
                     </compilerArgs>
@@ -182,14 +182,14 @@
                     <execution>
                         <id>install-frontend-tools</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-yarn</goal>
                         </goals>
                     </execution>
 
                     <execution>
-                        <id>npm-install</id>
+                        <id>yarn-install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
                             <arguments>install</arguments>
@@ -199,7 +199,7 @@
                     <execution>
                         <id>build-frontend</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>
@@ -230,14 +230,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>14</source>
-                    <target>14</target>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 </project>

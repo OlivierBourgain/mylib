@@ -59,7 +59,7 @@ public class BookService {
      */
     public Book findBook(String userId, long bookId) {
         var b = bookRepository.findById(bookId);
-        if (!b.isPresent()) return null;
+        if (b.isEmpty()) return null;
         if (!b.get().getUserId().equals(userId)) {
             log.warn("Access error to " + b + " from " + userId);
             throw new IllegalArgumentException("User " + userId + " cannot delete " + b);
@@ -130,7 +130,7 @@ public class BookService {
      */
     public Book isbnLookup(String userId, String isbn) {
         Book book = ItemLookupAmazon.lookup(isbn);
-        if (book == null) {
+        if (book == null || book.getTitle().isBlank()) {
             log.info("No book found");
             return null;
         }
@@ -176,11 +176,11 @@ public class BookService {
         fixTags(luceneBooks, alltags);
 
         // Apply the pageable (sort)
-        if (page != null && page.getSort() != null && page.getSort() != Sort.unsorted()) {
+        if (page != null && page.getSort() != Sort.unsorted()) {
             Sort.Order order = page.getSort().iterator().next();
             Comparator<Book> bookComparator = getBookComparator(order);
             if (order.isDescending()) bookComparator = bookComparator.reversed();
-            Collections.sort(luceneBooks, bookComparator);
+            luceneBooks.sort(bookComparator);
         }
 
         // Apply the pageable (size, and page)
@@ -191,19 +191,18 @@ public class BookService {
             newPage = PageRequest.of(0, page.getPageSize(), page.getSort());
         }
         int end = Math.min(start + page.getPageSize(), luceneBooks.size());
-        Page<Book> books = new PageImpl<Book>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
-        return books;
+        return new PageImpl<>(luceneBooks.subList(start, end), newPage, luceneBooks.size());
     }
 
     private Comparator<Book> getBookComparator(Sort.Order order) {
-        switch (order.getProperty()) {
-            case "Title" : return Comparator.comparing(Book::getTitle);
-            case "Author" : return Comparator.comparing(Book::getAuthor);
-            case "Pages" : return Comparator.comparing(Book::getPages);
-            case "Updated" : return Comparator.comparing(Book::getUpdated);
-            case "Tags" : return new TagListComparator();
-            default : return Comparator.comparing(Book::getTitle);
-        }
+        return switch (order.getProperty()) {
+            case "Title" -> Comparator.comparing(Book::getTitle);
+            case "Author" -> Comparator.comparing(Book::getAuthor);
+            case "Pages" -> Comparator.comparing(Book::getPages);
+            case "Updated" -> Comparator.comparing(Book::getUpdated);
+            case "Tags" -> new TagListComparator();
+            default -> Comparator.comparing(Book::getTitle);
+        };
     }
 
     /**
@@ -222,9 +221,9 @@ public class BookService {
         Pattern pattern = Pattern.compile(",");
         return pattern
                 .splitAsStream(book.getTagString())
-                .filter(s -> StringUtils.isNumeric(s))
+                .filter(StringUtils::isNumeric)
                 .map(Long::valueOf)
-                .map(x -> alltags.get(x))
+                .map(alltags::get)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(TreeSet::new));
     }
@@ -239,7 +238,7 @@ public class BookService {
     /**
      * Compare two books based on the their list of tags
      */
-    public class TagListComparator implements Comparator<Book> {
+    public static class TagListComparator implements Comparator<Book> {
 
         @Override
         public int compare(Book o1, Book o2) {
