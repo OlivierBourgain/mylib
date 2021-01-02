@@ -91,6 +91,20 @@ public class ItemLookupAmazonTest {
     }
 
     @Test
+    public void parseHtmlBlockchain() throws IOException {
+        InputStream is = ItemLookupAmazon.class.getResourceAsStream("/amazon/9782956470335.html");
+        String html = IOUtils.toString(is, StandardCharsets.UTF_8);
+        Document doc = Jsoup.parse(html);
+        Book book = ItemLookupAmazon.parseHtmlPage("2841726525", doc);
+        assertEquals("Blockchain - the key to unlocking the value chain", book.getTitle());
+        assertEquals("Martin Della Chiesa, François Hiault, Clément Tequi, Nicolas Bouzou, Thibaut Gress, Eric Poupy", book.getAuthor());
+        assertEquals("Prospectives Accuracy", book.getPublisher());
+        assertEquals("4 janvier 2019",book.getPublicationDate());
+        assertEquals("en", book.getLang());
+        assertEquals("978-2956470335", book.getIsbn());
+    }
+
+    @Test
     public void testLaMeprise() throws IOException {
         Book book = ItemLookupAmazon.lookup("9782020789516");
         assertEquals("La Méprise : L'Affaire d'Outreau", book.getTitle());
