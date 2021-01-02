@@ -6,7 +6,7 @@ import {Redirect} from 'react-router';
 import {Button, Col, Container, Input, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
-import {fetchBooks, lookup, exportcsv, rebuildindex} from '../actions/book.action'
+import {exportcsv, fetchBooks, lookup, rebuildindex} from '../actions/book.action'
 import Pagination from "./tools/pagination";
 
 class BookList extends Component {
@@ -132,13 +132,11 @@ class BookList extends Component {
             </Row>
             {list && <>
                 <Row>
-                    <Col className="col-12 col-md-4" >
+                    <Col className="col-12 col-md-4">
                         {list.totalElements} results
-                        {list.totalPages > 1 && <span>
-                            , showing page {list.number + 1} of {list.totalPages}
+                        {list.totalPages > 1 && <span>, showing page {list.number + 1} of {list.totalPages}
                         </span>}
-                        {this.state.activeFilter && <span>
-                            , filter on <strong>{this.state.activeFilter}</strong>{' '}
+                        {this.state.activeFilter && <span>, filter on <strong>{this.state.activeFilter}</strong>{' '}
                             (<button id="removeFilter" onClick={this.clearFilter}
                                      className="link-button">remove</button>)
                         </span>}
@@ -166,13 +164,17 @@ class BookList extends Component {
                     <Table bordered striped size="sm">
                         <thead>
                         <tr className="row">
-                            <th className="col-6 col-md-5"><Link to='/books'
-                                                        onClick={() => this.changeSort('Title')}>Title</Link></th>
-                            <th className="col-4 col-md-3"><Link to='/books'
-                                                        onClick={() => this.changeSort('Author')}>Author</Link></th>
-                            <th className="col-2 col-md-1"><Link to='/books'
-                                                        onClick={() => this.changeSort('Pages')}>Pages</Link></th>
-                            <th className="d-none d-md-block col-3"><Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link>
+                            <th className="col-6 col-md-5">
+                                <Link to='/books' onClick={() => this.changeSort('Title')}>Title</Link>
+                            </th>
+                            <th className="col-4 col-md-3">
+                                <Link to='/books' onClick={() => this.changeSort('Author')}>Author</Link>
+                            </th>
+                            <th className="col-2 col-md-1">
+                                <Link to='/books' onClick={() => this.changeSort('Pages')}>Pages</Link>
+                            </th>
+                            <th className="d-none d-md-block col-3">
+                                <Link to='/books' onClick={() => this.changeSort('Tags')}>Tags</Link>
                             </th>
                         </tr>
                         </thead>
@@ -199,8 +201,6 @@ class BookList extends Component {
                 </td>
             </tr>);
     }
-
-
 }
 
 function mapDispatchToProps(dispatch) {
