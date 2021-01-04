@@ -6,7 +6,7 @@ It uses Spring boot 2, with an H2 database, a search index using Lucene, and Rea
 You can add a new book with its ISBN number (information is scrapped from amazon), and associate tags to books.
 The application also provides basic export, and some statistics. 
 
-The application runs with java 14, with `--enable_preview` flag.
+The application runs with java 15, with `--enable_preview` flag.
 
 ## Authentication
 Authentication is done through Oauth2 with Google, so the application needs two variables.
@@ -20,7 +20,7 @@ The data is stored in a local h2 database.
 The application also download pictures from books, which are stored as files in `~/mylib/store`.
 
 ## Starting the application
-To start application, you need java 14.
+To start application, you need java 15.
 
 ### Back end
 ```
@@ -30,15 +30,15 @@ mvn spring-boot:run
 
 where `secret.sh` file exports `GOOGLE_CLIENT_SECRET` and `GOOGLE_CLIENT_ID`
 
-### Back end
+### Front end
 ```
 cd app
-yarn start
+npm start
 ```
 
 ## Deployment
-Run `mvn package` and deploy the `target\mylib-x.y.jar` on your server.
-Then run the app with `java -jar --enable-preview mylib-x.y.jar`.
+Run `mvn package` and deploy the `target\mylib-xx.jar` on your server.
+Then run the app with `java -jar --enable-preview mylib-xx.jar`.
 
 The application will create 3 subdirectories : `db`, `store` and `search`.
 
