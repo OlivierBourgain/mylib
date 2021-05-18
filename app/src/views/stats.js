@@ -11,7 +11,7 @@ import { faExpandAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 class Stats extends Component {
     state = {
-        year: 2020,
+        year: new Date().getFullYear(),
         showDetail: false,
         titleDetail: '',
         discarded: false
