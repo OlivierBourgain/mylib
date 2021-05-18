@@ -2,22 +2,23 @@ package com.obourgain.mylib.util.search;
 
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LuceneSearchTest {
 
     private static LuceneSearch fixture;
 
-    @Before
+    @BeforeEach
     public void initIndex() {
         fixture = new LuceneSearch(System.getProperty("user.home") + "/mylib/search/testfull");
         fixture.clearIndex();
