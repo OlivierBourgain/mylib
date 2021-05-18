@@ -13,15 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,8 +26,6 @@ import java.util.regex.Pattern;
 
 /**
  * Lookup d'un item sur Amazon.
- * <p>
- * L'appel des API nécessite d'être partenaire, on se rabat donc sur le scrapping de la page publique.
  * <p>
  * Pour les images, voir: http://aaugh.com/imageabuse.html.
  * http://images.amazon.com/images/P/${isbn}.08.T.jpg --> height 110 px
@@ -62,7 +57,7 @@ public class ItemLookupAmazon {
             String url = buildUrl(isbn10);
 
             log.info("Calling amazon {} at {}", isbn10, url);
-            String html = tempFetchDocument(url);
+            String html = fetchDocument(url);
             Document doc = Jsoup.parse(html);
             return parseHtmlPage(isbn10, doc);
         } catch (Exception e) {
@@ -71,26 +66,11 @@ public class ItemLookupAmazon {
         }
     }
 
-    /**
-     * Temporary solution.
-     * The HTTP get to amazon returns an HTTP 503. I wasn't able to find the exact cause of this
-     * problem for now. 'wget' the same url works fine.
-     */
-    private static String tempFetchDocument(String url) throws Exception {
-        String cmd = "wget -O /tmp/page.html " + url;
-        log.info("Using " + cmd);
-        Runtime.getRuntime().exec(cmd);
-        Thread.sleep(5000);
-        String res = Files.readString(Path.of("/tmp/page.html"));
-        return res;
-    }
-
     private static String fetchDocument(String urlstr) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlstr))
                 .header("user-agent", USER_AGENT)
                 .header("accept", "*/*")
-                .header("accept-encoding", "identity")
                 .GET()
                 .build();
 
@@ -98,7 +78,6 @@ public class ItemLookupAmazon {
         log.info("User agent {}", request.headers());
         HttpResponse<String> response = HttpClient
                 .newBuilder()
-                .proxy(ProxySelector.getDefault())
                 .build()
                 .send(request, HttpResponse.BodyHandlers.ofString());
         log.info("Response {}", response.toString());
@@ -113,8 +92,10 @@ public class ItemLookupAmazon {
     public static Book asinLookup(String asin) {
         try {
             String url = "https://www.amazon.fr/exec/obidos/ASIN/" + asin;
+
             log.info("Calling amazon asin={} at {}", asin, url);
-            Document doc = Jsoup.connect(url).userAgent(USER_AGENT).get();
+            String html = fetchDocument(url);
+            Document doc = Jsoup.parse(html);
             return parseHtmlPage(asin, doc);
         } catch (Exception e) {
             log.error("Book not found", e);
@@ -184,7 +165,6 @@ public class ItemLookupAmazon {
      * </pre>
      */
     private static void parseDetail(Book book, Document doc) {
-
         Pattern patternNbPages = Pattern.compile(".* (\\d*) pages");
         Pattern patternLang = Pattern.compile("Langue.*:\\s(.*)");
 
