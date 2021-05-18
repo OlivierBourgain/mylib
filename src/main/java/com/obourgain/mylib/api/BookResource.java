@@ -168,7 +168,7 @@ public class BookResource extends AbstractResource {
     private StringBuilder booksToCsv(List<Book> books) {
         StringBuilder sb = new StringBuilder();
         sb.append(
-                "Id;Status;Title;Subtitle;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;SmallImage;MediumImage;LargeImage;Description;Comment\n");
+                "Id;Status;Title;Subtitle;Author;ISBN;Publisher;PublicationDate;Pages;Tags;Lang;Created;Updated;Description;Comment\n");
         for (Book book : books) {
             sb.append(book.getId()).append(";");
             sb.append(book.getStatus() == null ? "" : book.getStatus()).append(";");
@@ -179,17 +179,11 @@ public class BookResource extends AbstractResource {
             sb.append(book.getPublisher()).append(";");
             sb.append(book.getPublicationDate()).append(";");
             sb.append(book.getPages()).append(";");
-            for (Tag tag : book.getTags())
-                sb.append(tag.getText()).append(",");
-            sb.append(";");
+            sb.append(book.getTags().stream().map(Tag::getText).collect(Collectors.joining(", "))).append(";");
             sb.append(string(book.getLang())).append(";");
             sb.append(date(book.getCreated())).append(";");
             sb.append(date(book.getUpdated())).append(";");
-            sb.append(string(book.getSmallImage())).append(";");
-            sb.append(string(book.getMediumImage())).append(";");
-            sb.append(string(book.getLargeImage())).append(";");
             sb.append(string(book.getComment())).append(";");
-
             sb.append("\n");
         }
         return sb;
