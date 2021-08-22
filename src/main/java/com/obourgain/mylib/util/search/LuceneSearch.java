@@ -193,6 +193,11 @@ public class LuceneSearch {
 
     // Add one document to index, using the writer passed as an argument.
     private void addOneDocToIndex(IndexWriter w, Book book) throws IOException {
+        if (book.getTitle() == null) {
+            log.warn("Ignored - Book {} has no title {}", book.getId(), book);
+            return;
+        }
+
         Document doc = new Document();
 
         // Fields with index
