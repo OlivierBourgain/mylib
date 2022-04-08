@@ -206,7 +206,10 @@ public class ItemLookupAmazon {
                     book.setPublicationDate(publication);
                 }
             } else if (elt.text().startsWith("ISBN-13")) {
-                book.setIsbn(elt.text().substring(elt.text().indexOf(':') + 1).trim());
+                String isbn = elt.text().substring(elt.text().indexOf(':') + 1).trim();
+                // Correction of strange case where the ISBN start with Unicode Character 'LEFT-TO-RIGHT MARK' (U+200E)
+                if (isbn.startsWith(Character.toString(8206))) isbn = isbn.substring(1).trim();
+                book.setIsbn(isbn);
             }
         }
     }

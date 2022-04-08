@@ -105,6 +105,19 @@ public class ItemLookupAmazonTest {
     }
 
     @Test
+    public void parseHtmlEspionTraitre() throws IOException {
+        InputStream is = ItemLookupAmazon.class.getResourceAsStream("/amazon/9782266309844.html");
+        String html = IOUtils.toString(is, StandardCharsets.UTF_8);
+        Document doc = Jsoup.parse(html);
+        Book book = ItemLookupAmazon.parseHtmlPage("2841726525", doc);
+        assertEquals("L'Espion et le Traître", book.getTitle());
+        assertEquals("Ben Macintyre, Henri Bernard", book.getAuthor());
+        //assertEquals("Pocket", book.getPublisher());
+        assertEquals("3 septembre 2020",book.getPublicationDate());
+        assertEquals("978-2266309844", book.getIsbn());
+    }
+
+    @Test
     public void testLaMeprise() throws IOException {
         Book book = ItemLookupAmazon.lookup("9782020789516");
         assertEquals("La Méprise : L'Affaire d'Outreau", book.getTitle());
