@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * http://images.amazon.com/images/P/${isbn}.08.L.jpg --> height 490 ou 500 px
  */
 public class ItemLookupAmazon {
-    private static final String USER_AGENT = "Mozilla/5.0";
+    private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0";
     private static final String AMAZON_URL = "https://www.amazon.fr/gp/product/";
     private static final String AMAZON_IMG = "http://images.amazon.com/images/P/";
     private static final Logger log = LoggerFactory.getLogger(ItemLookupAmazon.class);
@@ -71,6 +71,12 @@ public class ItemLookupAmazon {
                 .uri(new URI(urlstr))
                 .header("user-agent", USER_AGENT)
                 .header("accept", "*/*")
+                .header("Referrer-Policy","strict-origin-when-cross-origin")
+                //  .header("Accept-Encoding", "gzip, deflate")
+                .header("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+                .header("DNT","1")
+                //.header("Connection","close")
+                .header("Upgrade-Insecure-Requests", "1")
                 .GET()
                 .build();
 
