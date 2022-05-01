@@ -2,7 +2,6 @@ package com.obourgain.mylib.util.search;
 
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
