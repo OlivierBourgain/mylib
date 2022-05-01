@@ -38,6 +38,24 @@ public class ISBNConvertor {
         return s9 + DIGITS.substring(n, n + 1);
     }
 
+    public static String isbn10to13(String isbn) {
+        if (StringUtils.isBlank(isbn)) return "";
+
+        String res = isbn;
+        res = "978" + res.substring(0, 9);
+        int d;
+
+        int sum = 0;
+        for (int i = 0; i < res.length(); i++) {
+            d = (i % 2 == 0) ? 1 : 3;
+            sum += (((int) res.charAt(i)) - 48) * d;
+        }
+        sum = 10 - (sum % 10);
+        res += sum;
+
+        return res;
+    }
+
     /**
      * Clean an ISBN from non numeric char.
      */

@@ -1,0 +1,1910 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head id="Head1"><meta http-equiv="Content-Type" content="text/html;charset=UTF-8" /><link rel="shortcut icon" type="image/x-icon" href="/App_Themes/Payot/images/favicon.ico" /><link rel="stylesheet" type="text/css" href="/Style/style.css?d=20220125" media="all" /><link rel="Stylesheet" type="text/css" href="/Style/fixTelerik.css?d=20201027" media="all" /><link rel="Stylesheet" type="text/css" href="/Style/NavigationTreeView.css?v=20210701" media="all" /><link rel="Stylesheet" type="text/css" href="/Style/OtherNavigationTreeView.css?v=20210701" media="all" /><link rel="stylesheet" type="text/css" href="/Style/styleDev.css" media="all" /><link rel="stylesheet" type="text/css" href="/Style/print.css?v=20201027" media="print" /><link rel="stylesheet" type="text/css" href="/Style/sass-styles.css?v=20220302" media="all" />
+
+    <!--[if IE 9]>
+    <link rel="stylesheet" type="text/css" href="/Style/styleIE9.css" />
+    <![endif]-->
+    <!--[if IE 8]>
+    <link rel="stylesheet" type="text/css" href="/Style/styleIE8.css" />
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="stylesheet" type="text/css" href="/Style/styleIE7.css" />
+    <![endif]-->
+    <!--<script type="text/javascript" src="/App_Themes/Payot/js/footer.js"></script>-->
+
+    <script type="text/javascript" src="/App_Themes/Payot/js/jquery-1.7.1.js"></script>
+    <script type="text/javascript">
+        var dataLayer = window.dataLayer = window.dataLayer || [];
+    </script>
+    <script type="text/javascript">
+        dataLayer.push({
+            'event': 'impressions',
+            'eventCategory': 'Ecommerce',
+            'eventAction': 'Impression',
+            'eventLabel': 'http://www.payot.ch/Detail/9781942788331?cId=1',
+            'ecommerce':
+                {'impressions':
+                        [{'name': 'accelerate',
+                            'id': '9781942788331',
+                            'price': 33.5,
+                            'brand': 'nicole_forsgren_phd',
+                            'variant' : 'it_revolution_press',
+                            'dimension1' : 'Broché',
+                            'category': 'Sciences  techniques  médecine',
+                            'position': 1
+                        }
+                        ]
+                }});
+
+
+        function prdAddToBasket9781942788331() {
+            dataLayer.push({
+                'event': 'addToBasket',
+                'eventCategory' : 'Ecommerce',
+                'eventAction' : 'Add To Basket',
+                'eventLabel' : 'accelerate',
+                'ecommerce': {
+                    'add': {
+                        'products': [{
+                            'name': 'accelerate',
+                            'brand': 'nicole_forsgren_phd',
+                            'variant': 'it_revolution_press',
+                            'dimension1': 'Broché',
+                            'id': '9781942788331',
+                            'price': 33.5,
+                            'category': 'Sciences  techniques  médecine',
+                            'quantity': 1
+                        }]
+                    }
+                }
+            })
+        }
+    </script>
+    <!-- Google Tag Manager -->
+    <script type="text/javascript">
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-56R23B');</script>
+    <!-- End Google Tag Manager -->
+
+    <script type="text/javascript">
+
+        var indexWWW = location.href.toLowerCase().indexOf("?fwww=1");
+        if (indexWWW == -1 && '' != '1')
+        {
+            var wi = window.outerWidth;
+            var he = window.outerHeight;
+
+            // Case Android + Mobile (Exclude tablets)
+            if (navigator.userAgent.indexOf("Android") != -1 && navigator.userAgent.indexOf("Mobi") != -1)
+            {
+                // Special cases where the size can be enough to process the request as a desktop one
+                if (navigator.userAgent.indexOf("Desire") == -1 && navigator.userAgent.indexOf("Sensation") == -1)
+                {
+                    var minWidthOrHeight = Math.min(wi, he);
+                    if (minWidthOrHeight < 500)
+                    {
+                        window.location = "http://mobile.payot.ch" + window.location.pathname + window.location.search;
+                    }
+                }
+                // Otherwise, too small anyway => Mobile version
+                else
+                {
+                    window.location = "http://mobile.payot.ch" + window.location.pathname + window.location.search;
+                }
+            }
+            // Other known mobile phones' user agents
+            else if (navigator.userAgent.indexOf("iPhone") != -1 || navigator.userAgent.indexOf("iPod") != -1 || navigator.userAgent.match(/Windows Phone/i) || navigator.userAgent.match(/BB10/i))
+            {
+                window.location = "http://mobile.payot.ch" + window.location.pathname + window.location.search;
+            }
+        }
+
+        function ReturnToMobile()
+        {
+            window.location = "http://mobile.payot.ch/";
+        }
+
+
+
+        function RequestStartResultGC(sender, eventArgs) {
+
+            var re = new RegExp("\._lnkCheckBalance", "ig");
+
+            if (eventArgs.EventTarget.match(re)) {
+                return;
+            }
+
+            var left = 0;
+            var top = 0;
+
+            var divElementStyle = $find("RadAjaxLoadingPanelResult").get_element().style;
+
+            var div = document.getElementById('divLoading');
+
+            div.className = "loadingBtn";
+
+            divElementStyle.position = 'absolute';
+            divElementStyle.zIndex = 1000;
+
+            var e = eventArgs.get_eventTargetElement().childNodes[0];
+
+            while (e != null && e.offsetParent != undefined && e.offsetParent != null) {
+                /*On ajoute la position de l'élément parent*/
+                left += e.offsetLeft + (e.clientLeft != null ? e.clientLeft : 0);
+                top += e.offsetTop + (e.clientTop != null ? e.clientTop : 0);
+                e = e.offsetParent;
+            }
+
+            divElementStyle.left = left + "px";
+            divElementStyle.top = top + "px";
+        }
+
+
+
+        function RequestStartResult(sender, eventArgs) {
+
+            var re = new RegExp("\.lnkAuthor", "ig");
+            var re1 = new RegExp("\.lnkEditor", "ig");
+            var re2 = new RegExp("\.lnkBtOtherFormats", "ig");
+            var re3 = new RegExp("\.lnkCollection", "ig");
+            if (eventArgs.EventTarget.match(re) || eventArgs.EventTarget.match(re1) || eventArgs.EventTarget.match(re2) || eventArgs.EventTarget.match(re3)) {
+                eventArgs.EnableAjax = false;
+            }
+
+            var left = 0;
+            var top = 0;
+            var currentLoadingPanel = $find("RadAjaxLoadingPanelResult");
+            var divElementStyle = $find("RadAjaxLoadingPanelResult").get_element().style;
+            var strName = eventArgs.get_eventTarget();
+            var img = document.getElementById('imgList');
+            var div = document.getElementById('divLoading');
+            if (strName.indexOf("lnkBtAddToList") != -1) {
+                img.Height = "15px";
+                div.className = "loadingListResult";
+            }
+            else
+            {
+                img.Height = "23px";
+                div.className = "loadingBtn";
+            }
+
+            divElementStyle.position = 'absolute';
+            //position the loading panel
+            var e = eventArgs.get_eventTargetElement();
+
+            while (e != null && e.offsetParent != undefined && e.offsetParent != null) {
+                /*On ajoute la position de l'élément parent*/
+                left += e.offsetLeft + (e.clientLeft != null ? e.clientLeft : 0);
+                top += e.offsetTop + (e.clientTop != null ? e.clientTop : 0);
+                e = e.offsetParent;
+            }
+
+            divElementStyle.left = left + "px";
+            divElementStyle.top = top + "px";
+        }
+
+        function RequestStartList(sender, eventArgs) {
+
+            var re = new RegExp("\.lnkAuthor", "ig");
+            var re1 = new RegExp("\.lnkEditor", "ig");
+            var re2 = new RegExp("\.lnkCollection", "ig");
+            if (eventArgs.EventTarget.match(re) || eventArgs.EventTarget.match(re1) || eventArgs.EventTarget.match(re2) ) {
+                eventArgs.EnableAjax = false;
+            }
+
+            var left = 0;
+            var top = 0;
+            var divElementStyle = $find("RadAjaxLoadingPanelList").get_element().style;
+            var img = document.getElementById('imgLst');
+            var div = document.getElementById('divLoadingLst');
+            var strName = eventArgs.get_eventTarget();
+            if (strName.indexOf("lnkDelete") != -1) {
+                img.Height = "15px";
+                div.className = "loadingListResult";
+            }
+            else {
+                img.Height = "23px";
+                div.className = "loadingBtn";
+            }
+            divElementStyle.position = 'absolute';
+            //position the loading panel
+            var e = eventArgs.get_eventTargetElement();
+
+            while (e != null && e.offsetParent != undefined && e.offsetParent != null) {
+                //alert(e.toString());
+                /*On ajoute la position de l'élément parent*/
+                left += e.offsetLeft + (e.clientLeft != null ? e.clientLeft : 0);
+                top += e.offsetTop + (e.clientTop != null ? e.clientTop : 0);
+                e = e.offsetParent;
+            }
+            //alert(left + "px " + top + "px");
+
+            divElementStyle.left = left + "px";
+            divElementStyle.top = top + "px";
+
+            // divElementStyle.left = "1000px";
+            // divElementStyle.top = "200px";
+        }
+
+        try {
+            $(document).ready(function () {
+
+                $telerik.$('li#librairies').hover(function () {
+                    $telerik.$('#MenuLibrairies').stop().slideDown();
+                    $telerik.$('li#librairies').addClass('active');
+                }, function () {
+                    $telerik.$('#MenuLibrairies').stop().slideUp();
+                    $telerik.$('li#librairies').removeClass('active');
+                });
+
+                $telerik.$('li#librairiesEN').hover(function () {
+                    $telerik.$('#MenuLibrairiesEN').stop().slideDown();
+                    $telerik.$('li#librairiesEN').addClass('active');
+                }, function () {
+                    $telerik.$('#MenuLibrairiesEN').stop().slideUp();
+                    $telerik.$('li#librairiesEN').removeClass('active');
+                });
+
+                $telerik.$('li#entreprise').hover(function () {
+                    $telerik.$('#MenuEntreprise').stop().slideDown();
+                    $telerik.$('li#entreprise').addClass('active');
+                }, function () {
+                    $telerik.$('#MenuEntreprise').stop().slideUp();
+                    $telerik.$('li#entreprise').removeClass('active');
+                });
+
+                $telerik.$('li#entrepriseEN').hover(function () {
+                    $telerik.$('#MenuEntrepriseEN').stop().slideDown();
+                    $telerik.$('li#entrepriseEN').addClass('active');
+                }, function () {
+                    $telerik.$('#MenuEntrepriseEN').stop().slideUp();
+                    $telerik.$('li#entrepriseEN').removeClass('active');
+                });
+
+            }); //document ready
+        } catch (e) {
+
+        }
+
+
+    </script>
+    <title>
+        Accelerate -  Nicole Forsgren Phd - Payot
+    </title>
+    <script type="text/javascript" language="javascript">
+        function OnClientResponseError(sender, args) {
+            args.set_cancelErrorAlert(true);
+        }
+
+
+    </script>
+
+
+    <link href="../App_Themes/Payot/js/lightbox2/css/lightbox.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Payot/js/lightbox2-updated/css/lightbox.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Payot/js/slick/slick.css" type="text/css" rel="stylesheet" /><link href="../App_Themes/Payot/js/slick/slick-theme.css" type="text/css" rel="stylesheet" /><meta http-equiv="Content-Language" content="fr,fr-ch" /><meta name="Generator" content="Sitefinity 10.1.6544.0 SE" /><link href="/Telerik.Web.UI.WebResource.axd?d=PMrIT5dOWaVYIcpFWUE4nP-st8neoFRiUH1LCrjRe_UNv5ELEEaXGsSFS3gnRthMHtyJn7MHmvVQi6trrlDkjH6tqb7l33IildZqw-CHVZElVpFKk3eEw-BrG63zRZvY0&amp;t=637775047623531746&amp;compress=0&amp;_TSM_CombinedScripts_=%3b%3bTelerik.Web.UI%2c+Version%3d2017.2.621.40%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen%3ae0add335-49c5-47a8-829e-e7aa813f8ea6%3a45085116%3a6de05185%3af730aca1%3a1c2121e%3ae24b8e95%3a6eb493e0%3a9b51605%3aed2942d4%3a92753c09%3a91f742eb%3ad7e35272%3ab7acb766%3a6cd7c4a8%3a8cee9284%3aed057d30%3aa3b7d93f" type="text/css" rel="stylesheet" /><meta name="description" content="Accelerate -  Nicole Forsgren Phd. The Science Behind DevOps Building and Scaling High Performing Technology Organizations." /></head>
+<body>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-56R23B"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<!-- End Google Tag Manager (noscript) -->
+<form method="post" action="./9781942788331?cId=1" id="form1">
+    <div class="aspNetHidden">
+        <input type="hidden" name="RadScriptManager1_TSM" id="RadScriptManager1_TSM" value="" />
+        <input type="hidden" name="ctl17_TSSM" id="ctl17_TSSM" value="" />
+        <input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+        <input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+        <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+    </div>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var theForm = document.forms['form1'];
+        if (!theForm) {
+            theForm = document.form1;
+        }
+        function __doPostBack(eventTarget, eventArgument) {
+            if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+                theForm.__EVENTTARGET.value = eventTarget;
+                theForm.__EVENTARGUMENT.value = eventArgument;
+                theForm.submit();
+            }
+        }
+        //]]>
+    </script>
+
+
+    <script src="/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZDwA1mb_sFtgmD9uSeVTbh-2PB65DTnfMibpGx4PRspdYJZXsldOfcdDqIQMu40ogQ2&amp;t=637750830580544600" type="text/javascript"></script>
+
+
+    <script src="/Telerik.Web.UI.WebResource.axd?_TSM_HiddenField_=RadScriptManager1_TSM&amp;compress=0&amp;_TSM_CombinedScripts_=%3b%3bSystem.Web.Extensions%2c+Version%3d4.0.0.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d31bf3856ad364e35%3aen%3a4ff39ab4-86bc-4f97-a397-bc04a8fc5f51%3aea597d4b%3ab25378d2%3bTelerik.Web.UI%2c+Version%3d2017.2.621.40%2c+Culture%3dneutral%2c+PublicKeyToken%3d121fae78165ba3d4%3aen%3ae0add335-49c5-47a8-829e-e7aa813f8ea6%3a16e4e7cd%3aed16cbdc%3af7645509%3a88144a7a%3a24ee1bba%3ac128760b%3a19620875%3a33715776%3ab2e06756%3a1e771326%3a3f6e8f3f%3a2003d0b8%3af46195d3%3aaa288e2d%3a258f1c72%3aeaae47ab%3ae330518b%3ac8618e41%3a1a73651d%3a333f8d94%3a874f8ea2%3a92fe8ea0%3afa31b949%3a4877f69a%3a490a9d4e%3abd8f85e4%3afd9da3ae%3a8e6f0d33%3a1f3a7489%3a6a6d718d" type="text/javascript"></script>
+    <div class="aspNetHidden">
+
+        <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7BBE2909" />
+        <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="BBt6FDU38IR5IjT5h8RjXw+9M/v+mXLszdF8fTbrLhM0MWqIUKWnu44a8GFJTZzFQcQvR9NsbXUuRvdkmsq9JV76EfzJ3mj1WLnptiO7rylzUb8eDjWP0MQSrFtts/EHyLQwQTK4ax+NL2hvbWfpq9/gaQrjF4455PxOb3gU/VZvGv5zRk24kEOJbdm/u8S2XKhcX87CKHujpl77zoU1HMRcu69NIGuofCiSgC+lKnOqIvMGMfs1/IRSXQcuJ1TqcTZtlj4KK1kqNIrcwR0RMhMhMl/6fbfj3hYN3TtsMUH+Cyq7dBtFyAthW/HadGtoujMNkhsM4D83JJYDat0zj52yrzMscGtmENiIRvpwxns0mxZ5w6P5l3bH8VpcEFlKaxkFW3givgXtopYEONtUm5kE/fZzfgwVuIXFYL1TsIONcHu3Ps8oRS8n8whwfI8p77/3OAmL+CjoWADaLJ1byQ==" />
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        Sys.WebForms.PageRequestManager._initialize('ctl00$RadScriptManager1', 'form1', ['tctl00$ContentPlaceHolder3$T80EB8D4C006$updatePanel','ContentPlaceHolder3_T80EB8D4C006_updatePanel','tctl00$ContentPlaceHolder3$T80EB8D4C006$updatePanel1','ContentPlaceHolder3_T80EB8D4C006_updatePanel1','tctl00$ContentPlaceHolder2$T80EB8D4C004$updatePanel','ContentPlaceHolder2_T80EB8D4C004_updatePanel','tctl00$Column_Right$T80EB8D4C008$UpdatePanel1','Column_Right_T80EB8D4C008_UpdatePanel1','tctl00$ctl00$ContentPlaceHolder1$C001$plhHolderBasketPanel','','tctl00$ctl00$ContentPlaceHolder1$C001$panelListAlertePanel','','tctl00$ctl00$ContentPlaceHolder1$C001$RadMultiPage1Panel','','tctl00$ctl00$ContentPlaceHolder1$C001$panelOneClickPanel','','tctl00$ctl00$ContentPlaceHolder1$C001$panelChroniquesPanel','','tctl00$RadAjaxManager1SU','RadAjaxManager1SU'], ['ctl00$RadScriptManager1','RadScriptManager1'], [], 90, 'ctl00');
+        //]]>
+    </script>
+    <input type="hidden" name="ctl00$RadScriptManager1" id="RadScriptManager1" />
+    <script type="text/javascript">
+        //<![CDATA[
+        Sys.Application.setServerId("RadScriptManager1", "ctl00$RadScriptManager1");
+        Sys.Application._enableHistoryInScriptManager();
+        //]]>
+    </script>
+
+    <!-- 2017.2.621.40 --><div id="RadAjaxManager1SU">
+    <span id="ctl00_RadAjaxManager1" style="display:none;"></span>
+</div>
+    <div id="RadAjaxLoadingPanelList" style="display:none;">
+
+        <div id="divLoadingLst" class="loadingBtn">
+            <img id="imgLst" src="/App_Themes/Payot/images/loading.gif" alt="loading" style="height:23px;" />
+        </div>
+
+    </div>
+    <div id="RadAjaxLoadingPanelResult" style="display:none;">
+
+        <div id="divLoading" class="loadingBtn">
+            <img id="imgList" src="/App_Themes/Payot/images/loading.gif" alt="loading" style="height:23px;" />
+        </div>
+
+    </div>
+    <div id="RadAjaxLoadingPanelBasket" style="display:none;">
+
+        <div class="loadingBasket">
+            <div class="loadingContent">
+                <span id="Label23">Chargement...</span>
+                <img id="Image23" src="/App_Themes/Payot/images/loading.gif" alt="loading" />
+            </div>
+        </div>
+
+    </div>
+
+
+    <div id="RadAjaxLoadingMyAddresses" style="display:none;">
+
+        <div class="loadingBasket">
+            <div class="loadingContent">
+                <span id="Label55">Chargement...</span>
+                <img id="Image1" src="/App_Themes/Payot/images/loading.gif" alt="loading" />
+            </div>
+        </div>
+
+    </div>
+    <div id="RadAjaxLoadingFreeOrder" style="display:none;">
+
+        <div class="loadingBasket">
+            <div class="loadingContent">
+                <span id="Label2">Chargement...</span>
+                <img id="Image3" src="/App_Themes/Payot/images/loading.gif" alt="loading" />
+            </div>
+        </div>
+
+    </div>
+    <div id="RadAjaxLoadingPanelMyAlertes" style="display:none;">
+
+        <div class="loadingBasket">
+            <div class="loadingContent">
+                <span id="Label1">Chargement...</span>
+                <img id="Image2" src="/App_Themes/Payot/images/loading.gif" alt="loading" />
+            </div>
+        </div>
+
+    </div>
+    <div id="RadAjaxLoadingPanelLink" style="display:none;">
+
+        <div class="loadingList">
+            <img id="Image4" src="/App_Themes/Payot/images/loading.gif" alt="loading" style="height:15px;" />
+        </div>
+
+    </div>
+    <div class="externalContainer">
+        <div class="container2">
+            <!-- style="height:100%;position:absolute;width:100%;"-->
+            <!--BEGIN HEADER SECTION-->
+            <div id="header">
+                <div class="headerLeft">
+                    <a id="LocalizationControl_hlkLogo" href="../fr/accueil"><img src="/App_Themes/Payot/images/logoPayotHome.jpg"
+                                                                                  alt="logo" /></a>
+                    <div class="langue">
+                        <a id="LocalizationControl_lnkBtnFrench" class="aspNetDisabled selected">Français</a>
+                        |
+                        <a id="LocalizationControl_lnkBtnEnglish" href="javascript:__doPostBack(&#39;ctl00$LocalizationControl$lnkBtnEnglish&#39;,&#39;&#39;)">English</a>
+                    </div>
+                </div>
+
+                <div class="menuTopSection fl">
+                    <div class="center">
+
+                        <script type="text/javascript">
+                            // Dynapresse connection
+                            function initializeDynapresseLink(email, lang) {
+                                //	if (window.location.pathname.indexOf('nosLivres.html') != -1)
+                                //	{
+                                // Getting the Dynapresse <a
+                                //alert('email : ' + email);
+                                //alert('lang: ' + lang);
+                                var dynapresseLink = document.getElementById('lnkKiosque');
+
+                                var jsCall = 'callDynapresseCorner(\'' + lang + '\',\'' + email + '\');';
+                                //alert('jscall: ' + jsCall);
+
+                                if (dynapresseLink != null) {
+                                    // FF
+                                    dynapresseLink.setAttribute('onclick', jsCall);
+                                    dynapresseLink.attributes['onclick'].value = jsCall;
+
+                                    // IE
+                                    dynapresseLink.onclick = function () { callDynapresseCorner(lang, email); };
+                                }
+                                //	}
+                            }
+
+                            function callDynapresseCorner(lang, email) {
+                                var baseUrl;
+                                var browser = navigator.appName;
+
+                                // Temp (for tests)
+                                //if (email == 'ggr@cdi.ch' || email == 'pan@cdi.ch')
+                                //	email = '';
+                                // Temp (for tests)
+
+                                var notEncryptedParameters = 'utm_source=payot&utm_medium=';
+                                if (window.location.toString().indexOf('autresProduits') != -1)
+                                    notEncryptedParameters += 'link_nosautresproduits';
+                                else
+                                    notEncryptedParameters += 'link_kiosque';
+                                notEncryptedParameters += '&utm_campaign=2009_09_22';
+
+                                //if (lang == 'fr')
+                                //    baseUrl = 'http://www.dynapresse.ch/payot/corner-abonnement.aspx';
+                                //else
+                                //    baseUrl = 'http://www.dynapresse.ch/payot/en/corner-abonnement.aspx';
+
+                                baseUrl = 'https://www.payot-kiosque.ch';
+
+                                var emailParam;
+                                var timeParam;
+
+
+                                // email generation
+                                emailParam = 'em=' + email + '&';
+                                // email generation
+
+                                // time generation
+                                var time = new Date();
+
+                                var year = time.getYear();
+                                if (browser != "Microsoft Internet Explorer" || year < 1000) {
+                                    year = 1900 + year;
+                                }
+
+                                var month = time.getUTCMonth() + 1;
+                                month = month.toString();
+                                if (month.length == 1)
+                                    month = '0' + month;
+
+                                var day = time.getUTCDate().toString();
+                                if (day.length == 1)
+                                    day = '0' + day;
+
+                                var hour = time.getUTCHours().toString();
+                                if (hour.length == 1)
+                                    hour = '0' + hour;
+
+                                var minute = time.getUTCMinutes().toString();
+                                if (minute.length == 1)
+                                    minute = '0' + minute;
+
+                                var second = time.getUTCSeconds().toString();
+                                if (second.length == 1)
+                                    second = '0' + second;
+                                timeParam = 'da=' + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+                                // time generation
+
+                                var finalUrl;
+                                //alert(email);
+                                if (email.length == 0) {
+                                    finalUrl = baseUrl + '?' + notEncryptedParameters;
+                                }
+                                else {
+                                    finalUrl = baseUrl + '?' + notEncryptedParameters + '&sso=' + encode64(emailParam + timeParam); // +  getText(paramInBitArray);
+                                }
+
+                                //if (email = 'ggr@cdi.ch')
+                                //	alert(finalUrl);
+
+                                window.open(finalUrl);
+                            }
+
+                            // Base64 encoding
+                            var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+                            function encode64(input) {
+                                var output = "";
+                                var chr1, chr2, chr3;
+                                var enc1, enc2, enc3, enc4;
+                                var i = 0;
+
+                                do {
+                                    chr1 = input.charCodeAt(i++);
+                                    chr2 = input.charCodeAt(i++);
+                                    chr3 = input.charCodeAt(i++);
+
+                                    enc1 = chr1 >> 2;
+                                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                                    enc4 = chr3 & 63;
+
+                                    if (isNaN(chr2)) {
+                                        enc3 = enc4 = 64;
+                                    } else if (isNaN(chr3)) {
+                                        enc4 = 64;
+                                    }
+
+                                    output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                                        keyStr.charAt(enc3) + keyStr.charAt(enc4);
+                                } while (i < input.length);
+
+                                return output;
+                            }
+
+
+                        </script>
+                        <style>
+                            ul.menuTopNiv_2 .espaceProPNB {
+                                background-color: #919608;
+                                padding: 3px 10px;
+                            }
+
+                            ul.menuTopNiv_2 .espaceProPNB:hover {
+                                background-color: #A6AD01;
+                            }
+
+                            ul.menuTopNiv_2 .espaceProPNB a {
+                                color: white;
+                                font-weight: bold;
+                                text-transform: none;
+                            }
+
+                            ul.menuTopNiv_2 .espaceProPNB a:hover {
+                                border-bottom: none;
+                            }
+                        </style>
+
+
+                        <style>
+
+                            /*
+                                Sitefinity 10.1 patch
+                                */
+
+                            #rotatorDiv .RadRotator .rrButton{
+                                display:none !important;
+
+                            }
+
+                        </style>
+
+
+
+
+                        <div style="margin-left: auto; margin-right: auto; max-width: 700px;" id="rotatorDiv">
+                            <div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot" class="RadRotator RadRotator_Default" style="height:64px;width:700px;margin: 0 auto;">
+                                <div class="rrRelativeWrapper">
+                                    <div class="rrClipRegion">
+                                        <ul class="rrItemsList">
+                                            <li class="rrItem" style="height:64px;width:700px;"><div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i0">
+
+                                                <a id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i0__hlnkImageLink" href="https://www.payot.ch/fr/selections/concours-fete-des-meres"><img id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i0_img" src="/images/default-source/2022-home/ba220420.jpg?sfvrsn=802da35a_0" style="border-style:None;" /></a>
+
+                                            </div></li><li class="rrItem" style="height:64px;width:700px;"><div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i1">
+
+                                            <a id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i1__hlnkImageLink" href="https://www.payot.ch/fr/aide/modes-de-livraison-et-frais-de-port"><img id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i1_img" src="/images/default-source/2022-home/ba220120a.jpg?sfvrsn=31a5a35a_2" style="border-style:None;" /></a>
+
+                                        </div></li><li class="rrItem" style="height:64px;width:700px;"><div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i2">
+
+                                            <a id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i2__hlnkImageLink" href="https://www.payot.ch/fr/aide/modes-de-livraison-et-frais-de-port"><img id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i2_img" src="/images/default-source/2022-home/ba220120b.jpg?sfvrsn=2ea5a35a_2" style="border-style:None;" /></a>
+
+                                        </div></li><li class="rrItem" style="height:64px;width:700px;"><div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i3">
+
+                                            <a id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i3__hlnkImageLink" href="https://www.payot.ch/fr/selections/concours-fete-des-meres"><img id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i3_img" src="/images/default-source/2022-home/ba220420.jpg?sfvrsn=802da35a_0" style="border-style:None;" /></a>
+
+                                        </div></li><li class="rrItem" style="height:64px;width:700px;"><div id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i4">
+
+                                            <a id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i4__hlnkImageLink" href="https://www.payot.ch/fr/selections/concours-fete-des-meres"><img id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_i4_img" src="/images/default-source/2022-home/ba220420.jpg?sfvrsn=802da35a_0" style="border-style:None;" /></a>
+
+                                        </div></li>
+                                        </ul>
+                                    </div><a class="rrButton rrButtonUp p-icon p-i-arrow-up" href="javascript:void(0);">&nbsp;</a><a class="rrButton rrButtonLeft p-icon p-i-arrow-left" href="javascript:void(0);">&nbsp;</a><a class="rrButton rrButtonRight p-icon p-i-arrow-right" href="javascript:void(0);">&nbsp;</a><a class="rrButton rrButtonDown p-icon p-i-arrow-down" href="javascript:void(0);">&nbsp;</a>
+                                </div><input id="ctl00_MainMenuCentral1_BannerControl1_Header_rot_ClientState" name="ctl00_MainMenuCentral1_BannerControl1_Header_rot_ClientState" type="hidden" />
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="cl">
+                        </div>
+                        <ul class="menuTopNiv_2">
+                            <li>
+                                <a id="MainMenuCentral1_hlnkNosLibrairies" href="../fr/nos-librairies">LIBRAIRIES</a></li>
+                            <li>|</li>
+
+                            <li>
+                                <a id="MainMenuCentral1_hlnkNosEvenements" href="http://evenements.payot.ch/" target="_blank">ÉVÉNEMENTS</a></li>
+                            <li>|</li>
+                            <li>
+                                <a id="MainMenuCentral1_hlnkFrSelections" href="../fr/s%C3%A9lections">SÉLECTIONS</a></li>
+                            <li>|</li>
+                            <li>
+                                <a id="MainMenuCentral1_hlnkFrDossiersActus" href="../fr/dossiersdactualite">ACTUS</a></li>
+                            <li>|</li>
+                            <li>
+                                <a id="MainMenuCentral1_HyperLink1" href="../fr/Newsletter">NEWSLETTER</a></li>
+                            <li>|</li>
+                            <li>
+                                <a href="http://www.aimerlire.ch/" target="_blank">Aimer Lire
+                                </a>
+                            </li>
+                            <li>|</li>
+                            <li>
+                                <a id="MainMenuCentral1_hlnkFrNosVideos" href="../fr/videos">vidéos</a>
+                            </li>
+                        </ul>
+                        <div class="cl">
+                        </div>
+                        <div class="menuTopNiv_1">
+        <span>
+            <a id="MainMenuCentral1_hlnkFrAccueil" href="../fr/accueil">Accueil</a></span>
+                            <span>
+            <a id="MainMenuCentral1_lnkFrLivresFrancais" href="javascript:__doPostBack(&#39;ctl00$MainMenuCentral1$lnkFrLivresFrancais&#39;,&#39;&#39;)">Livres en français</a></span>
+                            <span>
+            <a id="MainMenuCentral1_hlnkFrLivresAnglais" href="javascript:__doPostBack(&#39;ctl00$MainMenuCentral1$hlnkFrLivresAnglais&#39;,&#39;&#39;)">Livres en anglais</a></span>
+                            <span>
+            <a id="MainMenuCentral1_lnkFreBooks" href="javascript:__doPostBack(&#39;ctl00$MainMenuCentral1$lnkFreBooks&#39;,&#39;&#39;)">eBooks</a></span>
+                            <span>
+            <a id="MainMenuCentral1_hlnkFrBonsCadeaux" href="../fr/bons-cadeaux">Bons cadeaux</a></span>
+                            <span>
+            <a id='lnkKiosque' href="#" onclick="callDynapresseCorner('fr','');">Kiosque</a></span>
+                        </div>
+
+
+
+                        <script type="text/javascript">
+                            initializeDynapresseLink('', 'fr');
+                        </script>
+
+                    </div>
+                </div>
+                <div class="basketTopSection fr">
+                    <div>
+
+                        <ul>
+
+                        </ul>
+                        <div id="divmobile" style="display:none">
+                            <a href="#" onclick="ReturnToMobile()">
+                                <img src="/App_Themes/Payot/images/fr/SiteToMobile.jpg" />
+                            </a>
+                        </div>
+
+
+
+                    </div>
+                    <div class="cl">
+                    </div>
+                    <div class="blocBasket fr">
+
+
+
+                        <div class="basketMainContent">
+                            <div id="ContentPlaceHolder3_T80EB8D4C006_UpdateProgress1" style="display:none;position:absolute;width:98px;height:51px;text-align:center;background-image:url(../App_Themes/Payot/images/bckgrndLoading.png);background-repeat:repeat;">
+
+                                <img src="/App_Themes/Payot/images/loading.gif" style="margin-top:15px;width:22px;" />
+
+                            </div>
+
+                            <div id="ContentPlaceHolder3_T80EB8D4C006_updatePanel">
+
+                                <a id="ContentPlaceHolder3_T80EB8D4C006_lnkbtBasket" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder3$T80EB8D4C006$lnkbtBasket&#39;,&#39;&#39;)">
+                                    <div class="panierContent">
+                                        <div class="panierLabel fr">
+                                            Mon Panier</div>
+                                        <div class="panierNbre fr">
+                                            0 article</div>
+                                    </div>
+                                </a>
+
+                            </div>
+
+                            <div id="ContentPlaceHolder3_T80EB8D4C006_updatePanel1">
+
+                                <a id="ContentPlaceHolder3_T80EB8D4C006_lnkbtList" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder3$T80EB8D4C006$lnkbtList&#39;,&#39;&#39;)">
+                                    <div class="listeContent">
+                                        <div class="listeLabel fr">
+                                            Ma Liste</div>
+                                        <div class="listeNbre fr">
+                                            0 article</div>
+                                    </div>
+                                </a>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="cl">
+                </div>
+            </div>
+            <!-- BEGIN BAR SEARCH-->
+            <div id="barsearch">
+
+
+                <script type="text/javascript">
+                    function onClientSelectedIndexChanged(sender, eventArgs) {
+
+                        var txtSearch = document.getElementById("ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch");
+                        if (txtSearch.value != "") {
+                            __doPostBack("ddlCatalog1", '{\"Command\" : \"Select\"}');
+                        }
+                    }
+
+                    // Base64 encoding
+                    var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=é";
+                    function encode64B(input) {
+
+                        input = input.replace('œ', 'oe');
+                        input = input.replace('Œ', 'OE');
+                        input = input.replace('æ', 'ae');
+                        input = input.replace('Æ', 'AE');
+                        input = input.replace('’', '\'');
+
+                        var output = "";
+                        var chr1, chr2, chr3;
+                        var enc1, enc2, enc3, enc4;
+                        var i = 0;
+
+                        do {
+                            chr1 = input.charCodeAt(i++);
+                            chr2 = input.charCodeAt(i++);
+                            chr3 = input.charCodeAt(i++);
+
+                            enc1 = chr1 >> 2;
+                            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                            enc4 = chr3 & 63;
+
+                            if (isNaN(chr2)) {
+                                enc3 = enc4 = 64;
+                            } else if (isNaN(chr3)) {
+                                enc4 = 64;
+                            }
+
+                            output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) +
+                                keyStr.charAt(enc3) + keyStr.charAt(enc4);
+                        } while (i < input.length);
+
+                        return output;
+                    }
+
+                    Telerik.Web.UI.RadSearchBox.prototype._onError = function (message) {
+                        //leave this function empty
+                    }
+                </script>
+
+                <style type="text/css">
+                    .hidden
+                    {
+                        display: none !important;
+                    }
+
+                    #form1 > .rsbSlide, #form1 > .rsbDropDownSlide {
+                        overflow: hidden !important;
+                    }
+
+                    /*.rsbPopup .rsbListItem:nth-last-child(2) {
+                    margin-bottom: 0px;
+                }*/
+
+                </style>
+                <div class="fl  searchZone">
+                    <div id="ContentPlaceHolder2_T80EB8D4C003_Panel1" onkeypress="javascript:return WebForm_FireDefaultButton(event, &#39;ContentPlaceHolder2_T80EB8D4C003_imgBtSearch&#39;)" style="margin-bottom: 117px">
+
+
+
+
+                        <script type="text/javascript">
+                            function OnSearch(sender, args) {
+                                // set text
+                                if (args.get_dataItem() == null) {
+
+                                    // Detect catalog
+                                    var combo = $find('ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1');
+                                    var selectedItem = combo.get_selectedItem().get_value();
+
+                                    var rawSearch = args.get_text().replace(/[|&;\/$%@?"<>'()+,]/g, "");
+                                    rawSearch = rawSearch.replace(/-/g, "");
+
+                                    var href = '/Dynamics/Result?acs=' + encode64B(args.get_text()) + "&c=" + selectedItem+"&rawSearch="+rawSearch;
+                                    window.location = href;
+                                }
+                            }
+
+                            function OnClientDataRequesting(sender, args) {
+                                // set text
+                                //var a = document.getElementById('autocompleteFullSearch');
+                                //a.href = '/Dynamics/Result?acs=' + encode64(args.get_text());
+
+                                // catalog
+                                var combo = $find('ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1');
+                                var selectedItem = combo.get_selectedItem().get_value();
+                                args.get_userContext()["selectedCatalog"] = selectedItem;
+
+                                // culture
+                                var currentCulture = 'fr';
+                                args.get_userContext()["currentCulture"] = currentCulture;
+
+                                // protocol
+                                args.get_userContext()["protocol"] = window.location.protocol;
+                            }
+
+                            function goto(url) {
+                                window.location = url;
+                            }
+
+                        </script>
+
+                        <div id="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1" class="RadComboBox RadComboBox_Default RadComboBoxSearchCatalog" style="width:217px;white-space:normal;">
+                            <table summary="combobox" style="border-width:0;border-collapse:collapse;width:100%">
+                                <tr class="rcbReadOnly">
+                                    <td class="rcbInputCell rcbInputCellLeft" style="width:100%;"><input name="ctl00$ContentPlaceHolder2$T80EB8D4C003$ddlCatalog1" type="text" class="rcbInput radPreventDecorate" id="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_Input" value="Livres en anglais" readonly="readonly" style="color:Black;background-color:White;" /></td><td class="rcbArrowCell rcbArrowCellRight"><a id="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_Arrow" style="overflow: hidden;display: block;position: relative;outline: none;">select</a></td>
+                                </tr>
+                            </table><div class="rcbSlide" style="z-index:6000;display:none;"><div id="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_DropDown" class="RadComboBoxDropDown RadComboBoxDropDown_Default "><div class="rcbScroll rcbWidth"><ul class="rcbList"><li class="rcbItem">Livres en fran&#231;ais</li><li class="rcbItem">Tous les formats en fran&#231;ais</li><li class="rcbItem">Livres en anglais</li><li class="rcbItem">Tous les formats en anglais</li><li class="rcbItem">Tous les eBooks</li><li class="rcbItem">eBooks en fran&#231;ais</li><li class="rcbItem">eBooks en anglais</li><li class="rcbItem">Livres audio</li></ul></div></div></div><input id="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_ClientState" name="ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_ClientState" type="hidden" />
+                        </div>
+
+                        <div id="ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch" class="RadSearchBox RadSearchBox_Default" placeholder="Recherche un titre, un auteur..." style="width:300px;">
+                            <span class="rsbInner"><input class="rsbInput radPreventDecorate" type="text" value="" name="ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch" id="ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch_Input" /><button class="rsbButton rsbButtonSearch" type="button"><span class="rsbIcon rsbIconSearch"><!-- &nbsp; --></span></button></span><div class="rsbSlide" style="display:none;">
+                            <div class="rsbPopup rsbPopup_Default">
+                                <div class="rsbHeader">
+
+
+                                </div>
+                            </div>
+                        </div><input id="ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch_ClientState" name="ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch_ClientState" type="hidden" />
+                        </div>
+
+
+                        <input type="image" name="ctl00$ContentPlaceHolder2$T80EB8D4C003$imgBtSearch" id="ContentPlaceHolder2_T80EB8D4C003_imgBtSearch" src="/App_Themes/Payot/images/btnSearch.jpg" />
+                        <a id="ContentPlaceHolder2_T80EB8D4C003_lnkAdvSearch" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder2$T80EB8D4C003$lnkAdvSearch&#39;,&#39;&#39;)">Recherche avancée</a>
+
+
+                    </div>
+                </div>
+
+                <div class="fr loginZone">
+                    <div id="ContentPlaceHolder2_T80EB8D4C004_updatePanel">
+
+            <span style="float: right;">
+                <a id="ContentPlaceHolder2_T80EB8D4C004_lnkLogin" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder2$T80EB8D4C004$lnkLogin&#39;,&#39;&#39;)">S'identifier</a>
+                |
+                <a id="ContentPlaceHolder2_T80EB8D4C004_lnkMyAccount" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder2$T80EB8D4C004$lnkMyAccount&#39;,&#39;&#39;)">Mon Compte</a>
+                | <a id="ContentPlaceHolder2_T80EB8D4C004_hlnkAide" href="/fr/aide">Aide</a></a> </span>
+                        <br class="cl" />
+                        <!-- n'afficher que si pas connecté -->
+                        <!--<span class="conectedas" style="font-style:italic;">Vous n'êtes pas identifié</span>-->
+
+                        <span class="conectedas">
+                Vous n'êtes pas identifié</span>
+
+
+                    </div>
+                </div>
+
+
+                <div class="cl">
+                </div>
+            </div>
+
+            <!-- BEGIN NAVIGATION LEFT -->
+            <table class="base" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="left">
+                        <div style="float: left; position: relative; height: 100%; width: 100%;">
+                            <div id="navleft" class="fl">
+
+
+
+                                <script type="text/javascript">
+                                    function itemPopulated(sender, eventArgs) {
+                                        $telerik.$('.NavLeftBestSell').parent('li').addClass("NavLeftBestSell");
+                                    }
+
+                                    function handleSubMenu(catcode) {
+                                        console.log(catcode);
+                                        console.log($telerik.$('a[href$="' + catcode + '"]'));
+                                        $currentElement = $telerik.$('a[href$="' + catcode + '"]');
+                                        //$currentElement.parent().children('.new').remove();
+                                        $telerik.$('ul.new').remove();
+                                        $telerik.$('<ul class="new" style="padding-left:20px;"><li><a href="../../Dynamics/Result?categ=22001">' + catcode + '</a></li></ul>').insertAfter($currentElement);
+                                    }
+
+                                    function clearSubMenu(catcode) {
+                                        //$currentElement = $telerik.$('a[href$="' + catcode + '"]');
+                                        //$currentElement.parent().children('.new').remove();
+                                    }
+
+                                    function OnMenuLoad(sender) {
+                                        $telerik.$('.niv_1').parent('li').addClass("niv_1");
+                                        $telerik.$('.active').filter('.niv_1').parent('li').addClass("active niv_1");
+                                        $telerik.$('.niv_2').parent('li').addClass("active niv_2");
+                                        $telerik.$('.niv_3').parent('li').addClass("active niv_3");
+                                        $telerik.$('.niv_4').parent('li').addClass("active niv_4");
+                                        if ($telerik.$('.niv_4').length > 0) {
+                                            $telerik.$('.niv_3.active').toggleClass('active').addClass('open');
+                                            $telerik.$('.niv_2.active').toggleClass('active').addClass('open');
+                                            $telerik.$('.niv_1.active').toggleClass('active').addClass('open');
+                                        }
+                                        else if ($telerik.$('.niv_3').length > 0) {
+                                            $telerik.$('.niv_2.active').toggleClass('active').addClass('open');
+                                            $telerik.$('.niv_1.active').toggleClass('active').addClass('open');
+                                        }
+                                        else if ($telerik.$('.niv_2').length > 0) {
+                                            $telerik.$('.niv_1.active').toggleClass('active').addClass('open');
+                                        }
+                                    }
+
+                                    function populationFailed(sender, eventArgs) {
+                                        //alert(eventArgs.get_errorMessage());
+                                        eventArgs.get_item().disable();
+                                        eventArgs.set_cancel(true);
+                                    }
+
+                                    function closeMenu() {
+                                        var menu = $find("ctl00_Navigation_Left_T80EB8D4C005_RadMenu1");
+                                        var openedmenu = menu.get_openedItem();
+                                        while (openedmenu.get_openedItem() != null) {
+                                            openedmenu = openedmenu.get_openedItem();
+                                        }
+                                        setTimeout(function () {
+                                            openedmenu.close(true);
+                                        }, 10);
+                                    }
+
+                                </script>
+
+                                <script>
+                                    // Fix for the Chrome scrolling provided by Telerik : https://community.progress.com/s/case/5004Q00002NxSycQAF/issue-regarding-focus-and-scrolling-on-radmenu-in-browsers-other-than-firefix?tabset-ec31c=2
+                                    // https://www.telerik.com/account/support-tickets/view-ticket/1538201
+                                    Telerik.Web.UI.RadMenu.prototype.focus = function () {
+                                    }
+
+                                    $telerik.getViewPortSize = function () {
+                                        var width = 0;
+                                        var height = 0;
+
+                                        var canvas = document.body;
+
+                                        if ((!$telerik.quirksMode && !$telerik.isSafari) ||
+                                            (Telerik.Web.Browser.chrome && Telerik.Web.Browser.version >= 61)) {
+                                            canvas = document.documentElement;
+                                        }
+
+                                        if (window.innerWidth) {
+                                            // Seems there's no completely reliable way to get the viewport size in Gecko, this should be the best one
+                                            // Check https://bugzilla.mozilla.org/show_bug.cgi?id=189112#c7
+                                            width = Math.max(document.documentElement.clientWidth, document.body.clientWidth);
+                                            height = Math.max(document.documentElement.clientHeight, document.body.clientHeight);
+
+                                            if (width > window.innerWidth)
+                                                width = document.documentElement.clientWidth;
+                                            if (height > window.innerHeight)
+                                                height = document.documentElement.clientHeight;
+                                        }
+                                        else {
+                                            width = canvas.clientWidth;
+                                            height = canvas.clientHeight;
+                                        }
+
+                                        width += canvas.scrollLeft;
+                                        height += canvas.scrollTop;
+
+                                        if ($telerik.isMobileSafari) {
+                                            width += window.pageXOffset;
+                                            height += window.pageYOffset;
+                                        }
+
+                                        return { width: width - 6, height: height - 6 };
+                                    }
+
+
+                                    // Required to properly apply/remove the expanded class which highlights the parent menu item we're in
+                                    function disableExpanded(sender, args) {
+                                        var $ = $telerik.$;
+                                        console.log(args);
+                                        console.log(args.get_item());
+                                        $('.rmTemplateSubmenu', args.get_item().get_element()).removeClass('rmExpanded').removeClass('expanded');
+                                        console.log("de-expanded");
+                                    }
+                                    function enableExpanded(sender, args) {
+                                        var $ = $telerik.$;
+                                        console.log(args);
+                                        console.log(args.get_item());
+                                        if (args._cancel != null) {
+                                            $(args.get_item().get_element()).find('.rmTemplateSubmenu').first().addClass('rmExpanded').addClass('expanded');
+                                            console.log("expanded");
+                                        }
+                                        else {
+                                            args.set_cancel(true);
+                                        }
+                                    }
+                                </script>
+
+                                <link rel="Stylesheet" type="text/css" href="../../Skins/Menu.css" />
+                                <link rel="Stylesheet" type="text/css" href="../../Skins/RadMenuSkin/Menu.RadMenuSkin.css" />
+                                <div class="nosrayons">
+                                    NOS RAYONS
+                                </div>
+                                <hr />
+                                <div tabindex="0" id="ctl00_Navigation_Left_T80EB8D4C005_RadMenu1" class="RadMenu RadMenu_RadMenuSkin navGauche" langIso="fr" catalog="En">
+                                    <ul class="rmRootGroup rmRoundedCorners rmVertical">
+                                        <li class="rmItem rmFirst"><a class="rmLink rmRootLink niv_1" href="../Category/fiction-100?cId=1"><span class="rmText">Fiction</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/non_fiction-800?cId=1"><span class="rmText">Non-fiction</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/comics_cartoons_humour_satire-120?cId=1"><span class="rmText">Comics, Cartoons, Humour, Satire</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/young_adult_and_childrens_books-110?cId=1"><span class="rmText">Young adult and children's books</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/travel-200?cId=1"><span class="rmText">Travel</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/hobbies_home-310?cId=1"><span class="rmText">Hobbies, Home</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/sport-320?cId=1"><span class="rmText">Sport</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/food__drink-330?cId=1"><span class="rmText">Food & Drink</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/health-340?cId=1"><span class="rmText">Health</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/spirituality-350?cId=1"><span class="rmText">Spirituality</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/self_help-360?cId=1"><span class="rmText">Self-help</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/general_social_sciences-410?cId=1"><span class="rmText">General Social sciences</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/art-420?cId=1"><span class="rmText">Art</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/science_medicine__information_technology_technology-500?cId=1"><span class="rmText">Science, Medicine,  Information Technology, Technology</span></a></li><li class="rmItem "><a class="rmLink rmRootLink active niv_1" href="../Category/social_studies_law_economics-600?cId=1"><span class="rmText">Social Studies, Law, Economics</span></a></li><li class="rmItem "><a class="rmLink rmRootLink active niv_2" href="../Category/economics-60007?cId=1"><span class="rmText">Economics</span></a></li><li class="rmItem "><a class="rmLink rmRootLink active niv_3" href="../Category/management-6000704?cId=1"><span class="rmText">Management</span></a></li><li class="rmItem "><a class="rmLink rmRootLink niv_1" href="../Category/teaching__learning-700?cId=1"><span class="rmText">Teaching & Learning</span></a></li><li class="rmItem rmLast"><a class="rmLink rmRootLink niv_1" href="../Category/gift_books-900?cId=1"><span class="rmText">Gift books</span></a></li>
+                                    </ul><script type="text/javascript">
+                                    Telerik.Web.UI.RadMenu._adjustRootItemWidth("ctl00_Navigation_Left_T80EB8D4C005_RadMenu1");
+                                </script><input id="ctl00_Navigation_Left_T80EB8D4C005_RadMenu1_ClientState" name="ctl00_Navigation_Left_T80EB8D4C005_RadMenu1_ClientState" type="hidden" />
+                                </div>
+
+
+                                <!--<div class="nosrayons">
+						NOS RAYONS
+						</div>
+					<hr />
+					<ul class="categorie">
+						<li class="niv_1">Littérature & fiction</li>
+						<li class="niv_1">Policier & Science-Fiction</li>
+						<li class="niv_1">Jeunesse</li>
+						<li class="niv_1">Bandes dessinées, comics & mangas, humour</li>
+						<li class="niv_1">Développement durable & écologie</li>
+						<li class="niv_1">Nature, animaux</li>
+						<li class="niv_1">Loisirs, jeux</li>
+						<li class="niv_1">Santé, diététique, sport</li>
+						<li class="niv_1">Bien-être, dans sa tête et dans son corps</li>
+						<li class="niv_1">Cuisine, vins & boissons</li>
+					</ul>-->
+                            </div>
+                    </td>
+                    <td class="middle">
+                        <!-- BEGIN CONTENT SECTION -->
+                        <div id="content" class="fl">
+
+
+
+                            <div class="ariane">
+
+
+                                <a id="FileAriane_T80EB8D4C009_lnkFirstHlnk" href="/Dynamics/advancedSearch">Recherche</a>
+                                &nbsp;>&nbsp;
+                                <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                                    <a id="FileAriane_T80EB8D4C009_rptArianeHyperLinks_hlnkBtNext_0" itemprop="url" href="/Category/social_studies_law_economics-600?cId=1">
+                                        <div itemprop="title">Social Studies, Law, Economics</div>
+                                    </a>
+                                </div>
+
+                                &nbsp;>&nbsp;
+                                <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                                    <a id="FileAriane_T80EB8D4C009_rptArianeHyperLinks_hlnkBtNext_1" itemprop="url" href="/Category/economics-60007?cId=1">
+                                        <div itemprop="title">Economics</div>
+                                    </a>
+                                </div>
+
+                                &nbsp;>&nbsp;
+                                <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                                    <a id="FileAriane_T80EB8D4C009_rptArianeHyperLinks_hlnkBtNext_2" itemprop="url" href="/Category/management-6000704?cId=1">
+                                        <div itemprop="title">Management</div>
+                                    </a>
+                                </div>
+
+                                &nbsp;>&nbsp;
+                                Accelerate
+                            </div>
+
+
+
+
+
+                            <script type="text/javascript">
+                                var yPos;
+                                var prm = Sys.WebForms.PageRequestManager.getInstance();
+                                prm.add_endRequest(EndRequestHandler);
+                                $(window).scroll(function () { yPos = $(window).scrollTop(); });
+                                function EndRequestHandler(sender, args) {
+                                    $(window).scrollTop(yPos);
+                                }
+                            </script>
+
+
+
+                            <!-- zone de navigation par ouvrage en haut Ã  droite -->
+
+
+                            <div id="ctl00_ContentPlaceHolder1_C001_windowManager" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_radWinChronic" style="display:none;">
+                                    <div id="ctl00_ContentPlaceHolder1_C001_radWinChronic_C" style="display:none;">
+
+                                    </div><input id="ctl00_ContentPlaceHolder1_C001_radWinChronic_ClientState" name="ctl00_ContentPlaceHolder1_C001_radWinChronic_ClientState" type="hidden" />
+                                </div><div id="ctl00_ContentPlaceHolder1_C001_radWinPlayer" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_radWinPlayer_C" style="display:none;">
+
+                                </div><input id="ctl00_ContentPlaceHolder1_C001_radWinPlayer_ClientState" name="ctl00_ContentPlaceHolder1_C001_radWinPlayer_ClientState" type="hidden" />
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_radWinAlert" class="lightboxAlerte" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_radWinAlert_C" style="display:none;">
+
+                                </div><input id="ctl00_ContentPlaceHolder1_C001_radWinAlert_ClientState" name="ctl00_ContentPlaceHolder1_C001_radWinAlert_ClientState" type="hidden" />
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_radWinLogin" class="lightboxAlerte" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_radWinLogin_C" style="display:none;">
+
+                                </div><input id="ctl00_ContentPlaceHolder1_C001_radWinLogin_ClientState" name="ctl00_ContentPlaceHolder1_C001_radWinLogin_ClientState" type="hidden" />
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick" class="lightboxLogin" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick_C" style="display:none;">
+
+                                </div><input id="ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick_ClientState" name="ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick_ClientState" type="hidden" />
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_RadWindowSendMail" style="display:none;">
+                                <div id="ctl00_ContentPlaceHolder1_C001_RadWindowSendMail_C" style="display:none;">
+
+                                </div><input id="ctl00_ContentPlaceHolder1_C001_RadWindowSendMail_ClientState" name="ctl00_ContentPlaceHolder1_C001_RadWindowSendMail_ClientState" type="hidden" />
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_windowManager_alerttemplate" style="display:none;">
+                                <div class="rwDialogPopup radalert">
+                                    <div class="rwDialogText">
+                                        {1}
+                                    </div>
+
+                                    <div>
+                                        <a  onclick="$find('{0}').close(true);"
+                                            class="rwPopupButton" href="javascript:void(0);">
+					<span class="rwOuterSpan">
+						<span class="rwInnerSpan">##LOC[OK]##</span>
+					</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_windowManager_prompttemplate" style="display:none;">
+                                <div class="rwDialogPopup radprompt">
+                                    <div class="rwDialogText">
+                                        {1}
+                                    </div>
+                                    <div>
+                                        <script type="text/javascript">
+                                            function RadWindowprompt_detectenter(id, ev, input)
+                                            {
+                                                if (!ev) ev = window.event;
+                                                if (ev.keyCode == 13)
+                                                {
+                                                    var but = input.parentNode.parentNode.getElementsByTagName("A")[0];
+                                                    if (but)
+                                                    {
+                                                        if (but.click) but.click();
+                                                        else if (but.onclick)
+                                                        {
+                                                            but.focus(); var click = but.onclick; but.onclick = null; if (click) click.call(but);
+                                                        }
+                                                    }
+                                                    return false;
+                                                }
+                                                else return true;
+                                            }
+                                        </script>
+                                        <input title="Enter Value" onkeydown="return RadWindowprompt_detectenter('{0}', event, this);" type="text"  class="rwDialogInput" value="{2}" />
+                                    </div>
+                                    <div>
+                                        <a onclick="$find('{0}').close(this.parentNode.parentNode.getElementsByTagName('input')[0].value);"
+                                           class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                                        <a onclick="$find('{0}').close(null);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+                                    </div>
+                                </div>
+                            </div><div id="ctl00_ContentPlaceHolder1_C001_windowManager_confirmtemplate" style="display:none;">
+                                <div class="rwDialogPopup radconfirm">
+                                    <div class="rwDialogText">
+                                        {1}
+                                    </div>
+                                    <div>
+                                        <a onclick="$find('{0}').close(true);"  class="rwPopupButton" href="javascript:void(0);" ><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[OK]##</span></span></a>
+                                        <a onclick="$find('{0}').close(false);" class="rwPopupButton"  href="javascript:void(0);"><span class="rwOuterSpan"><span class="rwInnerSpan">##LOC[Cancel]##</span></span></a>
+                                    </div>
+                                </div>
+                            </div><input id="ctl00_ContentPlaceHolder1_C001_windowManager_ClientState" name="ctl00_ContentPlaceHolder1_C001_windowManager_ClientState" type="hidden" />
+                            </div>
+
+                            <script type="text/javascript">
+                                function showSocials() {
+                                    document.querySelector('.printAndShare.detail-social').classList.toggle('not-showing');
+                                }
+                                function ShowExistingSendMail() {
+                                    window.radopen(null, "RadWindowSendMail");
+                                }
+                                function openWinLogin(chrId) {
+                                    return radopen("/Widgets/misccontrols/Login.aspx?ean=" + chrId, "radWinLogin");
+                                }
+
+                                function openWinLoginOneClick() {
+                                    var tooltip = Telerik.Web.UI.RadToolTipController.getInstance().get_activeToolTip();
+                                    if (tooltip) {
+                                        tooltip.hide();
+                                    }
+                                    return radopen("/Widgets/misccontrols/Login.aspx?", "radWinLoginOneClick");
+                                }
+
+                                function openPopupFromServer(clientId, url) {
+                                    var wnd = $find(clientId);
+                                    if (!wnd) return;
+                                    wnd.show();
+                                    wnd.setUrl(url);
+                                    //or, if a RadWindowManager is used the server ID from the server will suffice with the following line:
+                                    //radopen(serverName/*this will replace clientId*/, url);//width, height, top and left can also be preset from this method.
+                                }
+
+
+                                function rw_RequiredConfirmation_Closed(sender, args) {
+                                    $find("ctl00_RadAjaxManager1").ajaxRequest("updateRadListView1");
+                                }
+
+                                function rw_RequiredConfirmationOneClick_Closed(sender, args) {
+                                    $find("ctl00_RadAjaxManager1").ajaxRequest("goToOneClick");
+                                }
+
+                                function openWinPayot(chrId) {
+                                    return radopen("/Widgets/misccontrols/ChronicPayotDetail.aspx?id=" + chrId, "radWinChronic");
+                                }
+
+                                function openWinPresse(chrId) {
+                                    return radopen("/Widgets/misccontrols/ChronicPresseDetail.aspx?id=" + chrId, "radWinChronic");
+                                }
+
+                                function openWinPlayer(url) {
+                                    return radopen("/Widgets/Detail/Video.aspx?" + url, "radWinPlayer");
+                                }
+
+                                function openWinAlert(chrean) {
+                                    return radopen("/Widgets/misccontrols/AlertDetail.aspx?ean=" + chrean, "radWinAlert");
+                                }
+
+                                function triggerBasketUpdate(sender, args) {
+                                    setTimeout(function () {
+                                        $find("ctl00_RadAjaxManager1").ajaxRequest("updateRadListView1");
+                                    }, 100);
+                                }
+
+                            </script>
+
+
+                            <link rel="stylesheet" type="text/css" href="/App_Themes/Payot/js/slick/slick.css" media="all" />
+                            <link rel="stylesheet" type="text/css" href="/App_Themes/Payot/js/slick/slick-theme.css?v=20200203" media="all" />
+                            <link rel="stylesheet" href="/App_Themes/Payot/js/lightbox2-updated/css/lightbox.css" type="text/css" media="screen" />
+                            <script src="/App_Themes/Payot/js/lightbox2-updated/js/lightbox.js" type="text/javascript"></script>
+
+                            <div  class="rotNav fr">
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <a id="ContentPlaceHolder1_C001_lnkBtPrev" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$C001$lnkBtPrev&#39;,&#39;&#39;)"></a>
+                                        </td>
+                                        <td>
+                                            <h1 class="votreselection">
+                                                votre sélection</h1>
+                                        </td>
+                                        <td>
+                                            <a id="ContentPlaceHolder1_C001_lnkBtNext" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$C001$lnkBtNext&#39;,&#39;&#39;)"></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+
+
+
+                                            <p class="LilRotatorImages">
+            <span id="ContentPlaceHolder1_C001_spanPrev">
+                <input type="image" name="ctl00$ContentPlaceHolder1$C001$imgBtPrev" id="ContentPlaceHolder1_C001_imgBtPrev" title="Eloge de la force Renverser l&#39;histoire
+Laurent Obertone" src="https://bibliows.payot.ch/api/image/08797E73E865AEC2F9BA90D7648FBEF4CD3BDE0A/front/0/resized/mob_detail" style="width:63px;" />
+            </span>
+                                                <span>
+                <input type="image" name="ctl00$ContentPlaceHolder1$C001$imgBtCurrent" id="ContentPlaceHolder1_C001_imgBtCurrent" title="Accelerate
+ Nicole Forsgren Phd" src="https://bibliows.payot.ch/api/image/ED3B459CC92E889AE59A8AD23CDE0C9A9455EC28/front/0" style="width:63px;" />
+            </span>
+                                                <span id="ContentPlaceHolder1_C001_spanNext">
+                <input type="image" name="ctl00$ContentPlaceHolder1$C001$imgBtNext" id="ContentPlaceHolder1_C001_imgBtNext" title="Eloge de l&#39;asne ou discours ou l&#39;on prouve avec autant de force que de verite - que cet animal posse
+ XXX" src="https://bibliows.payot.ch/api/image/3E74EF0253F5B25210BE60774A81E9480FC14312/front/0/resized/mob_detail" style="width:63px;" />
+            </span>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div itemscope itemtype="http://schema.org/Product" />
+                            <div class="top-details">
+                                <h1 class="titreouvrageDetail">
+                                    <div itemprop="name">
+                                        Accelerate
+                                    </div>
+                                    <p class="detailSubTitle">
+
+                                    </p>
+
+                                    <ul class="infoLink li-autheur li-autheur--main">
+
+                                        <li><a id="ContentPlaceHolder1_C001_Authors1_rptAuthorPrimary_hlnkauthor_0" href="/Dynamics/Result?author= Nicole Forsgren Phd&amp;cId=1">Nicole Forsgren Phd</a></li>
+
+                                    </ul>
+
+
+                                </h1>
+                                <div class="printAndShare detail-social not-showing">
+
+                                    <a href="javascript:showSocials();" id="share-button">
+                                        <img src="/App_Themes/Payot/images/icon-share.svg" alt="Partager">
+                                        <span class="detail-social-title">
+                    Partager
+                </span>
+                                    </a>
+                                    <a href="javascript:window.print();" id="print-button">
+                                        <img src="/App_Themes/Payot/images/icon-print.svg" alt="Imprimer">
+                                        <span class="detail-social-title">
+                    Imprimer
+                </span>
+                                    </a>
+
+                                    <div class="social-icons">
+                                        <input type="image" name="ctl00$ContentPlaceHolder1$C001$imgBtnSendMail" id="ContentPlaceHolder1_C001_imgBtnSendMail" title="Partager par e-mail avec un ami" class="emailButton" src="../App_Themes/Payot/images/share-email.png" onclick="ShowExistingSendMail();return false;" />
+                                        <!-- todo10: pourquoi Ã§a ne marche plus ce RadSocialShare ? -->
+                                        <div id="ctl00_ContentPlaceHolder1_C001_radSocialShareDetail" class="RadSocialShare RadSocialShare_Default">
+                                            <ul class="sshContent">
+                                                <li class="sshListItem"><a class="sshLinkItem" href="javascript:void(0)" title="Partager sur Facebook"><span class="sshIcon sshShareOnFacebook "></span></a></li><li class="sshListItem"><a class="sshLinkItem" href="javascript:void(0)" title="Partager sur Twitter"><span class="sshIcon sshShareOnTwitter "></span></a></li>
+                                            </ul><input id="ctl00_ContentPlaceHolder1_C001_radSocialShareDetail_ClientState" name="ctl00_ContentPlaceHolder1_C001_radSocialShareDetail_ClientState" type="hidden" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="labels-wrapper">
+
+                                <div class="line"></div>
+                            </div>
+                            <div class="formats">
+
+                            </div>
+                            <div class="contenuGauche fl">
+                                <div class="biblio-block">
+                                    <div class="cover">
+                                        <a id="ContentPlaceHolder1_C001_lnkCover" rel="lightbox" href="https://bibliows.payot.ch/api/image/ED3B459CC92E889AE59A8AD23CDE0C9A9455EC28/front/0"><img id="ContentPlaceHolder1_C001_imgLnk" title="Accelerate -  Nicole Forsgren Phd" class="imgDetcartouche" itemprop="image" data-lightbox="images-lightbox" src="https://bibliows.payot.ch/api/image/ED3B459CC92E889AE59A8AD23CDE0C9A9455EC28/front/0" /></a>
+                                    </div>
+                                    <div class="infoOuvrage">
+                                        <div>
+                                            <p>
+                    <span>
+                        Editeur:</span><span>
+
+                            <a id="ContentPlaceHolder1_C001_hlnkEditor" href="/Dynamics/Result?edId=1a8fadab49a44d9e89ad49195fefa838&amp;ed=It Revolution Press&amp;cId=1">It Revolution Press</a>
+                        </span>
+                                            </p>
+
+
+
+                                            <p>
+                        <span>
+                            Parution:
+                        </span><span>
+                            décembre 2018</span>
+                                            </p>
+
+
+                                            <p>
+                        <span>
+                            Format:</span>
+                                                <span>
+                            Broché
+                        </span>
+                                            </p>
+
+
+
+                                            <p>
+                        <span>
+                            Dimensions:</span><span>22.6 x 15.1 x 2.5 cm</span>
+                                            </p>
+
+
+                                            <p>
+                        <span>
+                            Pages:</span><span>288 pages</span>
+                                            </p>
+
+
+
+
+                                            <p>
+                        <span>
+                            EAN13:</span><span>9781942788331</span>
+                                            </p>
+
+
+
+                                            <p>
+
+                                            </p>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+
+                                <div id="ctl00_ContentPlaceHolder1_C001_RadTabStrip1" class="RadTabStrip RadTabStrip_Default RadTabStripTop_Default RadTabStripTop cl info-tabs">
+                                    <div class="rtsLevel rtsLevel1">
+                                        <ul class="rtsUL"><li class="rtsLI rtsFirst rtsLast"><a class="rtsLink summaryTab rtsSelected summaryTabSelected" href="#"><span class="rtsOut"><span class="rtsIn"><span class="rtsTxt">Résumé</span></span></span></a></li></ul>
+                                    </div><input id="ctl00_ContentPlaceHolder1_C001_RadTabStrip1_ClientState" name="ctl00_ContentPlaceHolder1_C001_RadTabStrip1_ClientState" type="hidden" />
+                                </div>
+                                <div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_RadMultiPage1Panel">
+                                    <div id="ctl00_ContentPlaceHolder1_C001_RadMultiPage1" class="RadMultiPage RadMultiPage_Default wrapResum" style="width:396px;">
+                                        <div id="ContentPlaceHolder1_C001_RadPageChronicPayot" class="rmpView rmpHidden resume">
+
+                                            <div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_panelChroniquesPanel">
+                                                <div id="ContentPlaceHolder1_C001_panelChroniques">
+
+
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function () {
+                                                            if ($(".chroniquesPayot").length && $(".chroniquesPresse").length) {
+                                                                $(".chronique-spacer").removeClass('invisible');
+                                                            }
+                                                        });
+                                                    </script>
+
+                                                    <div class="chronique-tabs">
+
+                                                        <div class="chronique-spacer invisible"></div>
+
+                                                    </div>
+
+                                                    <div class="cl">
+                                                    </div>
+                                                    <div class="separationChronique">
+                                                    </div>
+                                                    <div class="chroniqueContent">
+                                                        <h2>
+                                                        </h2>
+                                                        <h1>
+                                                        </h1>
+                                                        <p>
+                                                            <i>
+                                                            </i>
+                                                        </p>
+                                                        <br />
+                                                        <p>
+
+                                                        </p>
+                                                    </div>
+
+
+                                                    <div class="cl">
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div><div id="ContentPlaceHolder1_C001_RadPageResume" class="rmpView resume">
+
+                                        <div itemprop="description" id="descriptionMicroData">
+                                            The Science Behind DevOps Building and Scaling High Performing Technology Organizations.
+                                        </div>
+
+                                    </div><div id="ContentPlaceHolder1_C001_RadPageAuthorBio" class="rmpView rmpHidden resume">
+
+                                        Bio de l'auteur
+
+                                    </div><div id="ContentPlaceHolder1_C001_RadPageSommaire" class="rmpView rmpHidden resume">
+
+                                        Sommaire / contenu
+
+                                    </div><div id="ContentPlaceHolder1_C001_RadPageInfoEBook" class="rmpView rmpHidden resume">
+
+                                        information eBook
+
+                                    </div><input id="ctl00_ContentPlaceHolder1_C001_RadMultiPage1_ClientState" name="ctl00_ContentPlaceHolder1_C001_RadMultiPage1_ClientState" type="hidden" />
+                                    </div><div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_panelChroniquesPanel">
+
+                                </div>
+                                </div>
+                                <!-- Youtube Emission Marque Page -->
+
+
+
+                                <div class="rotator">
+                                    <!--place rÃ©servÃ©e au rotator -->
+
+                                </div>
+                            </div>
+                            <div id="ContentPlaceHolder1_C001_RadAjaxLoadingPanel1" style="display:none;">
+
+                                <div class="loadingBtnDetail">
+                                    <img id="ContentPlaceHolder1_C001_Image1" src="/App_Themes/Payot/images/loading.gif" alt="loading" style="height:23px;" />
+                                </div>
+
+                            </div>
+                            <div id="ContentPlaceHolder1_C001_RadAjaxLoadingPanel2" style="display:none;">
+
+                                <div class="loadingList">
+                                    <img id="ContentPlaceHolder1_C001_Image2" src="/App_Themes/Payot/images/loading.gif" alt="loading" style="height:15px;" />
+                                </div>
+
+                            </div>
+                            <div id="ContentPlaceHolder1_C001_RadAjaxLoadingPanel3" style="display:none;">
+
+                                <div class="loadingBasket">
+                                    <div class="loadingContent">
+                                        <span id="ContentPlaceHolder1_C001_Label2">Chargement... </span>
+                                        <img id="ContentPlaceHolder1_C001_Image3" src="/App_Themes/Payot/images/loading.gif" alt="loading" />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="contenuDroite fr">
+                                <div class="fr">
+                                    <div class="wrapachat">
+                                        <div class="pricingDetail">
+
+
+                                            <div class="zonePrix">
+
+                                                <div class="vrai-prix">
+                                                    <span></span>
+                                                    <span class="prix-payot"></span>
+                                                </div>
+                                            </div>
+
+
+
+                                            <p class="prixDispo">
+                                                <span id="ContentPlaceHolder1_C001_litDispoResume" class="red">indisponible</span>
+                                            </p>
+
+
+                                            <p class="infoDispo2">
+                                                <span id="ContentPlaceHolder1_C001_litSousDispoInfo"></span>
+                                            </p>
+
+                                        </div>
+
+
+
+
+
+                                        <div class="add-to-basket">
+                                            <div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_plhHolderBasketPanel">
+                                                <div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_panelListAlertePanel">
+
+                                                </div><div class="RadAjaxPanel" id="ctl00_ctl00_ContentPlaceHolder1_C001_panelOneClickPanel">
+
+                                            </div>
+                                            </div>
+                                            <div class="boutonsCreerAlerte">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script src="/App_Themes/Payot/js/jquery.simple-popup.min.js"></script>
+                        <script type="text/javascript" src="/App_Themes/Payot/js/slick/slick.min.js"></script>
+                        <script src="/App_Themes/Payot/js/details-scripts.js"></script>
+
+
+
+        </div>
+        <!-- end Blocs-->
+        <!--<div id="footer">
+    <a href="">Conditions générales de vente</a> | <a href="">Mode de livraison et frais
+        de port</a> <a href="">Mentions légales</a> <a href="">Crédits</a> <a href="">Contact</a>
+    <a href="">Aide</a> <a href="">2011, Payot SA</a>
+</div>-->
+        </td>
+        <td class="right">
+            <!-- BEGIN COLUMN RIGHT -->
+            <div id="colright" class="fr">
+
+
+                <script type="text/javascript">
+                    window.onload = function () {
+                        document.getElementById('Column_Right_T80EB8D4C008_btnLoadPrediggo').click();
+                    }
+                </script>
+                <div id="Column_Right_T80EB8D4C008_UpdatePanel1">
+
+
+
+                    <input type="submit" name="ctl00$Column_Right$T80EB8D4C008$btnLoadPrediggo" value="" id="Column_Right_T80EB8D4C008_btnLoadPrediggo" style="display: none" />
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+    </div>
+    <div class="cl">
+    </div>
+    </td>
+    <tr>
+        <td colspan="3">
+
+
+
+            <div id="footer">
+                <div id="topFooter">
+
+                    <div id="divLogo">
+                        <span><img src="/App_Themes/Payot/images/logoFooter.jpg" /></span>
+                    </div>
+                    <div id="divCol1">
+                        <span style="font-weight:bold">Payot Libraire</span>
+                        <div><a href="/fr/notre-entreprise">Qui sommes-nous ?</a></div>
+                        <div><a href="/fr/nos-librairies/nos-magasins">Nos librairies</a></div>
+                        <div><a href="/fr/nos-librairies/nos-services">Nos services</a></div>
+                        <div><a href="/fr/nos-librairies/nosevenements" target="_blank">Nos événements</a></div>
+                        <div><a href="/fr/service-institutionnel">Service institutionnel et entreprise</a></div>
+                        <div><a href="/fr/notre-entreprise/emploi">Emploi</a></div>
+                        <div><a href="/fr/contact">Contact</a></div>
+                    </div>
+                    <div id="divCol2">
+                        <span style="font-weight:bold">Acheter en ligne</span>
+                        <div><a href="/fr/aide/rechercher">Rechercher</a></div>
+                        <div><a href="/fr/aide/passer-une-commande">Passer une commande</a></div>
+                        <div><a href="/fr/aide/modes-de-livraison-et-frais-de-port">Livraison gratuite</a></div>
+                        <div><a href="/fr/aide/modes-de-paiement">Paiement</a>&nbsp; <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_saferpay.png" style="margin-bottom: -2px;" /></a></div>
+                        <div class="paymentLogos">
+                            <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_post.png" /></a>
+                            <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_masterCard.png" /></a>
+                            <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_visa.png" /></a>
+                            <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_americanExpress.png" /></a>
+                            <a href="/fr/aide/modes-de-paiement"><img src="/App_Themes/Payot/images/payment_invoice.png" /></a>
+                        </div>
+                        <div><a href="/fr/aide/retour-et-échanges">Retour et échange</a></div>
+                        <div><a href="https://www.payot.ch/fr/ecoles">Commandes des écoles</a></div>
+                    </div>
+                    <div id="divCol3">
+                        <span style="font-weight:bold">Nos contenus</span>
+                        <div><a href="/fr/dossiers-d'actualite">Dossiers d'actualité</a></div>
+                        <div><a href="/fr/videos">Vidéos, Marque-Page</a></div>
+                        <div><a href="/fr/sélections">Sélections</a></div>
+                        <div><a href="https://www.instagram.com/youngadults.payotlibraire/?hl=fr" target="_blank">Ados & Young Adults</a></div>
+                        <div><a href="/fr/Newsletter">Newsletter</a></div>
+                    </div>
+                    <div id="divCol4">
+                        <span style="font-weight:bold">Lire en numérique</span>
+                        <div><a href="/fr/ebooks/guide-et-glossaire">Découvrir la lecture numérique</a></div>
+                        <div><a href="/fr/ebooks/les-liseuses-numériques">Nos modèles de liseuses</a></div>
+                        <div><a href="/fr/ebooks/aide-pour-le-téléchargement">Aide au téléchargement</a></div>
+                        <div><a href="http://pnb.payot.ch/" target="_blank" rel="noopener noreferrer">Prêt Numérique en Bibliothèque</a></div>
+                    </div>
+                    <div id="divCol5">
+                        <span style="font-weight:bold">Nos actions</span>
+                        <div><a href="https://fppl.ch/" target="_blank">La Fondation</a></div>
+                        <div><a href="/fr/nos-partenaires">Nos partenaires</a></div>
+                        <div class="fb">
+                            <a href="https://www.facebook.com/payotlibraire" target="_blank"><img src="/App_Themes/Payot/images/fb.png" alt="Facebook" /></a>
+                            <a href="https://www.instagram.com/payot.libraire/?hl=fr" target="_blank"><img src="/App_Themes/Payot/images/ig.png" alt="Instagram" /></a>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+
+
+                </div>
+                <div id="bottomFooter">
+
+                    <a href="/fr/aide/conditions-générales-de-vente">Conditions générales</a>
+                    <a href="/fr/aide/déclaration-de-protection-des-données">Protection des données</a>
+                    <a href="/fr/Mentions-legales">Mentions légales</a>
+                    <a href="/fr/Credits">Crédits</a>
+                    <span>2022, Payot SA</span>
+
+
+                </div>
+            </div>
+        </td>
+    </tr>
+    </table>
+    </div>
+    </div>
+
+
+    <script type="text/javascript">
+        //<![CDATA[
+        ;(function() {
+            function loadHandler() {
+                var hf = $get('ctl17_TSSM');
+                if (!hf._RSSM_init) { hf._RSSM_init = true; hf.value = ''; }
+                hf.value += ';Telerik.Web.UI, Version=2017.2.621.40, Culture=neutral, PublicKeyToken=121fae78165ba3d4:en:e0add335-49c5-47a8-829e-e7aa813f8ea6:45085116:6de05185:f730aca1:1c2121e:e24b8e95:6eb493e0:9b51605:ed2942d4:92753c09:91f742eb:d7e35272:b7acb766:6cd7c4a8:8cee9284:ed057d30:a3b7d93f';
+                Sys.Application.remove_load(loadHandler);
+            };
+            Sys.Application.add_load(loadHandler);
+        })();Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxManager, {"_updatePanels":"","ajaxSettings":[{InitControlID : "ContentPlaceHolder1_C001_plhHolderBasket",UpdatedControls : [{ControlID:"ContentPlaceHolder1_C001_plhHolderBasket",PanelID:"ContentPlaceHolder1_C001_RadAjaxLoadingPanel1"}]},{InitControlID : "ContentPlaceHolder1_C001_panelListAlerte",UpdatedControls : [{ControlID:"ContentPlaceHolder1_C001_panelListAlerte",PanelID:"ContentPlaceHolder1_C001_RadAjaxLoadingPanel2"}]},{InitControlID : "ctl00_ContentPlaceHolder1_C001_RadMultiPage1",UpdatedControls : [{ControlID:"ctl00_ContentPlaceHolder1_C001_RadMultiPage1",PanelID:"ContentPlaceHolder1_C001_RadAjaxLoadingPanel3"}]},{InitControlID : "ContentPlaceHolder1_C001_panelOneClick",UpdatedControls : [{ControlID:"ContentPlaceHolder1_C001_panelOneClick",PanelID:"ContentPlaceHolder1_C001_RadAjaxLoadingPanel1"}]},{InitControlID : "ContentPlaceHolder1_C001_panelChroniques",UpdatedControls : [{ControlID:"ContentPlaceHolder1_C001_panelChroniques",PanelID:"ContentPlaceHolder1_C001_RadAjaxLoadingPanel3"}]}],"clientEvents":{OnRequestStart:"",OnResponseEnd:""},"defaultLoadingPanelID":"","enableAJAX":true,"enableHistory":false,"links":[],"styles":[],"uniqueID":"ctl00$RadAjaxManager1","updatePanelsRenderMode":0}, null, null, $get("ctl00_RadAjaxManager1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":true,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingPanelList","zIndex":90000}, null, null, $get("RadAjaxLoadingPanelList"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":true,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingPanelResult","zIndex":90000}, null, null, $get("RadAjaxLoadingPanelResult"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingPanelBasket","zIndex":90000}, null, null, $get("RadAjaxLoadingPanelBasket"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingMyAddresses","zIndex":90000}, null, null, $get("RadAjaxLoadingMyAddresses"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingFreeOrder","zIndex":90000}, null, null, $get("RadAjaxLoadingFreeOrder"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingPanelMyAlertes","zIndex":90000}, null, null, $get("RadAjaxLoadingPanelMyAlertes"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$RadAjaxLoadingPanelLink","zIndex":90000}, null, null, $get("RadAjaxLoadingPanelLink"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadRotator, {"_itemHeight":"64px","_itemWidth":"700px","clientStateFieldID":"ctl00_MainMenuCentral1_BannerControl1_Header_rot_ClientState","frameDuration":5000,"items":[{},{},{},{},{}],"rotatorType":4,"skin":"Default","slideShowAnimationSettings":{"duration":2000,"type":4}}, null, null, $get("ctl00_MainMenuCentral1_BannerControl1_Header_rot"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Sys.UI._UpdateProgress, {"associatedUpdatePanelId":"ContentPlaceHolder3_T80EB8D4C006_updatePanel","displayAfter":500,"dynamicLayout":true}, null, null, $get("ContentPlaceHolder3_T80EB8D4C006_UpdateProgress1"));
+        });
+
+        WebForm_InitCallback();Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadComboBox, {"_dropDownWidth":0,"_height":0,"_skin":"Default","_text":"Livres en anglais","_uniqueId":"ctl00$ContentPlaceHolder2$T80EB8D4C003$ddlCatalog1","_value":"1","clientStateFieldID":"ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1_ClientState","collapseAnimation":"{\"duration\":450}","expandAnimation":"{\"duration\":450}","itemData":[{"value":"0"},{"value":"90"},{"value":"1","selected":true},{"value":"91"},{"value":"30"},{"value":"31"},{"value":"33"},{"value":"4"}],"localization":"{\"AllItemsCheckedString\":\"All items checked\",\"ItemsCheckedString\":\"items checked\",\"CheckAllString\":\"Check All\"}","selectedIndex":2}, {"selectedIndexChanged":onClientSelectedIndexChanged}, null, $get("ctl00_ContentPlaceHolder2_T80EB8D4C003_ddlCatalog1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadSearchBox, {"_clientTemplate":"\r\n                    \u003cdiv class=\"resultList\"\u003e\r\n                            \u003cspan id=\"divHasResultLeft\" class=\"#= DataItem.HasResultClass #\"\u003e\r\n                                \u003ca href=\"#= DataItem.NavigateUrl #\"\u003e\r\n                                    \u003cimg id=\"imgCover\" width=\"53px\" src=\u0027#= DataItem.ImageUrl #\u0027 onclick=\"goto(\u0027#= DataItem.NavigateUrl #\u0027)\"\u003e\u003c/img\u003e\r\n                                \u003c/a\u003e\r\n                            \u003c/span\u003e    \r\n\r\n                            \u003cspan id=\"divHasResultRight\" class=\"#= DataItem.HasResultClass #\"\u003e\r\n                                \u003cp class=\"title\"\u003e\r\n                                    \u003ca href=\u0027#= DataItem.NavigateUrl #\u0027\u003e\r\n                                        #= DataItem.Title #\r\n                                    \u003c/a\u003e\r\n                                \u003c/p\u003e\r\n                                \u003cp\u003e\r\n                                    \u003ca href=\u0027#= DataItem.NavigateUrl #\u0027\u003e\r\n                                        #= DataItem.Author #\r\n                                    \u003c/a\u003e\r\n                                \u003c/p\u003e\r\n                                \u003cp class=\"small\"\u003e\r\n                                    \u003ca href=\u0027#= DataItem.NavigateUrl #\u0027\u003e\r\n                                        #= DataItem.Editor #\r\n                                    \u003c/a\u003e\r\n                                \u003c/p\u003e\r\n                                \u003cp class=\"small\"\u003e\r\n                                    \u003ca href=\u0027#= DataItem.NavigateUrl #\u0027\u003e\r\n                                        #= DataItem.Collection #\r\n                                    \u003c/a\u003e\r\n                                \u003c/p\u003e\r\n                                \u003cp class=\"small\"\u003e\r\n                                    \u003ca href=\u0027#= DataItem.NavigateUrl #\u0027\u003e\r\n                                        #= DataItem.Format #\r\n                                    \u003c/a\u003e\r\n                                \u003c/p\u003e\r\n                            \u003c/span\u003e\r\n                            \r\n\r\n                        \r\n                    \u003c/div\u003e\r\n\r\n                    \u003cdiv\u003e\r\n                    \u003cspan id=\"divFooterLeft\" class=\"#= DataItem.HasResultClassFooter #\"\u003e\r\n                    \u003c/span\u003e\r\n                    \u003cspan id=\"divFooterRight\" class=\"#= DataItem.HasResultClassFooter #\"\u003e\r\n                        \u003ca id=\"autocompleteFullSearch\" href=\"#= DataItem.Href #\"\u003e\r\n                           \r\n                                #= DataItem.ButtonText #\r\n                            \r\n                        \u003c/a\u003e\r\n                    \u003c/span\u003e\r\n                    \u003c/div\u003e\r\n                ","_showAllResultsText":"#ResourceNotFound#:RadSearchBox:ShowAllResults","_skinName":"Default","_uniqueId":"ctl00$ContentPlaceHolder2$T80EB8D4C003$rsbSimpleSearch","clientStateFieldID":"ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch_ClientState","dropDownWidth":"300px","webServiceSettings":"{\"path\":\"/WebService1.asmx\",\"method\":\"GetResults\"}"}, {"dataRequesting":OnClientDataRequesting,"search":OnSearch}, null, $get("ctl00_ContentPlaceHolder2_T80EB8D4C003_rsbSimpleSearch"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadMenu, {"_childListElementCssClass":null,"_flow":0,"_skin":"RadMenuSkin","attributes":{"langIso":"fr","catalog":"En"},"clientStateFieldID":"ctl00_Navigation_Left_T80EB8D4C005_RadMenu1_ClientState","clientTemplate":"\r\n        \u003ca href=\"#= NavigateUrl #\"\u003e\r\n            \u003cdiv class=\"rmTemplateSubmenu\"\u003e\r\n                \u003cspan class=\"templateText\"\u003e#= Text #\u003c/span\u003e\r\n            \u003c/div\u003e\r\n        \u003c/a\u003e\r\n    ","collapseAnimation":"{\"type\":0,\"duration\":1000}","collapseDelay":400,"enableRoundedCorners":true,"expandAnimation":"{\"type\":0,\"duration\":1000}","expandDelay":400,"itemData":[{"attributes":{"langIso":"fr","catalog":"1"},"value":"100","navigateUrl":"../../Category/fiction-100?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"800","navigateUrl":"../../Category/non_fiction-800?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"120","navigateUrl":"../../Category/comics_cartoons_humour_satire-120?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"110","navigateUrl":"../../Category/young_adult_and_childrens_books-110?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"200","navigateUrl":"../../Category/travel-200?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"310","navigateUrl":"../../Category/hobbies_home-310?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"320","navigateUrl":"../../Category/sport-320?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"330","navigateUrl":"../../Category/food__drink-330?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"340","navigateUrl":"../../Category/health-340?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"350","navigateUrl":"../../Category/spirituality-350?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"360","navigateUrl":"../../Category/self_help-360?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"410","navigateUrl":"../../Category/general_social_sciences-410?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"420","navigateUrl":"../../Category/art-420?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"500","navigateUrl":"../../Category/science_medicine__information_technology_technology-500?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"600","navigateUrl":"../../Category/social_studies_law_economics-600?cId=1","cssClass":"active niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"60007","navigateUrl":"../../Category/economics-60007?cId=1","cssClass":"active niv_2","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"6000704","navigateUrl":"../../Category/management-6000704?cId=1","cssClass":"active niv_3","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"700","navigateUrl":"../../Category/teaching__learning-700?cId=1","cssClass":"niv_1","expandMode":1},{"attributes":{"langIso":"fr","catalog":"1"},"value":"900","navigateUrl":"../../Category/gift_books-900?cId=1","cssClass":"niv_1","expandMode":1}],"loadingTemplate":"\r\n        \u003cimg id=\"ctl00_Navigation_Left_T80EB8D4C005_RadMenu1_LoadingImage\" title=\"Loading...\" src=\"../Skins/RadMenuSkin/Menu/Loading.gif\" style=\"height:16px;width:16px;margin-top: 8px\" /\u003e\r\n    ","persistLoadOnDemandItems":false,"webServiceSettings":"{\"path\":\"../../WebService1.asmx\",\"method\":\"GetMenuCategories\"}"}, {"itemClosing":disableExpanded,"itemOpening":enableExpanded,"itemPopulated":itemPopulated,"itemPopulationFailed":populationFailed,"load":OnMenuLoad}, null, $get("ctl00_Navigation_Left_T80EB8D4C005_RadMenu1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"autoSize":true,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radWinChronic_ClientState","formID":"form1","iconUrl":"","maxHeight":"500px","maxWidth":"700px","minWidth":"600px","minimizeIconUrl":"","name":"radWinChronic","reloadOnShow":true,"skin":"Default","visibleStatusbar":false}, null, null, $get("ctl00_ContentPlaceHolder1_C001_radWinChronic"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"autoSize":true,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radWinPlayer_ClientState","formID":"form1","height":"650px","iconUrl":"","minimizeIconUrl":"","name":"radWinPlayer","reloadOnShow":true,"skin":"Default","visibleStatusbar":false,"width":"670px"}, null, null, $get("ctl00_ContentPlaceHolder1_C001_radWinPlayer"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radWinAlert_ClientState","formID":"form1","height":"720px","iconUrl":"","minimizeIconUrl":"","name":"radWinAlert","reloadOnShow":true,"skin":"Default","visibleStatusbar":false,"width":"638px"}, null, null, $get("ctl00_ContentPlaceHolder1_C001_radWinAlert"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radWinLogin_ClientState","formID":"form1","height":"200px","iconUrl":"","minimizeIconUrl":"","name":"radWinLogin","reloadOnShow":true,"skin":"Default","title":"Déjà client?","visibleStatusbar":false,"width":"340px"}, {"close":rw_RequiredConfirmation_Closed}, null, $get("ctl00_ContentPlaceHolder1_C001_radWinLogin"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick_ClientState","formID":"form1","height":"350px","iconUrl":"","minimizeIconUrl":"","name":"radWinLoginOneClick","reloadOnShow":true,"skin":"Default","title":"DÃ©jÃ  client ?","visibleStatusbar":false,"width":"500px"}, {"close":rw_RequiredConfirmationOneClick_Closed}, null, $get("ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindow, {"_dockMode":false,"autoSize":true,"behaviors":4,"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_RadWindowSendMail_ClientState","formID":"form1","iconUrl":"","maxWidth":"450px","minimizeIconUrl":"","name":"RadWindowSendMail","navigateUrl":"../misccontrols/mail?type=WriteAnyProductDetail\u0026ean=9781942788331","openerElementID":"\u003c%=imgBtnSendMail.ClientID %\u003e","reloadOnShow":true,"skin":"Default","visibleStatusbar":false,"width":"450px"}, null, null, $get("ctl00_ContentPlaceHolder1_C001_RadWindowSendMail"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadWindowManager, {"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_windowManager_ClientState","formID":"form1","iconUrl":"","minimizeIconUrl":"","name":"windowManager","skin":"Default","windowControls":"['ctl00_ContentPlaceHolder1_C001_radWinChronic','ctl00_ContentPlaceHolder1_C001_radWinPlayer','ctl00_ContentPlaceHolder1_C001_radWinAlert','ctl00_ContentPlaceHolder1_C001_radWinLogin','ctl00_ContentPlaceHolder1_C001_radWinLoginOneClick','ctl00_ContentPlaceHolder1_C001_RadWindowSendMail']"}, null, {"child":"ctl00_ContentPlaceHolder1_C001_radWinChronic"}, $get("ctl00_ContentPlaceHolder1_C001_windowManager"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadSocialShare, {"_addFbScript":false,"_addGoogleScript":false,"_addLinkedInScript":false,"_addPinterestScript":false,"_addTwitterScript":false,"_addYammerScript":false,"_locale":"en_US","_uniqueId":"ctl00$ContentPlaceHolder1$C001$radSocialShareDetail","clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_radSocialShareDetail_ClientState","mainButtons":"[['ShareOnFacebook','','', '470', '470', '', ''],['ShareOnTwitter','','', '470', '470', '', '']]"}, null, null, $get("ctl00_ContentPlaceHolder1_C001_radSocialShareDetail"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadTabStrip, {"_selectedIndex":0,"_skin":"Default","clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_RadTabStrip1_ClientState","multiPageID":"ctl00_ContentPlaceHolder1_C001_RadMultiPage1","selectedIndexes":["0"],"tabData":[{"value":"1","selectedCssClass":"summaryTabSelected","hoveredCssClass":"summaryTabHovered","cssClass":"summaryTab","_implPageViewID":"ContentPlaceHolder1_C001_RadPageResume"}]}, null, null, $get("ctl00_ContentPlaceHolder1_C001_RadTabStrip1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadMultiPage, {"clientStateFieldID":"ctl00_ContentPlaceHolder1_C001_RadMultiPage1_ClientState","pageViewData":[{"id":"ContentPlaceHolder1_C001_RadPageChronicPayot"},{"id":"ContentPlaceHolder1_C001_RadPageResume"},{"id":"ContentPlaceHolder1_C001_RadPageAuthorBio"},{"id":"ContentPlaceHolder1_C001_RadPageSommaire"},{"id":"ContentPlaceHolder1_C001_RadPageInfoEBook"}],"selectedIndex":1}, null, null, $get("ctl00_ContentPlaceHolder1_C001_RadMultiPage1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$ContentPlaceHolder1$C001$RadAjaxLoadingPanel1","zIndex":90000}, null, null, $get("ContentPlaceHolder1_C001_RadAjaxLoadingPanel1"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$ContentPlaceHolder1$C001$RadAjaxLoadingPanel2","zIndex":90000}, null, null, $get("ContentPlaceHolder1_C001_RadAjaxLoadingPanel2"));
+        });
+        Sys.Application.add_init(function() {
+            $create(Telerik.Web.UI.RadAjaxLoadingPanel, {"initialDelayTime":0,"isSticky":false,"minDisplayTime":0,"skin":"","transparency":10,"uniqueID":"ctl00$ContentPlaceHolder1$C001$RadAjaxLoadingPanel3","zIndex":90000}, null, null, $get("ContentPlaceHolder1_C001_RadAjaxLoadingPanel3"));
+        });
+        //]]>
+    </script>
+</form>
+
+<script type="text/javascript">
+
+    var targetElement;
+    targetElement = document.getElementById("divmobile");
+    var targetElementEn;
+    targetElementEn = document.getElementById("divmobileEn");
+    var indexWWW = location.href.toLowerCase().indexOf("?fwww=1");
+    if (indexWWW == -1 && '' != '1') {
+
+        if(targetElement != null)
+        {
+            targetElement.style.display = "none";
+        }
+        if (targetElementEn != null)
+        {
+            targetElementEn.style.display = "none";
+        }
+    }
+    else if ('' == '1') {
+
+        if (targetElement != null) {
+            targetElement.style.display = "block";
+        }
+        if (targetElementEn != null) {
+            targetElementEn.style.display = "block";
+        }
+    }
+</script>
+
+<script type='text/javascript'>
+    // Review the commented lines. Insert real values for the placeholders
+    var _Mfb_ud = {
+    };
+    (function() {
+        var mfb = document.createElement('script');
+        mfb.type = 'text/javascript';
+        mfb.charset = 'UTF-8';
+        mfb.async = true;
+        mfb.id = 'MFBActor';
+        mfb.src = 'https://actorssl-5637.kxcdn.com/actor/bc777bbba95543abdf8698e1cea29d30-718/action';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mfb, s);
+    })();
+</script>
+<script type="text/javascript">
+    // add a class to the body on homepage @tmi 27.11.19
+    // if href contains accueil or home
+    // or if path is empty or /
+    $(document).ready(function () {
+        var checkURL = ['fr/accueil', 'en/home'];
+        for (var i = 0; i < checkURL.length; i++) {
+            if(window.location.href.indexOf(checkURL[i]) > -1){
+                $("body").addClass("homepage");
+            }
+        }
+        var checkPathname = ['', '/'];
+        if (checkPathname.indexOf(window.location.pathname) > -1) {
+            $("body").addClass("homepage");
+        }
+    });
+</script>
+<script type="text/javascript">
+    <!-- add a class to the body on homepage @tmi 27.11.19-->
+    $(document).ready(function () {
+        if ((window.location.href.indexOf("accueil") > -1) || (window.location.href.indexOf("home") > -1)) {
+            $("body").addClass("homepage");
+        }
+    });
+</script>
+
+</body>
+
+</html>

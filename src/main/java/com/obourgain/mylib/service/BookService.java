@@ -1,7 +1,7 @@
 package com.obourgain.mylib.service;
 
 import com.obourgain.mylib.db.BookRepository;
-import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.ext.payot.PayotItemLookup;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -110,46 +109,13 @@ public class BookService {
     }
 
     /**
-     * Create a book from its ISBN Number or ASIN Number.
+     * Create a book from its ISBN Number.
      * <p>
-     * Return null if the amazon's page for this book can't be found.
+     * Return null this book can't be found.
      */
-    public Book lookup(String userId, String term) {
-        if (term.toLowerCase().startsWith("asin")) {
-            String asin = term.substring(term.indexOf(':') + 1).trim();
-            return asinLookup(userId, asin);
-        } else {
-            return isbnLookup(userId, term);
-        }
-    }
-
-    /**
-     * Create a book from its ISBN Number. The ISBN can be an ISBN10 or ISBN13.
-     * <p>
-     * Return null if the amazon's page for this book can't be found.
-     */
-    public Book isbnLookup(String userId, String isbn) {
-        Book book = ItemLookupAmazon.lookup(isbn);
+    public Book lookup(String userId, String isbn) {
+        Book book = PayotItemLookup.lookup(isbn);
         if (book == null || book.getTitle().isBlank()) {
-            log.info("No book found");
-            return null;
-        }
-        book.setUserId(userId);
-        book.setCreated(LocalDateTime.now());
-        book.setUpdated(LocalDateTime.now());
-
-        bookRepository.save(book);
-        return book;
-    }
-
-    /**
-     * Create a book from its ASIN Number.
-     * <p>
-     * Return null if the amazon's page for this book can't be found.
-     */
-    public Book asinLookup(String userId, String asin) {
-        Book book = ItemLookupAmazon.asinLookup(asin);
-        if (book == null) {
             log.info("No book found");
             return null;
         }
