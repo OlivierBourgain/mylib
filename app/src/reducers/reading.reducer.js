@@ -1,7 +1,7 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
 import {FETCH_READINGS, FETCH_BOOKREADINGS, DELETE_READING} from '../actions/reading.action';
 
-export default function (state = {}, action) {
+function exportReading (state = {}, action) {
     switch (action.type) {
         case PENDING(FETCH_READINGS):
         case PENDING(DELETE_READING): {
@@ -24,3 +24,5 @@ export default function (state = {}, action) {
             return state;
     }
 }
+
+export default exportReading

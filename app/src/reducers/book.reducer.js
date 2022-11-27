@@ -1,7 +1,7 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
 import {FETCH_BOOKS, FETCH_BOOK_TITLES, FETCH_BOOK, LOOKUP_BOOK, DELETE_BOOK, UPDATE_BOOK, EXPORT_BOOKS} from '../actions/book.action';
 
-export default function (state = {}, action) {
+function reduceBook(state = {}, action) {
     switch (action.type) {
         case PENDING(FETCH_BOOKS):
         case PENDING(FETCH_BOOK):
@@ -60,3 +60,4 @@ export default function (state = {}, action) {
     }
 }
 
+export default reduceBook

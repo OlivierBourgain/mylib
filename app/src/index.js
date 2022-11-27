@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -17,24 +18,24 @@ import './app.scss';
 const createStoreWithMiddleware = applyMiddleware(promise, thunk)(createStore);
 export const store = createStoreWithMiddleware(reducers);
 
-const rootEl = document.getElementById('root')
-
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    rootEl
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+    <React.StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </React.StrictMode>
 );
 
 if (module.hot) {
     module.hot.accept('./App', () => {
-        const NextApp = require('./App').default
-        ReactDOM.render(
-            <Provider store={store}>
-                <NextApp />
-            </Provider>,
-            rootEl
-        )
+        root.render(
+            <React.StrictMode>
+                <Provider store={store}>
+                    <App />
+                </Provider>
+            </React.StrictMode>
+        );
     })
 }
 

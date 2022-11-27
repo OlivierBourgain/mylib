@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import {Redirect} from 'react-router';
+import {Navigate} from 'react-router';
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import moment from 'moment'
@@ -60,7 +60,7 @@ class BookDetail extends Component {
         const book = this.props.book;
 
         if (book.redirectTo) {
-            return (<Redirect to={book.redirectTo}/>)
+            return (<Navigate replace to={book.redirectTo}/>)
         }
 
         if (book.pending || !book.detail || book.detail === {}) {

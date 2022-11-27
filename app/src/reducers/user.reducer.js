@@ -1,7 +1,7 @@
 import {FAILURE, PENDING, SUCCESS} from './index.js';
 import {DELETE_USER, FETCH_USERS, FETCH_ROLE, LOGIN, LOGOUT} from '../actions/user.action';
 
-export default function (state = {}, action) {
+function reduceUser(state = {}, action) {
     switch (action.type) {
         case LOGIN: {
             return {
@@ -35,3 +35,5 @@ export default function (state = {}, action) {
             return state;
     }
 }
+
+export default reduceUser

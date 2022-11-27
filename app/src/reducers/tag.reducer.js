@@ -1,7 +1,7 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
 import {FETCH_TAGS, UPDATE_TAG, DELETE_TAG} from '../actions/tag.action';
 
-export default function (state = {}, action) {
+function reduceTag(state = {}, action) {
     switch (action.type) {
         case PENDING(FETCH_TAGS): {
             return {...state, pending: true, error:false};
@@ -18,3 +18,5 @@ export default function (state = {}, action) {
             return state;
     }
 }
+
+export default reduceTag

@@ -37,7 +37,7 @@ npm start
 ```
 
 ## Deployment
-Run `mvn package` and deploy the `target\mylib-xx.jar` on your server.
+Run `npm run build` and `mvn package` and deploy the `target\mylib-xx.jar` on your server.
 Then run the app with `java -jar --enable-preview mylib-xx.jar`.
 
 The application will create 3 subdirectories : `db`, `store` and `search`.

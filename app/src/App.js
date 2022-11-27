@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from "react-redux";
 import {GoogleLogin} from 'react-google-login';
-
+import {useParams} from "react-router-dom";
 import Header from './views/header';
 import BookList from './views/booklist';
 import BookDetail from './views/bookdetail';
@@ -11,7 +11,13 @@ import TagList from './views/taglist';
 import UserList from './views/userlist';
 import Stats from './views/stats';
 import {login, logout} from "./actions/user.action";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+const BookDetailWrapper = () => {
+    const { id } = useParams();
+    console.log("Here", id)
+    return <BookDetail id={id} />;
+};
 
 class App extends Component {
 
@@ -27,6 +33,7 @@ class App extends Component {
         this.props.logout()
     }
 
+
     render() {
         const {logged, role} = this.props;
 
@@ -34,12 +41,14 @@ class App extends Component {
             <div className="App">
                 {logged && role && <Router>
                     <Header role={role}/>
-                    <Route exact path="/book/:id" render={props => <BookDetail id={props.match.params.id} />}/>
-                    <Route exact path="/books" render={() => <BookList/>} />
-                    <Route exact path="/readings" render={() => <ReadingList/>} />
-                    <Route exact path="/stats" render={() => <Stats/>} />
-                    <Route exact path="/tags" render={() => <TagList/>} />
-                    {role === 'ADMIN' && <Route exact path="/admin" render={() => <UserList/>}/>}
+                    <Routes>
+                        <Route exact path="/book/:id" element={<BookDetailWrapper />}/>
+                        <Route exact path="/books" element={<BookList/>} />
+                        <Route exact path="/readings" element={<ReadingList/>} />
+                        <Route exact path="/stats" element={<Stats/>} />
+                        <Route exact path="/tags" element={<TagList/>} />
+                    {role === 'ADMIN' && <Route exact path="/admin" element={<UserList/>}/>}
+                    </Routes>
                 </Router>}
                 {!logged && <>
                     <GoogleLogin

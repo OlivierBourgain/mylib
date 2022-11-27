@@ -27,14 +27,19 @@ public class ItemLookupAmazon {
      */
     public static String saveImage(String isbn, char size) throws IOException {
         String url = AMAZON_IMG + isbn + ".08." + size + ".jpg";
-        System.out.println("Calling " + url);
-        URLConnection connection = new URL(url).openConnection();
-        connection.setRequestProperty("User-Agent", USER_AGENT);
+        log.debug("Calling " + url);
+        try {
+            URLConnection connection = new URL(url).openConnection();
+            connection.setRequestProperty("User-Agent", USER_AGENT);
 
-        InputStream response = connection.getInputStream();
-        byte[] bytes = IOUtils.toByteArray(response);
-        // Don't store if it is less than 100 bytes.
-        if (bytes.length < 100) return null;
-        return FileStore.saveFile(isbn, size, bytes, "jpg");
+            InputStream response = connection.getInputStream();
+            byte[] bytes = IOUtils.toByteArray(response);
+            // Don't store if it is less than 100 bytes.
+            if (bytes.length < 100) return null;
+            return FileStore.saveFile(isbn, size, bytes, "jpg");
+        } catch (Exception e) {
+            log.warn("Pb fetching image @amazon", e);
+            return null;
+        }
     }
 }

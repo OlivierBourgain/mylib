@@ -27,9 +27,9 @@
 
         <!-- https://medium.com/@itzgeoff/including-react-in-your-spring-boot-maven-build-ae3b8f8826e -->
         <frontend-src-dir>${project.basedir}/app</frontend-src-dir>
-        <node.version>v12.18.2</node.version>
+        <node.version>v16.17.0</node.version>
+        <!-- 9.1.2 -->
         <npm.version>6.14.5</npm.version>
-        <yarn.version>v1.22.4</yarn.version>
         <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 
     </properties>
@@ -178,7 +178,6 @@
                 <configuration>
                     <nodeVersion>${node.version}</nodeVersion>
                     <npmVersion>${npm.version}</npmVersion>
-                    <yarnVersion>${yarn.version}</yarnVersion>
                     <workingDirectory>${frontend-src-dir}</workingDirectory>
                     <installDirectory>${project.build.directory}</installDirectory>
                 </configuration>
@@ -187,14 +186,14 @@
                     <execution>
                         <id>install-frontend-tools</id>
                         <goals>
-                            <goal>install-node-and-yarn</goal>
+                            <goal>install-node-and-npm</goal>
                         </goals>
                     </execution>
 
                     <execution>
-                        <id>yarn-install</id>
+                        <id>npm-install</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>npm</goal>
                         </goals>
                         <configuration>
                             <arguments>install</arguments>
@@ -204,7 +203,7 @@
                     <execution>
                         <id>build-frontend</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>npm</goal>
                         </goals>
                         <phase>prepare-package</phase>
                         <configuration>

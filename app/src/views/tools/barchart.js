@@ -1,5 +1,5 @@
 import React from 'react';
-import Chart from "chart.js";
+import {Chart} from "chart.js";
 
 Chart.defaults.global.defaultFontColor = 'white'
 Chart.defaults.global.legend.display = false
@@ -7,7 +7,7 @@ Chart.defaults.scale.ticks.beginAtZero = true;
 Chart.defaults.scale.ticks.autoSkip = false;
 Chart.defaults.scale.ticks.callback = (value) => {
     if (value.length <= 20) return value;
-    return value.substr(0, 18) + '\u2026'; // If truncated, add triple dot
+    return value.substring(0, 18) + '\u2026'; // If truncated, add triple dot
 };
 
 /**

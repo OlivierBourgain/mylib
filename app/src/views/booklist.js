@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {Redirect} from 'react-router';
+import {Navigate} from 'react-router';
 import {Button, Col, Container, Input, Row, Table} from 'reactstrap'
 
 import Tag from './tag'
@@ -92,7 +92,7 @@ class BookList extends Component {
     render() {
         const {book} = this.props;
         if (book.redirectTo) {
-            return (<Redirect to={book.redirectTo}/>)
+            return (<Navigate replace to={book.redirectTo}/>)
         }
         if (book.error) {
             return (<Container>Something went wrong</Container>);

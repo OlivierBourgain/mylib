@@ -1,7 +1,7 @@
 import {PENDING, SUCCESS, FAILURE} from './index.js';
 import {FETCH_STATS, FETCH_STATS_DETAIL} from '../actions/stat.action';
 
-export default function (state = {}, action) {
+function reduceStat(state = {}, action) {
     switch (action.type) {
 
         case PENDING(FETCH_STATS): {
@@ -28,3 +28,4 @@ export default function (state = {}, action) {
     }
 }
 
+export default reduceStat
