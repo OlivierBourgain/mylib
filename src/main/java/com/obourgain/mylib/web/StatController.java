@@ -48,22 +48,19 @@ public class StatController extends AbstractController {
         log.info("Controller stats");
         User user = getUserDetail();
 
-        Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
         Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
         List<Book> allBooks = bookService.findByUserId(user.getId());
 
-        // If the year is set, the discarded flag is ignored.
+        // If the year is set, filter the list
         if (year != null)
             allBooks = allBooks.stream().filter(b -> readInYear(b, year)).collect(Collectors.toList());
-        else if (!showDiscarded)
-            allBooks = allBooks.stream().filter(b -> b.getStatus() != BookStatus.DISCARDED).collect(Collectors.toList());
 
 
         model.addAttribute("nbBooks", allBooks.size());
         model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
 
-        Map<String, List<StatData>> stats = statService.getAllStat(user.getId(), year != null || showDiscarded, year);
+        Map<String, List<StatData>> stats = statService.getAllStat(user.getId(), year);
         model.addAttribute("pagesByTag", toHighChartJs(stats.get("pagesByTag")));
         model.addAttribute("booksByTag", toHighChartJs(stats.get("booksByTag")));
         model.addAttribute("pagesByAuthor", toHighChartJs(stats.get("pagesByAuthor")));
@@ -72,7 +69,6 @@ public class StatController extends AbstractController {
         model.addAttribute("booksByYear", toHighChartJs(stats.get("booksByYear")));
         model.addAttribute("pagesByMonth", toHighChartJs(stats.get("pagesByMonth")));
         model.addAttribute("booksByMonth", toHighChartJs(stats.get("booksByMonth")));
-        model.addAttribute("showDiscarded", showDiscarded);
         model.addAttribute("year", year);
 
         return "stats";
@@ -92,12 +88,11 @@ public class StatController extends AbstractController {
     @RequestMapping(value = "/stat/{statName}", method = RequestMethod.GET)
     public void stat(HttpServletRequest request, HttpServletResponse response, @PathVariable("statName") String statName, Model model) throws IOException {
         log.info("Controller stat " + statName);
-        Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
         Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
         User user = getUserDetail();
 
-        List<StatData> stat = statService.getStatDetail(user.getId(), showDiscarded, year, statName);
+        List<StatData> stat = statService.getStatDetail(user.getId(), year, statName);
         response.setContentType("application/json");
         response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         response.getWriter().print(toHighChartJs(stat));

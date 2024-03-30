@@ -75,10 +75,8 @@ public class BookListController extends AbstractController {
 
     private String internalBookList(HttpServletRequest request, Model model, Pageable page, String searchCriteria) {
         User user = getUserDetail();
-        Boolean showDiscarded = HttpRequestUtil.getParamAsBoolean(request, "showDisc");
         Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
         String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
-        Boolean cachedShowDiscarded = (Boolean) httpSession.getAttribute("bookListShowDiscarded");
 
         log.info("Request Pageable is : " + page);
         log.info("Cached  Pageable is : " + cachedPage);
@@ -89,19 +87,17 @@ public class BookListController extends AbstractController {
                 && request.getParameter("size") == null
                 && searchCriteria == null
                 && cachedPage != null) {
-            String params = getParams(cachedPage, cachedSearchCriteria, cachedShowDiscarded);
+            String params = getParams(cachedPage, cachedSearchCriteria);
             return "redirect:/books?" + params;
         }
         httpSession.setAttribute("bookListPageable", page);
         httpSession.setAttribute("bookListSearchCriteria", searchCriteria);
-        httpSession.setAttribute("bookListShowDiscarded", showDiscarded);
 
-        Page<Book> books = bookService.getBooks(searchCriteria, showDiscarded, page, user.getId());
+        Page<Book> books = bookService.getBooks(searchCriteria, page, user.getId());
 
         List<Integer> pagination = computePagination(books);
         model.addAttribute("pagination", pagination);
         model.addAttribute("searchCriteria", searchCriteria);
-        model.addAttribute("showDiscarded", showDiscarded);
         model.addAttribute("sort", books.getSort() == null ? null : books.getSort().iterator().next());
         model.addAttribute("books", books);
         model.addAttribute("user", user);
@@ -112,7 +108,7 @@ public class BookListController extends AbstractController {
      * Generate the URL parameters that are equivalent to the given Pageable.
      * Used when a Pageable is in session, and we want to reapply it.
      */
-    private String getParams(Pageable cachedPage, String searchCriteria, Boolean showDiscarded) {
+    private String getParams(Pageable cachedPage, String searchCriteria) {
         String params = "page=" + cachedPage.getPageNumber() + "&size=" + cachedPage.getPageSize();
         if (cachedPage.getSort() != null) {
             Order order = cachedPage.getSort().iterator().next();
@@ -124,9 +120,6 @@ public class BookListController extends AbstractController {
                 params += "&criteria=" + URLEncoder.encode(searchCriteria, StandardCharsets.UTF_8.name());
             } catch (UnsupportedEncodingException e) {
             }
-        }
-        if (showDiscarded == true) {
-            params += "&showDisc=true";
         }
         return params;
     }
@@ -152,13 +145,7 @@ public class BookListController extends AbstractController {
             return internalBookList(request, model, page, "");
         }
 
-        Book book = null;
-        if (isbn.toLowerCase().startsWith("asin")) {
-            String asin = isbn.substring(isbn.indexOf(':') + 1).trim();
-            book = bookService.asinLookup(user, asin);
-        } else {
-            book = bookService.isbnLookup(user, isbn);
-        }
+        Book book = bookService.isbnLookup(user, isbn);
         if (book == null) {
             model.addAttribute("alertWarn", "No book found for isbn <strong>" + isbn + "</strong>");
             return internalBookList(request, model, page, "");

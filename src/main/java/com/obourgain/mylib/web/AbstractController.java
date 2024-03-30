@@ -23,14 +23,7 @@ public abstract class AbstractController {
                 .getDetails();
         User user = new User();
         user.setId(userdetail.get("sub"));
-        user.setName(userdetail.get("name"));
-        user.setFirstName(userdetail.get("given_name"));
-        user.setLastName(userdetail.get("family_name"));
         user.setEmail(userdetail.get("email"));
-        user.setPicture(userdetail.get("picture"));
-        user.setProfile(userdetail.get("profile"));
-        user.setLocale(userdetail.get("locale"));
-        user.setGender(userdetail.get("gender"));
         return user;
     }
 

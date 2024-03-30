@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ReadingRepository extends JpaRepository<Reading, Long> {
     List<Reading> findByUserId(String userId);
-
     Page<Reading> findByUserId(String userId, Pageable page);
+    List<Reading> findByUserIdAndBookId(String userId, Long bookId);
 }

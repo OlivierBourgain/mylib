@@ -12,6 +12,5 @@ FROM
   LEFT JOIN reading ON book.id = reading.book_id
 WHERE
   book.user_id = ?
-  AND (book.status IS NULL OR book.status <> 'DISCARDED' OR ? = 1)
   AND (? IS NULL OR reading.year = ?)
 GROUP BY tag.text

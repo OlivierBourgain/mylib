@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByUserId(String userId);
-
     Page<Book> findByUserId(String userId, Pageable page);
 }

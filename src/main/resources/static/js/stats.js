@@ -20,18 +20,6 @@ $(function () {
         $('#stat-extended').addClass('hidden')
     });
 
-    // Check box show discarded
-    $("#showDisc").click(function () {
-        var checked = $(this)[0].checked
-        var newUrl = URI(window.location.href)
-        if (checked)
-            newUrl.setSearch("showDisc", "true").toString()
-        else
-            newUrl.setSearch("showDisc", "").toString()
-        window.location.href = newUrl
-    });
-
-    // Check box show discarded
     $("#year").change(function () {
         var newUrl = URI(window.location.href)
         newUrl.setSearch("year", this.value ).toString()
@@ -46,13 +34,12 @@ function showDetail(parent) {
     $('#statdetail').css('background', parent.css('background-image'));
     $('#statdetail>h4').text(parent.find('h4').text())
     $('#stat-extended').removeClass('hidden')
-    var discarded= $("#showDisc")[0].checked
     var year = $("#year")[0].value
 
     console.log("Detail for " + stat + ", year=" + year);
 
     $.ajax({
-        url: '/stat/' + stat + "?showDisc=" + discarded+ "&year=" + year,
+        url: '/stat/' + stat + "?year=" + year,
         type: 'GET',
         dataType: 'json',
         success: function (chartData, status) {

@@ -2,6 +2,7 @@ package com.obourgain.mylib.service;
 
 import com.obourgain.mylib.db.BookRepository;
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.ext.payot.PayotItemLookup;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
@@ -51,7 +52,11 @@ public class BookService {
      * Return the list of books for a user.
      */
     public List<Book> findByUserId(String userId) {
-        return bookRepository.findByUserId(userId);
+        return bookRepository
+                .findByUserId(userId)
+                .stream()
+                .filter(b -> b.getTitle() != null)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -98,7 +103,9 @@ public class BookService {
             existing.setIsbn(book.getIsbn());
             existing.setPages(book.getPages());
             existing.setPublisher(book.getPublisher());
+            existing.setPublicationDate(book.getPublicationDate());
             existing.setTags(tags);
+            existing.setLang(book.getLang());
             existing.setComment(book.getComment());
             existing.setUpdated(LocalDateTime.now());
             log.info("Updating book " + existing.deepToString());
@@ -121,26 +128,7 @@ public class BookService {
      * Return null if the amazon's page for this book can't be found.
      */
     public Book isbnLookup(User user, String isbn) {
-        Book book = ItemLookupAmazon.lookup(isbn);
-        if (book == null) {
-            log.info("No book found");
-            return null;
-        }
-        book.setUserId(user.getId());
-        book.setCreated(LocalDateTime.now());
-        book.setUpdated(LocalDateTime.now());
-
-        bookRepository.save(book);
-        return book;
-    }
-
-    /**
-     * Create a book from its ASIN Number.
-     * <p>
-     * Return null if the amazon's page for this book can't be found.
-     */
-    public Book asinLookup(User user, String asin) {
-        Book book = ItemLookupAmazon.asinLookup(asin);
+        Book book = PayotItemLookup.lookup(isbn);
         if (book == null) {
             log.info("No book found");
             return null;
@@ -172,13 +160,13 @@ public class BookService {
     /**
      * Get the list of book from Lucene, as a Page<Book>.
      */
-    public Page<Book> getBooks(String criteria, boolean showDiscarded, Pageable page, String userId) {
+    public Page<Book> getBooks(String criteria, Pageable page, String userId) {
         // First get the list of tags.
         Map<Long, Tag> alltags = tagService
                 .findByUserId(userId).stream()
                 .collect(Collectors.toMap(Tag::getId, Function.identity()));
 
-        List<Book> luceneBooks = luceneSearch.search(userId, criteria, showDiscarded, MAX_RESULTS);
+        List<Book> luceneBooks = luceneSearch.search(userId, criteria, MAX_RESULTS);
         fixTags(luceneBooks, alltags);
 
         // Apply the pageable (sort)

@@ -24,7 +24,7 @@ public class ReadingService {
     private ReadingRepository readingRepository;
 
     /**
-     * Return the list of tags for a user.
+     * Return the list of books for a user.
      */
     public List<Reading> findByUserId(String userId) {
         log.debug("Reading list for " + userId);
@@ -32,10 +32,17 @@ public class ReadingService {
     }
 
     /**
-     * Return the list of tags for a user.
+     * Return the list of books for a user.
      */
     public Page<Reading> findByUserId(String userId, Pageable page) {
         return readingRepository.findByUserId(userId, page);
+    }
+
+    /**
+     * Return the list of readings for a book.
+     */
+    public List<Reading> findByBook(String userId, Long bookId) {
+        return readingRepository.findByUserIdAndBookId(userId, bookId);
     }
 
     /**

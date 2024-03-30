@@ -94,15 +94,6 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="status" class="col-sm-3 col-form-label">Status</label>
-                        <div class="col-sm-9">
-                            <select name="status" class="form-control" th:value="${book.status}">
-                                <option></option>
-                                <option value="DISCARDED" th:selected="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">Discarded</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <div class="ml-auto">
                             <button type="submit" name="action" value="save" class="btn btn-success">Submit</button>
                             <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>

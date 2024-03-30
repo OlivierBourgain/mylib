@@ -170,6 +170,11 @@ public class LuceneSearch {
 
     // Add one document to index, using the writer passed as an argument.
     private void addOneDocToIndex(IndexWriter w, Book book) throws IOException {
+        if (book.getTitle() == null) {
+            log.warn("Ignored - Book {} has no title {}", book.getId(), book);
+            return;
+        }
+
         Document doc = new Document();
 
         // Fields with index
@@ -201,11 +206,11 @@ public class LuceneSearch {
         w.addDocument(doc);
     }
 
-    public List<Book> search(String userId, String query, boolean showDiscarded, int nbHits) {
+    public List<Book> search(String userId, String query, int nbHits) {
         log.debug("Internal search for " + query);
 
         try {
-            Query q = getQuery(userId, query, showDiscarded);
+            Query q = getQuery(userId, query);
             List<Book> res = executeQuery(q, nbHits);
             log.debug("MatchFound" + res.size());
             return res;
@@ -220,15 +225,12 @@ public class LuceneSearch {
     /**
      * Query contain a mandatory userId, and then the search criterias.
      */
-    private Query getQuery(String userId, String criteria, boolean showDiscarded) throws ParseException {
+    private Query getQuery(String userId, String criteria) throws ParseException {
         Query q1 = new TermQuery(new Term(FIELD_USER_ID, "" + userId));
-        Query q2 = new TermQuery(new Term(FIELD_STATUS, "DISCARDED"));
 
         if (StringUtils.isBlank(criteria)) {
             BooleanQuery.Builder qb = new BooleanQuery.Builder()
                     .add(q1, BooleanClause.Occur.MUST);
-            if (!showDiscarded)
-                qb.add(q2, BooleanClause.Occur.MUST_NOT);
             return qb.build();
         }
 
@@ -241,8 +243,6 @@ public class LuceneSearch {
                 .add(q1, BooleanClause.Occur.MUST)
                 .add(q3, BooleanClause.Occur.MUST);
 
-        if (!showDiscarded)
-            qb.add(q2, BooleanClause.Occur.MUST_NOT);
         return qb.build();
     }
 

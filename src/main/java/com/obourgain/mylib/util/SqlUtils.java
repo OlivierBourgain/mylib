@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class SqlUtils {
                     // Filter comments & empty lines.
                     .filter(line -> StringUtils.isNotBlank(line) && !line.trim().startsWith("--"))
                     .collect(Collectors.joining(" "));
-        } catch (IOException e) {
+        } catch (UncheckedIOException e) {
             log.error("SQL file not found");
             throw new RuntimeException("Should not happen");
         }

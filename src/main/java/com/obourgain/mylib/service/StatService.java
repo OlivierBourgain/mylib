@@ -35,17 +35,16 @@ public class StatService {
      * - booksByMonth and pagesByMonth
      *
      * @param userId        The user Id
-     * @param showDiscarded if true, includes discarded books.
      * @param year          The year selected, or null.
      */
-    public Map<String, List<StatData>> getAllStat(String userId, Boolean showDiscarded, Integer year) {
+    public Map<String, List<StatData>> getAllStat(String userId, Integer year) {
 
         Map<String, List<StatData>> res = new HashMap<>();
 
-        res.put("booksByTag", top10(getStatDetail(userId, showDiscarded, year, "booksByTag")));
-        res.put("pagesByTag", top10(getStatDetail(userId, showDiscarded, year, "pagesByTag")));
-        res.put("booksByAuthor", top10(getStatDetail(userId, showDiscarded, year, "booksByAuthor")));
-        res.put("pagesByAuthor", top10(getStatDetail(userId, showDiscarded, year, "pagesByAuthor")));
+        res.put("booksByTag", top10(getStatDetail(userId, year, "booksByTag")));
+        res.put("pagesByTag", top10(getStatDetail(userId, year, "pagesByTag")));
+        res.put("booksByAuthor", top10(getStatDetail(userId, year, "booksByAuthor")));
+        res.put("pagesByAuthor", top10(getStatDetail(userId, year, "pagesByAuthor")));
 
         List<StatData> booksByYear = jdbcTemplate.query(SQL_READ_YEAR, new StatRowMapper("YEAR", "NB"), userId, year, year);
         List<StatData> pagesByYear = jdbcTemplate.query(SQL_READ_YEAR, new StatRowMapper("YEAR", "PAGES"), userId, year, year);
@@ -71,14 +70,13 @@ public class StatService {
     /**
      * Return the data for one given stat.
      */
-    private List<StatData> innerStatDetail(String userId, Boolean showDiscarded, Integer year, String statName) {
+    private List<StatData> innerStatDetail(String userId, Integer year, String statName) {
         log.info("Getting stat for year " + year);
-        var discardedFlag = showDiscarded ? 1 : 0;
         return switch (statName.toLowerCase()) {
-            case "booksbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, discardedFlag, year, year);
-            case "pagesbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, discardedFlag, year, year);
-            case "booksbyauthor" -> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, discardedFlag, year, year);
-            case "pagesbyauthor"-> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, discardedFlag, year, year);
+            case "booksbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "NB"), userId, year, year);
+            case "pagesbytag" -> jdbcTemplate.query(SQL_TAG, new StatRowMapper("TAG", "PAGES"), userId, year, year);
+            case "booksbyauthor" -> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "NB"), userId, year, year);
+            case "pagesbyauthor"-> jdbcTemplate.query(SQL_AUTHOR, new StatRowMapper("AUTHOR", "PAGES"), userId, year, year);
             default -> throw new IllegalArgumentException("Stat doesn't exist " + statName);
         };
     }
@@ -86,8 +84,8 @@ public class StatService {
     /**
      * Return the data for one given stat.
      */
-    public List<StatData> getStatDetail(String userId, Boolean showDiscarded, Integer year, String statName) {
-        return innerStatDetail(userId, showDiscarded, year, statName)
+    public List<StatData> getStatDetail(String userId, Integer year, String statName) {
+        return innerStatDetail(userId, year, statName)
                 .stream()
                 .sorted(Comparator.comparing(StatData::getValue).reversed())
                 .limit(30)

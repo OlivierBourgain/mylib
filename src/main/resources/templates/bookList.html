@@ -28,8 +28,7 @@
                 </div>
                 <p style="color:#AAA;font-size:small">
                     Type a keyword to filter the list<br/>
-                    Add a book by typing its ISBN number, or
-                    <code>ASIN:Amazon ASIN number</code>.
+                    Add a book by typing its ISBN number.
                 </p>
             </div>
             <div id="menu" class="col-md-4">
@@ -41,10 +40,6 @@
                 </div>
                 <div class="row">
 
-                </div>
-                <div class="row">
-                    <label for="showDisc"> <input type="checkbox" id="showDisc" th:checked="${showDiscarded}"/> Show discarded
-                    </label>
                 </div>
             </div>
         </div>
@@ -102,7 +97,6 @@
                         <td class="col-5">
                             <a th:href="@{/book/{b}(b=${book.id})}" th:text="${book.title}"
                                class="book-title" data-th-attr="data-bookid=${book.id}">Title</a>
-                            <span th:if="${book.status == T(com.obourgain.mylib.vobj.Book.BookStatus).DISCARDED}">(Discarded)</span>
                         </td>
                         <td class="col-3" th:text="${book.author}">Author</td>
                         <td class="col-1" th:text="${book.pages}">Pages</td>
@@ -126,18 +120,6 @@
 
     <script src="/js/mylib.js"></script>
     <script>
-        $(function () {
-            // Check box show discarded
-            $("#showDisc").click(function () {
-                var checked = $(this)[0].checked
-                var newUrl = URI(window.location.href)
-                if (checked)
-                    newUrl.setSearch("showDisc", "true").toString()
-                else
-                    newUrl.setSearch("showDisc", "").toString()
-                window.location.href = newUrl
-            });
-        });
 
         // Search
         function search() {
