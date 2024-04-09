@@ -57,13 +57,13 @@
                 <!-- Pagination -->
                 <div class="row col-12">
                     <div id="list-header-summary" class="col-md-4">
-                        <div th:replace="fragment/pagination-message :: pagination(${books}, ${searchCriteria})"></div>
+                        <div th:replace="~{fragment/pagination-message :: pagination(${books}, ${searchCriteria})}"></div>
                     </div>
                     <div id="list-header-pages" class="col-md-5">
-                        <div th:replace="fragment/pagination :: pagination(${books}, ${pagination})"></div>
+                        <div th:replace="~{fragment/pagination :: pagination(${books}, ${pagination})}"></div>
                     </div>
                     <div id="list-header-size" class="col-md-3">
-                        <div th:replace="fragment/pagination-pagesize :: pagination(${books})"></div>
+                        <div th:replace="~{fragment/pagination-pagesize :: pagination(${books})}"></div>
                     </div>
                 </div>
                 <!-- Table principale -->

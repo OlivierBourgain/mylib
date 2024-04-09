@@ -2,9 +2,9 @@ package com.obourgain.mylib.web;
 
 import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.TagService;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
-import com.obourgain.mylib.vobj.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book/{bookId}", method = RequestMethod.GET)
     public String bookDetail(@PathVariable("bookId") long bookId, Model model) {
         log.info("Controller bookDetail");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         Book b = bookService.findBook(user.getId(), bookId);
         if (b == null) {
@@ -69,7 +69,7 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book/tooltip/{bookId}", method = RequestMethod.GET)
     public String bookTooltip(@PathVariable("bookId") long bookId, Model model) {
         log.info("Controller bookTooltip");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         Book b = bookService.findBook(user.getId(), bookId);
         if (b == null) {
@@ -86,13 +86,13 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=save")
     public String updateBook(@PathVariable("bookId") Long bookId, Book book) {
         log.info("Controller updateBook");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         log.info("And the tags are : " + book.getTags());
         Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
         bookService.createOrUpdateBook(book, user, tags);
-        return "redirect:/books/";
+        return "redirect:/books";
     }
 
     /**
@@ -101,14 +101,14 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=readnow")
     public String updateBookReading(@PathVariable("bookId") Long bookId) {
         log.info("Controller updateBookReading");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         int year = LocalDate.now().getYear();
         log.info("Book " + bookId + " was read in " + year);
 
         Book book = bookService.updateBookReading(user, bookId, year);
         if (book == null) {
-            return "redirect:/books/";
+            return "redirect:/books";
         }
         return "redirect:/book/" + book.getId();
     }
@@ -119,11 +119,10 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book/{bookId}", method = RequestMethod.POST, params = "action=delete")
     public String deleteBook(@PathVariable("bookId") Long bookId) {
         log.info("Controller deleteBook " + bookId);
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
         bookService.deleteBook(user.getId(), bookId);
-        return "redirect:/books/";
+        return "redirect:/books";
     }
-
 
     /**
      * Create book.
@@ -131,13 +130,12 @@ public class BookDetailController extends AbstractController {
     @RequestMapping(value = "/book", method = RequestMethod.POST, params = "action=create")
     public String createBook(Book book) {
         log.info("Controller createBook");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         log.info("And the tags are : " + book.getTagString());
         Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
         bookService.createOrUpdateBook(book, user, tags);
-        return "redirect:/books/";
+        return "redirect:/books";
     }
-
 }

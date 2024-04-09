@@ -1,8 +1,7 @@
 package com.obourgain.mylib.web;
 
 import com.obourgain.mylib.service.TagService;
-import com.obourgain.mylib.vobj.Tag;
-import com.obourgain.mylib.vobj.User;
+import com.obourgain.mylib.util.auth.WebUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Collections;
-import java.util.List;
 
 @Controller
 public class TagController extends AbstractController {
@@ -27,7 +25,7 @@ public class TagController extends AbstractController {
     @RequestMapping(value = "/tags", method = RequestMethod.GET)
     public String tagList(Model model) {
         log.info("Controller tagList");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         var tags = tagService.findByUserId(user.getId());
         Collections.sort(tags);
@@ -41,7 +39,7 @@ public class TagController extends AbstractController {
      */
     @RequestMapping(value = "/updateTagColor", method = RequestMethod.POST)
     public String updateTagColor(Long tagId, String backgroundColor, String color, String borderColor) {
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
         log.info("Controller updateTag " + tagId + " with " + backgroundColor + "/" + color + "/" + borderColor);
 
         tagService.updateTag(tagId, backgroundColor, color, borderColor, user.getId());
@@ -53,7 +51,7 @@ public class TagController extends AbstractController {
      */
     @RequestMapping(value = "/updateTagPriority", method = RequestMethod.POST)
     public String updateTagPriority(Long tagId, Integer priority) {
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
         log.info("Controller updateTag " + tagId + " with priority " + priority);
 
         tagService.updateTag(tagId, priority, user.getId());
@@ -65,7 +63,7 @@ public class TagController extends AbstractController {
      */
     @RequestMapping(value = "/deleteTag", method = RequestMethod.POST)
     public String deleteTag(Long tagId) {
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
         log.info("Controller deleteTag  " + tagId);
         tagService.deleteTag(tagId, user.getId());
         return "empty";

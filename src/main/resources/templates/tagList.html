@@ -50,6 +50,12 @@
             #tag-color-V{background-color:#CCA6AC; color:#FFFFFF; border-color:#662E37;} /* Clam shell */
             #tag-color-W{background-color:#42D692; color:#094228; border-color:#094228;} /* Shamrock */
             #tag-color-X{background-color:#16A765; color:#FFFFFF; border-color:#094228;} /* Mountain meadow */
+            #tag-color-Y{background-color:#CC0000; color:#FFFFFF; border-color:#8A1C0A;} /* Red */
+            #tag-color-Z{background-color:#B65775; color:#FFFFFF; border-color:#994A64;} /* Cadillac */
+            #tag-color-AA{background-color:#285BAC; color:#FFFFFF; border-color:#0D3472;} /* Cerulean blue */
+            #tag-color-BB{background-color:#0B804B; color:#FFFFFF; border-color:#094228;} /* Salem */
+            #tag-color-CC{background-color:#653E9b; color:#FFFFFF; border-color:#3D188E;} /* Royal purple */
+            #tag-color-DD{background-color:#EC7000; color:#FFFFFF; border-color:#8A1C0A;} /* Clementine */
         </style>
     </head>
     <body>
@@ -83,6 +89,8 @@
                         <span id="tag-color-P" class="tagcolor">a</span> <span id="tag-color-Q" class="tagcolor">a</span> <span id="tag-color-R" class="tagcolor">a</span>
                         <span id="tag-color-S" class="tagcolor">a</span> <span id="tag-color-T" class="tagcolor">a</span> <span id="tag-color-U" class="tagcolor">a</span>
                         <span id="tag-color-V" class="tagcolor">a</span> <span id="tag-color-W" class="tagcolor">a</span> <span id="tag-color-X" class="tagcolor">a</span>
+                        <span id="tag-color-Y" class="tagcolor">a</span> <span id="tag-color-Z" class="tagcolor">a</span> <span id="tag-color-AA" class="tagcolor">a</span>
+                        <span id="tag-color-BB" class="tagcolor">a</span> <span id="tag-color-CC" class="tagcolor">a</span> <span id="tag-color-DD" class="tagcolor">a</span>
                     </td>
                     <td th:align="right"><span th:text="${#lists.size(tag.books)}">-1</span> books</td>
                     <td><input type="text" th:value="${tag.priority}" class="input-priority"></input> <a class="update-priority" href="#">update</a></td>
@@ -136,8 +144,6 @@
                 var tagid = $(this).closest('tr').attr('id'); // table row ID
                 var priority = $(this).siblings('input').val();
                 var csrf = $("#csrf").val();
-                console.log("Modifying priority to " + priority
-                    + " for tag " + tagid)
                 $.post("updateTagPriority", {
                     tagId: tagid,
                     priority: priority,

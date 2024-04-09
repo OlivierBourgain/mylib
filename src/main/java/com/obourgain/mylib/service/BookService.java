@@ -1,13 +1,12 @@
 package com.obourgain.mylib.service;
 
 import com.obourgain.mylib.db.BookRepository;
-import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
 import com.obourgain.mylib.ext.payot.PayotItemLookup;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
 import com.obourgain.mylib.vobj.Tag;
-import com.obourgain.mylib.vobj.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +29,7 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -93,7 +93,7 @@ public class BookService {
     /**
      * If the book has an Id, and exists in database, update it. If not, create it.
      */
-    public void createOrUpdateBook(Book book, User user, Set<Tag> tags) {
+    public void createOrUpdateBook(Book book, WebUser user, Set<Tag> tags) {
         Book existing = book.getId() == null ? null : findBook(user.getId(), book.getId());
         if (existing != null) {
             existing.setStatus(book.getStatus());
@@ -127,7 +127,7 @@ public class BookService {
      * <p>
      * Return null if the amazon's page for this book can't be found.
      */
-    public Book isbnLookup(User user, String isbn) {
+    public Book isbnLookup(WebUser user, String isbn) {
         Book book = PayotItemLookup.lookup(isbn);
         if (book == null) {
             log.info("No book found");
@@ -144,7 +144,7 @@ public class BookService {
     /**
      * Update the reading list of a book.
      */
-    public Book updateBookReading(User user, Long bookId, int year) {
+    public Book updateBookReading(WebUser user, Long bookId, int year) {
         Book b = findBook(user.getId(), bookId);
         if (b == null) return b;
 
@@ -213,9 +213,7 @@ public class BookService {
     }
 
     private Set<Tag> getTags(Map<Long, Tag> alltags, Book book) {
-        Pattern pattern = Pattern.compile(",");
-        return pattern
-                .splitAsStream(book.getTagString())
+        return Stream.of(book.getTagString().split(","))
                 .filter(s -> StringUtils.isNumeric(s))
                 .map(Long::valueOf)
                 .map(x -> alltags.get(x))
@@ -231,7 +229,7 @@ public class BookService {
     }
 
     /**
-     * Compare two books based on the their list of tags
+     * Compare two books based on their list of tags
      */
     public class TagListComparator implements Comparator<Book> {
 

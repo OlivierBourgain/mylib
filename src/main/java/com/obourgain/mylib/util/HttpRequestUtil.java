@@ -4,13 +4,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class HttpRequestUtil {
-    private static Logger log = LoggerFactory.getLogger(HttpRequestUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpRequestUtil.class);
 
     /**
      * Return the value of the request parameter as Boolean.
@@ -27,7 +27,7 @@ public class HttpRequestUtil {
     /**
      * Return the value of the request parameter as String.
      * <p>
-     * If the param doesn't exists, return an empty String.
+     * If the param doesn't exist, return an empty String.
      */
     public static String getParamAsString(HttpServletRequest request, String paramName) {
         String s = request.getParameter(paramName);
@@ -38,7 +38,7 @@ public class HttpRequestUtil {
     /**
      * Return the value of the request parameter as Long.
      * <p>
-     * If the param doesn't exists or is not numeric, returns null.
+     * If the param doesn't exist or is not numeric, returns null.
      */
     public static Long getParamAsLong(HttpServletRequest request, String paramName) {
         String s = request.getParameter(paramName);
@@ -55,7 +55,7 @@ public class HttpRequestUtil {
     /**
      * Return the value of the request parameter as Integer.
      * <p>
-     * If the param doesn't exists or is not numeric, returns null.
+     * If the param doesn't exist or is not numeric, returns null.
      */
     public static Integer getParamAsInteger(HttpServletRequest request, String paramName) {
         String s = request.getParameter(paramName);
@@ -71,7 +71,7 @@ public class HttpRequestUtil {
     /**
      * Return the value of the request parameter as a LocalDate.
      * <p>
-     * If the param doesn't exists or is not a date with format "yyyy-mm-dd", returns null.
+     * If the param doesn't exist or is not a date with format "yyyy-mm-dd", returns null.
      */
     public static LocalDate getParamAsLocalDate(HttpServletRequest request, String paramName) {
         String s = request.getParameter(paramName);

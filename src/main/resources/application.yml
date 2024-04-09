@@ -1,9 +1,17 @@
+# Web
+server:
+  port: 2017
 
 spring:
+  data:
+    web:
+      pageable:
+        default-page-size: 100
 
-# H2 Database
+
+  # H2 Database
   datasource:
-    url: jdbc:h2:file:~/mylib/db/database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:~/mylib/db/database;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=YEAR,MONTH,USER
     username: sa
   jpa:
     hibernate:
@@ -13,24 +21,11 @@ spring:
   thymeleaf:
     cache: false
 
-
-# Web
-server:
-  port: 2017
-  
 # Authentication
-security:
-  oauth2:
-    client:
-      clientId: ${GOOGLE_CLIENT_ID}
-      clientSecret: ${GOOGLE_CLIENT_SECRET}
-      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
-      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
-      clientAuthenticationScheme: form
-      scope:  
-        - openid
-        - email
-        - profile
-    resource:
-      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
-      preferTokenInfo: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}

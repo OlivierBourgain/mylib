@@ -18,7 +18,7 @@ import java.net.URLConnection;
  */
 public class ItemLookupAmazon {
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0";
-    private static final String AMAZON_IMG = "http://images.amazon.com/images/P/";
+    private static final String AMAZON_IMG = "https://images.amazon.com/images/P/";
     private static final Logger log = LoggerFactory.getLogger(ItemLookupAmazon.class);
 
     /**

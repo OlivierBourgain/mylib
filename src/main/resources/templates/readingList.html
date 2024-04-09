@@ -53,13 +53,13 @@
                 <!-- Pagination -->
                 <div class="row col-12">
                     <div id="list-header-summary" class="col-4">
-                        <div th:replace="fragment/pagination-message :: pagination(${readings}, '')"></div>
+                        <div th:replace="~{fragment/pagination-message :: pagination(${readings}, '')}"></div>
                     </div>
                     <div id="list-header-pages" class="col-5">
-                        <div th:replace="fragment/pagination :: pagination(${readings}, ${pagination})"></div>
+                        <div th:replace="~{fragment/pagination :: pagination(${readings}, ${pagination})}"></div>
                     </div>
                     <div id="list-header-size" class="col-3">
-                        <div th:replace="fragment/pagination-pagesize :: pagination(${readings})"></div>
+                        <div th:replace="~{fragment/pagination-pagesize :: pagination(${readings})}"></div>
                     </div>
                 </div>
                 <table id="readingtable" class="table table-bordered table-striped table-hover table-sm">

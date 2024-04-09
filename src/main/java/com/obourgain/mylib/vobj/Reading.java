@@ -1,6 +1,6 @@
 package com.obourgain.mylib.vobj;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -44,7 +44,6 @@ public class Reading {
     public void setYear(int year) {
         this.year = year;
     }
-
 
     public String getUserId() {
         return userId;

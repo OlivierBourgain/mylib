@@ -1,30 +1,37 @@
 package com.obourgain.mylib.web;
 
+import com.obourgain.mylib.service.UserService;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.vobj.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class AbstractController {
 
+    @Autowired
+    private UserService userService;
+
     protected static final int PAGINATION_GAP = -1;
 
-    protected User getUserDetail() {
-        OAuth2Authentication aut = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
-        @SuppressWarnings("unchecked")
-        LinkedHashMap<String, String> userdetail = (LinkedHashMap<String, String>) aut
-                .getUserAuthentication()
-                .getDetails();
-        User user = new User();
-        user.setId(userdetail.get("sub"));
-        user.setEmail(userdetail.get("email"));
-        return user;
+    protected WebUser getUserDetail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
+        WebUser webUser = new WebUser();
+        webUser.setId(userDetails.getAttributes().get("sub").toString());
+        webUser.setEmail(userDetails.getAttributes().get("email").toString());
+
+        User user = userService.getByEmail(webUser.getEmail());
+        if (user !=null && user.getRole() == User.UserRole.ADMIN) webUser.setAdmin(true);
+
+        return webUser;
     }
 
     /**
@@ -58,5 +65,4 @@ public abstract class AbstractController {
         }
         return res;
     }
-
 }

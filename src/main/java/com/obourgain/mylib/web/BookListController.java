@@ -1,13 +1,11 @@
 package com.obourgain.mylib.web;
 
 import com.obourgain.mylib.service.BookService;
-import com.obourgain.mylib.service.TagService;
-import com.obourgain.mylib.util.HttpRequestUtil;
 import com.obourgain.mylib.util.ISBNConvertor;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Tag;
-import com.obourgain.mylib.vobj.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +20,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -74,7 +72,7 @@ public class BookListController extends AbstractController {
     }
 
     private String internalBookList(HttpServletRequest request, Model model, Pageable page, String searchCriteria) {
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
         Pageable cachedPage = (Pageable) httpSession.getAttribute("bookListPageable");
         String cachedSearchCriteria = (String) httpSession.getAttribute("bookListSearchCriteria");
 
@@ -138,7 +136,7 @@ public class BookListController extends AbstractController {
      */
     private String isbnlookup(HttpServletRequest request, String isbn, Model model, Pageable page) {
         log.info("ISBN lookup for  " + isbn);
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         if (StringUtils.isBlank(isbn)) {
             log.info("No param");
@@ -159,7 +157,7 @@ public class BookListController extends AbstractController {
     @RequestMapping(value = "/books/exportcsv", method = RequestMethod.GET)
     public void exportcsv(HttpServletResponse response) throws IOException {
         log.info("Controller exportcsv");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         response.setContentType("text/csv");
         String headerKey = "Content-Disposition";
@@ -219,12 +217,12 @@ public class BookListController extends AbstractController {
     @RequestMapping(value = "/books/rebuildindex", method = RequestMethod.GET)
     public String rebuildindex(HttpServletResponse response) throws IOException {
         log.info("Controller rebuildindex");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         List<Book> books = bookService.findAll();
         luceneSearch.clearIndex();
         luceneSearch.addAll(books);
-        return "redirect:/books/";
+        return "redirect:/books";
     }
 
 }

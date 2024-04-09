@@ -4,10 +4,8 @@ import com.obourgain.mylib.service.BookService;
 import com.obourgain.mylib.service.StatService;
 import com.obourgain.mylib.service.StatService.StatData;
 import com.obourgain.mylib.util.HttpRequestUtil;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.vobj.Book;
-import com.obourgain.mylib.vobj.Book.BookStatus;
-import com.obourgain.mylib.vobj.Reading;
-import com.obourgain.mylib.vobj.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -46,7 +44,7 @@ public class StatController extends AbstractController {
     @RequestMapping(value = "/stats", method = RequestMethod.GET)
     public String stats(HttpServletRequest request, Model model) {
         log.info("Controller stats");
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
@@ -57,6 +55,7 @@ public class StatController extends AbstractController {
             allBooks = allBooks.stream().filter(b -> readInYear(b, year)).collect(Collectors.toList());
 
 
+        model.addAttribute("user", user);
         model.addAttribute("nbBooks", allBooks.size());
         model.addAttribute("nbPages", allBooks.stream().mapToInt(Book::getPages).sum());
 
@@ -90,7 +89,7 @@ public class StatController extends AbstractController {
         log.info("Controller stat " + statName);
         Integer year = HttpRequestUtil.getParamAsInteger(request, "year");
 
-        User user = getUserDetail();
+        WebUser user = getUserDetail();
 
         List<StatData> stat = statService.getStatDetail(user.getId(), year, statName);
         response.setContentType("application/json");
@@ -139,6 +138,4 @@ public class StatController extends AbstractController {
                 """.replace("{keys}", keys)
                 .replace("{values}", vals);
     }
-
-
 }

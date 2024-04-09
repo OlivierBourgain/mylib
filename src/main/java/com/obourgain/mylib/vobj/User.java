@@ -1,41 +1,46 @@
 package com.obourgain.mylib.vobj;
 
-/**
- * User, fetched from Google auth.
- */
-public class User {
-    private String id;
-    private String name;
-    private String lastName;
-    private String firstName;
-    private String email;
-    private String locale;
-    private String gender;
-    private String profile;
-    private String picture;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
-    public String getId() {
+/**
+ * This class represents a user authorised to use the application.
+ * For simplicity, user are identified through their email address.
+ * It also stores the role of the user : ADMIN or USER.
+ */
+@Entity
+@Table(name = "User")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String email;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    private LocalDateTime created;
+    private LocalDateTime updated;
+
+    public enum UserRole {ADMIN, USER}
+
+    @Override
+    public String toString() {
+        return String.format("User[id=%d, email=%s, role=%s]", getId(), getEmail(), getRole());
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getEmail() {
@@ -46,44 +51,27 @@ public class User {
         this.email = email;
     }
 
-    public String getLocale() {
-        return locale;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
-    public String getGender() {
-        return gender;
+    public LocalDateTime getCreated() {
+        return created;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
-    public String getProfile() {
-        return profile;
+    public LocalDateTime getUpdated() {
+        return updated;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
     }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 }

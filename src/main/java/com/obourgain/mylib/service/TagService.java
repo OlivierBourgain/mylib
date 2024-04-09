@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Business logic for tag management.
@@ -29,7 +26,7 @@ public class TagService {
     }
 
     /**
-     * Transform a list of tag names, to a list a tags. If a tag doesn't exists, create it in the Tag table.
+     * Transform a list of tag names, to a list a tags. If a tag doesn't exist, create it in the Tag table.
      *
      * @param in The tag list, e.g. "SF,Cycle Fondation"
      * @param userId The user id
@@ -37,14 +34,13 @@ public class TagService {
      */
     public Set<Tag> getTags(String in, String userId) {
         if (in == null || in.trim().length() == 0)
-            return new HashSet<>();
+            return Collections.emptySet();
 
         var texts = Arrays.asList(in.split(","));
         Set<Tag> res = new HashSet<>();
 
         var alltags = tagRepository.findByUserId(userId);
 
-        alltags.stream().forEach(System.out::println);
         for (String text : texts) {
             Tag t = alltags
                     .stream()

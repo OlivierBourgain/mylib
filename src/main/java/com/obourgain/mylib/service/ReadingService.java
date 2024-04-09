@@ -1,9 +1,9 @@
 package com.obourgain.mylib.service;
 
 import com.obourgain.mylib.db.ReadingRepository;
+import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.vobj.Book;
 import com.obourgain.mylib.vobj.Reading;
-import com.obourgain.mylib.vobj.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReadingService {
@@ -73,7 +72,7 @@ public class ReadingService {
     /**
      * Save a new reading.
      */
-    public void save(User user, Book book, LocalDate date) {
+    public void save(WebUser user, Book book, LocalDate date) {
         Reading r = new Reading();
         r.setUserId(user.getId());
         r.setBook(book);

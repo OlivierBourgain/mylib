@@ -1,6 +1,6 @@
 package com.obourgain.mylib.vobj;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
