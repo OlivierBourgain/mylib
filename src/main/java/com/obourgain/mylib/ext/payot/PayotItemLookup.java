@@ -1,6 +1,7 @@
 package com.obourgain.mylib.ext.payot;
 
 import com.obourgain.mylib.ext.amazon.ItemLookupAmazon;
+import com.obourgain.mylib.ext.isbndb.IsbnDbLookup;
 import com.obourgain.mylib.util.ISBNConvertor;
 import com.obourgain.mylib.vobj.Book;
 import org.slf4j.Logger;
@@ -24,11 +25,10 @@ public class PayotItemLookup {
         try {
             String isbn = ISBNConvertor.clean(rawIsbn);
             String isbn13 = isbn.length() == 10 ? ISBNConvertor.isbn10to13(isbn) : isbn;
-            String isbn10 = isbn.length() == 13 ? ISBNConvertor.isbn13to10(isbn) : isbn;
             String html = fetchDocument(isbn13);
             Book book = new PayotHtmlParser(html).parseBook();
             // Payot doesn't have a good quality image of the book, going to amazon.
-            book.setLargeImage(ItemLookupAmazon.saveImage(isbn10, 'L'));
+            book.setLargeImage(IsbnDbLookup.saveImage(isbn13));
             return book;
         } catch (Exception e) {
             log.error("Book not found", e);
