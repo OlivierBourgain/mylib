@@ -68,9 +68,10 @@ public class ReadingListController extends AbstractController {
         WebUser user = getUserDetail();
         LocalDate date = HttpRequestUtil.getParamAsLocalDate(request, "readdate");
         Long bookId = HttpRequestUtil.getParamAsLong(request, "bookId");
-
-        Book book = bookService.findBook(user.getId(), bookId);
-        readingService.save(user, book, date);
+        if (bookId != null) {
+            Book book = bookService.findBook(user.getId(), bookId);
+            readingService.save(user, book, date);
+        }
         return "redirect:/readinglist";
     }
 
