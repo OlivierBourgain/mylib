@@ -14,7 +14,7 @@ import java.net.URLConnection;
 public class IsbnDbLookup {
     private final static String ISBN_DB_URL = "https://images.isbndb.com/covers/";
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0";
-    private static final Logger log = LoggerFactory.getLogger(PayotItemLookup.class);
+    private static final Logger log = LoggerFactory.getLogger(IsbnDbLookup.class);
 
     /**
      * Gets the image from IsbnDbLookup, and store result.
@@ -37,7 +37,7 @@ public class IsbnDbLookup {
             }
             return FileStore.saveFile(isbn, 'L', bytes, "jpg");
         } catch (Exception e) {
-            log.warn("Pb fetching image @amazon", e);
+            log.warn("Pb fetching image @isbndb", e);
             return null;
         }
     }
