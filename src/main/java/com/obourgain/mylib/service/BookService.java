@@ -1,7 +1,10 @@
 package com.obourgain.mylib.service;
 
 import com.obourgain.mylib.db.BookRepository;
+import com.obourgain.mylib.ext.abebooks.AbeBooksLookup;
+import com.obourgain.mylib.ext.isbndb.IsbnDbLookup;
 import com.obourgain.mylib.ext.payot.PayotItemLookup;
+import com.obourgain.mylib.util.ISBNConvertor;
 import com.obourgain.mylib.util.auth.WebUser;
 import com.obourgain.mylib.util.search.LuceneSearch;
 import com.obourgain.mylib.vobj.Book;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,7 +31,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -226,6 +229,20 @@ public class BookService {
      */
     public List<Book> findAll() {
         return bookRepository.findAll();
+    }
+
+    public void updateImg(Long bookId, String userId, String source) throws IOException {
+        Book book = findBook(userId, bookId);
+        switch (source) {
+            case "isbndb":
+                book.setLargeImage(IsbnDbLookup.saveImage(ISBNConvertor.clean(book.getIsbn())));
+                bookRepository.save(book);
+                break;
+            case "abebooks":
+                book.setLargeImage(AbeBooksLookup.saveImage(ISBNConvertor.clean(book.getIsbn())));
+                bookRepository.save(book);
+                break;
+        }
     }
 
     /**

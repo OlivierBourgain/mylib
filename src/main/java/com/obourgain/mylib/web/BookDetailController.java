@@ -8,12 +8,14 @@ import com.obourgain.mylib.vobj.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -137,5 +139,27 @@ public class BookDetailController extends AbstractController {
 
         bookService.createOrUpdateBook(book, user, tags);
         return "redirect:/books";
+    }
+
+    @RequestMapping(value = "/book/{bookId}/updateimgwithisbndb", method = RequestMethod.GET)
+    public String updateImageIsnbDb(@PathVariable("bookId") Long bookId) throws IOException {
+        log.info("Controller createBook");
+        WebUser user = getUserDetail();
+        Book book = bookService.findBook(user.getId(), bookId);
+        if (book != null) {
+            bookService.updateImg(bookId, user.getId(), "isbndb");
+        }
+        return "redirect:/book/" + book.getId();
+    }
+
+    @RequestMapping(value = "/book/{bookId}/updateimg/{source}", method = RequestMethod.GET)
+    public String updateImageAbe(@PathVariable("bookId") Long bookId, @PathVariable("source") String source) throws IOException {
+        log.info("Controller createBook");
+        WebUser user = getUserDetail();
+        Book book = bookService.findBook(user.getId(), bookId);
+        if (book != null) {
+            bookService.updateImg(bookId, user.getId(), source);
+        }
+        return "redirect:/book/" + book.getId();
     }
 }
