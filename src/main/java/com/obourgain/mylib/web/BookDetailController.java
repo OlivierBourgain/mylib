@@ -154,11 +154,22 @@ public class BookDetailController extends AbstractController {
 
     @RequestMapping(value = "/book/{bookId}/updateimg/{source}", method = RequestMethod.GET)
     public String updateImageAbe(@PathVariable("bookId") Long bookId, @PathVariable("source") String source) throws IOException {
-        log.info("Controller createBook");
+        log.info("Controller update image with " + source);
         WebUser user = getUserDetail();
         Book book = bookService.findBook(user.getId(), bookId);
         if (book != null) {
             bookService.updateImg(bookId, user.getId(), source);
+        }
+        return "redirect:/book/" + book.getId();
+    }
+
+    @RequestMapping(value = "/book/{bookId}/removeimg", method = RequestMethod.GET)
+    public String updateImageAbe(@PathVariable("bookId") Long bookId) throws IOException {
+        log.info("Controller remove image");
+        WebUser user = getUserDetail();
+        Book book = bookService.findBook(user.getId(), bookId);
+        if (book != null) {
+            bookService.removeImg(bookId, user.getId());
         }
         return "redirect:/book/" + book.getId();
     }

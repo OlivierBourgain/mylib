@@ -245,6 +245,12 @@ public class BookService {
         }
     }
 
+    public void removeImg(Long bookId, String userId) throws IOException {
+        Book book = findBook(userId, bookId);
+        book.setLargeImage(null);
+        bookRepository.save(book);
+    }
+
     /**
      * Compare two books based on their list of tags
      */
