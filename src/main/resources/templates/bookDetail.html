@@ -87,15 +87,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div class="ml-auto">
-                            <button type="submit" name="action" value="save" class="btn btn-success">Submit</button>
-                            <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
-                        </div>
+                    <div class="gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" name="action" value="save" class="btn btn-success">Submit</button>
+                        <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</button>
                     </div>
                 </form>
-                <a th:href="@{/book/{id}/updateimg/abebooks(id=${book.id})}">Update image with abebooks</a>
-                <a th:href="@{/book/{id}/updateimg/isbndb(id=${book.id})}">Update image with isbndb</a>
+                <a th:href="@{/book/{id}/updateimg/abebooks(id=${book.id})}">Update image with abebooks</a><br />
+                <a th:href="@{/book/{id}/updateimg/isbndb(id=${book.id})}">Update image with isbndb</a><br />
                 <a th:href="@{/book/{id}/removeimg(id=${book.id})}">Remove image</a>
             </div>
         </div>
