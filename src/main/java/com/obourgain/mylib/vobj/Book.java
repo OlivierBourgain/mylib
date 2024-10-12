@@ -45,6 +45,8 @@ public class Book {
     private LocalDateTime created;
     private LocalDateTime updated;
 
+    private String summary;
+
     /**
      * List of dates this book has been read.
      */
@@ -251,5 +253,13 @@ public class Book {
 
     public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

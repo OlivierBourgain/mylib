@@ -31,3 +31,6 @@ tr.row{margin:0}
 	background-color: #f1f1f1;
 }
 
+/** Book detail */
+.bookdetail #summary{height:107px}
+

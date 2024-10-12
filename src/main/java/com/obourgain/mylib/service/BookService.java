@@ -111,6 +111,7 @@ public class BookService {
             existing.setLang(book.getLang());
             existing.setComment(book.getComment());
             existing.setUpdated(LocalDateTime.now());
+            existing.setSummary(book.getSummary());
             log.info("Updating book " + existing.deepToString());
             bookRepository.save(existing);
             luceneSearch.addToIndex(existing);

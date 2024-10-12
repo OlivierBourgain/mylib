@@ -35,7 +35,26 @@ public class PayotHtmlParser {
         res.setPages(getPages());
         res.setPublicationDate(getPublicationDate());
         res.setIsbn(getIsbn());
+        res.setSummary(getSummary());
         return res;
+    }
+
+    /**
+     * <div id="ContentPlaceHolder1_C001_RadPageResume" class="rmpView resume">
+     *      <div itemprop="description" id="descriptionMicroData">
+     *           "Le inonde se souleva sous ses yeux. Le sol se craquela sous ses pieds. Le Gataclyrme avait commencé." Les agents de la Légion ardente répandent une mystérieuse peste de non-mort, plongeant la Horde et l'Alliance dans une nouvelle ère de conflits, et les héros légendaires doivent faire de nouveaux sacrifices pour sauver leur monde. Dans ce troisième tome des Chroniques de World of Warcraft, découvrez des révélations inédites sur les personnages et les évènements qui ont façonné l'histoire moderne de cet univers en proie au chaos. Plongez dans un monde plus tourmenté que jamais !
+     *      </div>
+     * 	</div>
+     */
+    private String getSummary() {
+        Elements elts = doc.select("#ContentPlaceHolder1_C001_RadPageResume div");
+        if (elts.size() == 0) return null;
+        // Col size is limited to 10k
+        return truncate(elts.get(0).text(), 9900);
+    }
+
+    private String truncate(String s, int l) {
+        return s.substring(0, Math.min(s.length(), l));
     }
 
     /**
