@@ -129,7 +129,7 @@ public class BookDetailController extends AbstractController {
     /**
      * Create book.
      */
-    @RequestMapping(value = "/book", method = RequestMethod.POST, params = "action=create")
+    @RequestMapping(value = "/book/", method = RequestMethod.POST, params = "action=create")
     public String createBook(Book book) {
         log.info("Controller createBook");
         WebUser user = getUserDetail();
@@ -138,6 +138,8 @@ public class BookDetailController extends AbstractController {
         Set<Tag> tags = tagService.getTags(book.getTagString(), user.getId());
 
         bookService.createOrUpdateBook(book, user, tags);
+        log.info("Book created {}", book.getId());
+
         return "redirect:/books";
     }
 
