@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -70,9 +71,14 @@ public class BookService {
     }
 
     /**
-     * Return a book.
-     * <p>
-     * Returns null if the book is not found, or if the book is not linked to the user.
+     * Look up a book within the user's library without exposing other users' books.
+     */
+    public Optional<Book> findOwnedBook(String userId, long bookId) {
+        return bookRepository.findByIdAndUserId(bookId, userId);
+    }
+
+    /**
+     * Return a book, or null when absent. Reject access to another user's book.
      */
     public Book findBook(String userId, long bookId) {
         var b = bookRepository.findById(bookId);

@@ -72,7 +72,10 @@ public class ReadingService {
     /**
      * Save a new reading.
      */
-    public void save(WebUser user, Book book, LocalDate date) {
+    public Reading save(WebUser user, Book book, LocalDate date) {
+        if (book == null || !user.getId().equals(book.getUserId())) {
+            throw new IllegalArgumentException("Book must belong to the user");
+        }
         Reading r = new Reading();
         r.setUserId(user.getId());
         r.setBook(book);
@@ -84,6 +87,7 @@ public class ReadingService {
 
         r = readingRepository.save(r);
         log.info("Created reading " + r.getId());
+        return r;
 
     }
 
