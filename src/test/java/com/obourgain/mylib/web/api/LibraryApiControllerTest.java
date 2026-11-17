@@ -82,6 +82,58 @@ class LibraryApiControllerTest {
     }
 
     @Test
+    void searchesOwnedBooksWithPaginationAndTags() throws Exception {
+        Book book = book();
+        Tag tag = new Tag();
+        tag.setId(2L);
+        tag.setText("Science fiction");
+        book.setTags(java.util.Set.of(tag));
+        var page = PageRequest.of(1, 2, org.springframework.data.domain.Sort.by("id"));
+        when(books.searchBooks("author:Herbert", page, "google-user"))
+                .thenReturn(new PageImpl<>(List.of(book), page, 3));
+        mvc.perform(get("/api/books/search").param("q", "author:Herbert").param("page", "1").param("size", "2")
+                        .with(jwt().jwt(j -> j.subject("google-user"))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.content[0].title").value("Dune"))
+                .andExpect(jsonPath("$.content[0].tags[0].text").value("Science fiction"))
+                .andExpect(jsonPath("$.page").value(1)).andExpect(jsonPath("$.size").value(2))
+                .andExpect(jsonPath("$.totalElements").value(3));
+        verify(books).searchBooks("author:Herbert", page, "google-user");
+    }
+
+    @Test
+    void validatesSearchRequests() throws Exception {
+        mvc.perform(get("/api/books/search").param("q", "Dune")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/api/books/search").with(jwt())).andExpect(status().isBadRequest());
+        for (String query : List.of("", " ", "x".repeat(1001))) {
+            mvc.perform(get("/api/books/search").param("q", query).with(jwt())).andExpect(status().isBadRequest());
+        }
+        for (String query : List.of("page=-1", "size=0", "size=101")) {
+            mvc.perform(get("/api/books/search?" + query).param("q", "Dune").with(jwt()))
+                    .andExpect(status().isBadRequest());
+        }
+        verifyNoInteractions(books);
+    }
+
+    @Test
+    void handlesEmptyAndInvalidSearchResults() throws Exception {
+        var page = PageRequest.of(0, 100, org.springframework.data.domain.Sort.by("id"));
+        when(books.searchBooks("unknown", page, "google-user"))
+                .thenReturn(org.springframework.data.domain.Page.empty(page));
+        mvc.perform(get("/api/books/search").param("q", "unknown").with(jwt().jwt(j -> j.subject("google-user"))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0));
+        when(books.searchBooks("title:", page, "google-user"))
+                .thenThrow(new com.obourgain.mylib.util.search.SearchUnavailableException("parse",
+                        new org.apache.lucene.queryparser.classic.ParseException("parse")));
+        mvc.perform(get("/api/books/search").param("q", "title:").with(jwt().jwt(j -> j.subject("google-user"))))
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.detail").value("Invalid search query"));
+        when(books.searchBooks("Dune", page, "google-user"))
+                .thenThrow(new com.obourgain.mylib.util.search.SearchUnavailableException(new java.io.IOException()));
+        mvc.perform(get("/api/books/search").param("q", "Dune").with(jwt().jwt(j -> j.subject("google-user"))))
+                .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test
     void detailAndOwnershipFailures() throws Exception {
         when(books.findOwnedBook("google-user", 7)).thenReturn(Optional.of(book()));
         mvc.perform(get("/api/books/7").with(jwt().jwt(j -> j.subject("google-user"))))

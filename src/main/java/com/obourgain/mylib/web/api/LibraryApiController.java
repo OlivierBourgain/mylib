@@ -37,6 +37,17 @@ public class LibraryApiController {
                 .map(BookResponse::from));
     }
 
+    @GetMapping("/books/search")
+    public PageResponse<BookResponse> searchBooks(@AuthenticationPrincipal Jwt jwt,
+            @RequestParam String q, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size) {
+        if (q.isBlank() || q.length() > 1000) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "q must contain 1 to 1000 characters");
+        }
+        return PageResponse.from(books.searchBooks(q, pagination(page, size), jwt.getSubject())
+                .map(BookResponse::from));
+    }
+
     @GetMapping("/books/{id}")
     public BookResponse bookDetail(@AuthenticationPrincipal Jwt jwt, @PathVariable long id) {
         return BookResponse.from(ownedBook(jwt, id));
