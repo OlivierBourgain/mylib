@@ -18,6 +18,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:rest-api-tests;NON_KEYWORDS=YEAR,MONTH,USER",
@@ -30,6 +31,37 @@ class LibraryPersistenceTest {
     @Autowired EntityManager entityManager;
     @MockBean LuceneSearch index;
     @MockBean TagService tags;
+
+    @Test
+    void searchLoadsCompleteBooksAndExcludesForeignAndStaleIndexEntries() {
+        WebUser user = new WebUser();
+        user.setId("google-user");
+        Book book = new Book();
+        book.setTitle("Dune");
+        book.setSummary("Complete database metadata");
+        books.createOrUpdateBook(book, user, Set.of());
+        WebUser other = new WebUser();
+        other.setId("other-user");
+        Book foreignBook = new Book();
+        foreignBook.setTitle("Dune");
+        books.createOrUpdateBook(foreignBook, other, Set.of());
+        Book indexedBook = new Book();
+        indexedBook.setId(book.getId());
+        Book stale = new Book();
+        stale.setId(9999L);
+        when(index.search("google-user", "Dune", 100000))
+                .thenReturn(java.util.List.of(indexedBook, foreignBook, stale));
+        var page = books.searchBooks("Dune", PageRequest.of(0, 10), "google-user");
+        assertEquals(1, page.getTotalElements());
+        assertEquals("Complete database metadata", page.getContent().getFirst().getSummary());
+        assertEquals(book.getId(), page.getContent().getFirst().getId());
+        var beyondEnd = books.searchBooks("Dune", PageRequest.of(3, 10), "google-user");
+        assertTrue(beyondEnd.isEmpty());
+        assertEquals(3, beyondEnd.getNumber());
+        assertEquals(1, beyondEnd.getTotalElements());
+        when(index.search("google-user", "unknown", 100000)).thenReturn(java.util.List.of());
+        assertTrue(books.searchBooks("unknown", PageRequest.of(0, 10), "google-user").isEmpty());
+    }
 
     @Test
     void persistsBooksAndReadingsWithOwnershipAndDerivedDates() {

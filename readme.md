@@ -57,12 +57,13 @@ credentials or application-issued tokens are needed. Keep using
 | Method | Path | Description |
 | --- | --- | --- |
 | GET | `/api/books` | List the authenticated user's books |
+| GET | `/api/books/search?q=...` | Search the authenticated user's books |
 | GET | `/api/books/{id}` | Get one of the user's books |
 | POST | `/api/books` | Create a book |
 | GET | `/api/readings` | List the authenticated user's readings |
 | POST | `/api/readings` | Add a reading for one of the user's books |
 
-Both list endpoints accept zero-based `page` (default `0`) and `size` (default
+List and search endpoints accept zero-based `page` (default `0`) and `size` (default
 `100`, allowed range `1`–`100`), ordered by ID ascending. They return
 `{"content": [...], "page": 0, "size": 100, "totalElements": 1, "totalPages": 1}`.
 Book list entries and book details contain the book's metadata, timestamps and
@@ -70,6 +71,20 @@ Book list entries and book details contain the book's metadata, timestamps and
 and `priority`. Tags are ordered by ID ascending; untagged books return `tags: []`.
 Reading responses contain `id`, `bookId`, `date`, `year`, `month`, `created` and
 `updated`. Internal user IDs and tag-to-book back references are not serialized.
+
+Search accepts a required nonblank `q` (maximum 1000 characters). It searches
+titles, subtitles, authors, ISBNs and tags using the existing Lucene syntax,
+including field queries such as `author:Herbert` and `tag:fiction`. Results use
+the same complete book representation (including tags), pagination and ID ordering
+as the book list. No matches return an empty page; pages beyond the end remain
+empty. Search considers up to 100,000 index matches, consistent with the web UI.
+Malformed Lucene syntax returns `400`; an unavailable search index returns `503`.
+
+```sh
+curl --get 'http://localhost:2017/api/books/search' \
+  -H "Authorization: Bearer $GOOGLE_ID_TOKEN" \
+  --data-urlencode 'q=author:Herbert' --data-urlencode 'size=20'
+```
 
 Create a book with a required nonblank `title` and optional `subtitle`, `author`,
 `isbn`, `publisher`, `publicationDate`, `status`, `pages`, `lang`, `comment` and

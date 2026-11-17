@@ -168,6 +168,17 @@ public class BookService {
     private static final int MAX_RESULTS = 100000;
 
     /**
+     * Search the user's index, then load complete, currently owned books from the database.
+     */
+    public Page<Book> searchBooks(String criteria, Pageable page, String userId) {
+        List<Long> ids = luceneSearch.search(userId, criteria, MAX_RESULTS).stream()
+                .map(Book::getId).distinct().toList();
+        if (ids.isEmpty()) return Page.empty(page);
+        return bookRepository.findByUserIdAndIdIn(userId, ids, page);
+    }
+
+
+    /**
      * Get the list of book from Lucene, as a Page<Book>.
      */
     public Page<Book> getBooks(String criteria, Pageable page, String userId) {
